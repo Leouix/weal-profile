@@ -46,7 +46,7 @@ define( 'WEAL_PROFILE_VERSION', '1.0.0' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-weal-profile-activator.php
  */
-function activate_weal_profile() {
+function weal_profile_activate() {
 	include_once plugin_dir_path( __FILE__ ) . 'includes/class-weal-profile-activator.php';
 	Weal_Profile_Activator::activate();
 }
@@ -55,13 +55,13 @@ function activate_weal_profile() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-weal-profile-deactivator.php
  */
-function deactivate_weal_profile() {
+function weal_profile_deactivate() {
 	include_once plugin_dir_path( __FILE__ ) . 'includes/class-weal-profile-deactivator.php';
 	Weal_Profile_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_weal_profile' );
-register_deactivation_hook( __FILE__, 'deactivate_weal_profile' );
+register_activation_hook( __FILE__, 'weal_profile_activate' );
+register_deactivation_hook( __FILE__, 'weal_profile_deactivate' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -78,8 +78,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-weal-profile.php';
  *
  * @since 1.0.0
  */
-function run_weal_profile() {
+function weal_profile_run() {
 	$plugin = new Weal_Profile();
 	$plugin->run();
 }
-run_weal_profile();
+weal_profile_run();

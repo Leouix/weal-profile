@@ -19,24 +19,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 if ( ! empty( $user_comments ) ) {
-	foreach ( $user_comments as $user_comment ) {
+	foreach ( $user_comments as $weal_profile_user_comment ) {
 
-		$post_url   = get_permalink( $user_comment->comment_post_ID );
-		$post_title = get_the_title( $user_comment->comment_post_ID );
+		$weal_profile_post_url   = get_permalink( $weal_profile_user_comment->comment_post_ID );
+		$weal_profile_post_title = get_the_title( $weal_profile_user_comment->comment_post_ID );
 		?>
 		<div class="au-comment-area">
 		<?php
 
-		printf( '<p class="post-link">Post: <a href="%s" target="_blank">%s</a></p>', esc_url( $post_url ), esc_html( $post_title ) );
+		printf( '<p class="post-link">Post: <a href="%s" target="_blank">%s</a></p>', esc_url( $weal_profile_post_url ), esc_html( $weal_profile_post_title ) );
 
-		printf( '<p>Comment text: %s</p>', esc_html( $user_comment->comment_content ) );
+		printf( '<p>Comment text: %s</p>', esc_html( $weal_profile_user_comment->comment_content ) );
 
 		printf(
 			'<p class="comment-date">Date: %s</p>',
-			esc_html( gmdate( 'Y-m-d H:i', strtotime( $user_comment->comment_date ) ) )
+			esc_html( gmdate( 'Y-m-d H:i', strtotime( $weal_profile_user_comment->comment_date ) ) )
 		);
 
-		printf( '<p class="comment-author">Author: %s</p>', esc_html( $user_comment->comment_author ) );
+		printf( '<p class="comment-author">Author: %s</p>', esc_html( $weal_profile_user_comment->comment_author ) );
 
 		?>
 		</div>
