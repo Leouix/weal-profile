@@ -56,14 +56,12 @@ class Activation_Manager {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$table_name      = $wpdb->prefix . 'my_account_page_plugin';
+		$table_name      = $wpdb->prefix . 'weal_profile_plugin';
 
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(9) NOT NULL AUTO_INCREMENT,
             user_page_url varchar(255) NOT NULL,
             fields_allowed_json varchar(255) NULL,
-            is_comments_allowed tinyint NULL,
-            is_users_allowed tinyint NULL,
             PRIMARY KEY  (id)
         ) $charset_collate;";
 

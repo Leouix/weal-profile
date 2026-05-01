@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Settings_Manager {
 
 
-	private const TABLE_NAME         = 'my_account_page_plugin';
-	private const CACHE_GROUP        = 'my_account_page_plugin';
-	private const CACHE_KEY_SETTINGS = 'plugin_settings';
+	private const TABLE_NAME         = 'weal_profile_plugin';
+	private const CACHE_GROUP        = 'weal_profile_plugin';
+	private const CACHE_KEY_SETTINGS = 'weal_profile_plugin_settings';
 	private const CACHE_KEY_URL      = 'plugin_user_page_url';
 	private const SETTINGS_ID        = 1;
 
