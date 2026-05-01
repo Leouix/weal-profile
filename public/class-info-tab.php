@@ -16,7 +16,7 @@ use stdClass;
 /**
  * Info Tab Class.
  *
- * @package weal-user-account
+ * @package weal-profile
  */
 class Info_Tab {
 

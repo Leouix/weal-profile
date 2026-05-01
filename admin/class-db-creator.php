@@ -4,10 +4,10 @@
  *
  * Creates the plugin database table.
  *
- * @package weal-user-account
+ * @package weal-profile
  */
 
-namespace WealUserAccount\Admin;
+namespace WealProfile\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * DB Creator Class.
  *
- * @package weal-user-account
+ * @package weal-profile
  */
 class DB_Creator {
 

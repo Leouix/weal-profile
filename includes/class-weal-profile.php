@@ -50,7 +50,7 @@ class Weal_Profile {
 	 *
 	 * @since  1.0.0
 	 * @access protected
-	 * @var    Weal_User_Account_Loader $loader Maintains and registers all hooks for the plugin.
+	 * @var    Weal_Profile_Loader $loader Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -115,9 +115,9 @@ class Weal_Profile {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Weal_User_Account_Loader. Orchestrates the hooks of the plugin.
-	 * - Weal_User_Account_Admin. Defines all hooks for the admin area.
-	 * - Weal_User_Account_Public. Defines all hooks for the public side of the site.
+ * - Weal_Profile_Loader. Orchestrates the hooks of the plugin.
+ * - Weal_Profile_Admin. Defines all hooks for the admin area.
+ * - Weal_Profile_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.

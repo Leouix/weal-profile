@@ -2,7 +2,7 @@
 /**
  * Contains the relevant methods and functions for the plugin
  *
- * @package weal-user-account
+ * @package weal-profile
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,8 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @link  https://weal.cloud
  * @since 1.0.0
  *
- * @package    Weal_User_Account
- * @subpackage Weal_User_Account/public/partials
+ * @package    Weal_Profile
+ * @subpackage Weal_Profile/public/partials
  */
 
 if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {

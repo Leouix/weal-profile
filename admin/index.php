@@ -2,5 +2,5 @@
 /**
  * Silence is golden.
  *
- * @package weal-user-account
+ * @package weal-profile
  */

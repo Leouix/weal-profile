@@ -2,7 +2,7 @@
 /**
  * Contains the relevant methods and functions for the plugin
  *
- * @package weal-user-account
+ * @package weal-profile
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -96,6 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					oninput="editingUserData(this)"
 					data-orig="<?php echo esc_html( $user_data_obj->description ); ?>"
 					value="<?php echo esc_html( $user_data_obj->description ); ?>"
+            >
 		</div>
 	<?php } ?>
 

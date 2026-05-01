@@ -75,10 +75,10 @@ class Weal_Profile_Public {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Weal_User_Account_Loader as all of the hooks are defined
+		 * defined in Weal_Profile_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Weal_User_Account_Loader will then create the relationship
+		 * The Weal_Profile_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
@@ -97,10 +97,10 @@ class Weal_Profile_Public {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Weal_User_Account_Loader as all of the hooks are defined
+		 * defined in Weal_Profile_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Weal_User_Account_Loader will then create the relationship
+		 * The Weal_Profile_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */

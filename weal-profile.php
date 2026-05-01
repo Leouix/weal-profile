@@ -44,7 +44,7 @@ define( 'WEAL_PROFILE_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-weal-user-account-activator.php
+ * This action is documented in includes/class-weal-profile-activator.php
  */
 function activate_weal_profile() {
 	include_once plugin_dir_path( __FILE__ ) . 'includes/class-weal-profile-activator.php';
