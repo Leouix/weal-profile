@@ -1,0 +1,90 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.au-container {
+	padding: 25px 15px;
+	height: 100vw;
+}
+#admin-user-account-form input[type=submit] {
+	margin-top: 15px;
+	padding: 7px 15px;
+	border-radius: 7px;
+	background: #2278c5;
+	color: #fff;
+	border: none;
+	box-shadow: 0 -1px 2px #ddddddeb;
+	cursor: pointer;
+	transition: 0.25s ease-in;
+}
+
+#admin-user-account-form input[type=submit].success {
+	background: green;
+}
+
+#lock-url {
+	display: inline-block;
+	margin: 0 15px;
+	content: "\f160";
+}
+
+.url-label-area label {
+	display: block;
+}
+.input-url-wrapper {
+	display: inline-block;
+	margin-top: 5px;
+	margin-left: 10px;
+}
+.input-url-wrapper span {
+	font-size: 14px;
+}
+
+.sub-title {
+	margin-bottom: 10px;
+	margin-top: 25px;
+	font-size: 18px;
+}
+
+.label-area {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-left: 10px;
+}
+
+.label-area label {
+	margin-bottom: 2px;
+	margin-top: 3px;
+}
+
+h1 {
+	color: #43494c;
+}
+
+#success-notice {
+	display: none;
+	margin-top: 12px;
+	padding: 7px 15px;
+	font-size: 16px;
+	color: green;
+	transition: 0.25s ease-in;
+}
+
+.button-area {
+	display: flex;
+}
+
+.dashicons {
+	cursor: pointer;
+}
+
+#save-create-button {
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+#success-notice {
+	font-size: 12px;
+}
