@@ -14,69 +14,67 @@ window.addEventListener(
 	'load',
 	function () {
 
-		formUserButton = document.getElementById('save-create-button');
-		successNotice = document.getElementById('success-notice');
-		lockUrlIcon = document.getElementById('lock-url');
-		urlInput = document.getElementById('adu-form-input');
-		dashiconsUnlock = document.getElementById('dashicons-unlock');
-		dashiconsLock = document.getElementById('dashicons-lock');
+		formUserButton = document.getElementById( 'save-create-button' );
+		successNotice = document.getElementById( 'success-notice' );
+		lockUrlIcon = document.getElementById( 'lock-url' );
+		urlInput = document.getElementById( 'adu-form-input' );
+		dashiconsUnlock = document.getElementById( 'dashicons-unlock' );
+		dashiconsLock = document.getElementById( 'dashicons-lock' );
 
-
-		lockUrlIcon?.addEventListener(
+		lockUrlIcon.addEventListener(
 			'click',
 			function () {
-				urlInput.disabled = !urlInput.disabled;
+				urlInput.disabled = ! urlInput.disabled;
 
 				if (urlInput.disabled) {
-					dashiconsLock.classList.remove('hidden');
-					dashiconsLock.classList.add('visible');
+					dashiconsLock.classList.remove( 'hidden' );
+					dashiconsLock.classList.add( 'visible' );
 
-					dashiconsUnlock.classList.remove('visible');
-					dashiconsUnlock.classList.add('hidden');
+					dashiconsUnlock.classList.remove( 'visible' );
+					dashiconsUnlock.classList.add( 'hidden' );
 				} else {
-					dashiconsLock.classList.remove('visible');
-					dashiconsLock.classList.add('hidden');
+					dashiconsLock.classList.remove( 'visible' );
+					dashiconsLock.classList.add( 'hidden' );
 
-					dashiconsUnlock.classList.remove('hidden');
-					dashiconsUnlock.classList.add('visible');
+					dashiconsUnlock.classList.remove( 'hidden' );
+					dashiconsUnlock.classList.add( 'visible' );
 				}
 			}
 		);
 
-
 		function saveMyAccountSettingsForm(elForm) {
-			var formData = new FormData(elForm);
+			var formData = new FormData( elForm );
 
 			var xhr = new XMLHttpRequest();
-			xhr.open('POST', myAccountAdminData.root + 'my-account/v1/admin-save-page-settings/', true);
-			xhr.setRequestHeader('X-WP-Nonce', myAccountAdminData.nonce);
+			xhr.open( 'POST', myAccountAdminData.root + 'my-account/v1/admin-save-page-settings/', true );
+			xhr.setRequestHeader( 'X-WP-Nonce', myAccountAdminData.nonce );
 			xhr.onreadystatechange = function (res) {
 				if (4 === this.readyState && 200 === this.status) {
-					successAjaxButtonEvent('success');
+					successAjaxButtonEvent( 'success' );
 					lockLinkField();
 				}
 				if (4 === this.readyState && (404 === this.status || 401 === this.status)) {
-					console.log('An error occurred');
+					console.log( 'An error occurred' );
 				}
 			};
-			xhr.send(formData);
+			xhr.send( formData );
 		}
 
 		function lockLinkField() {
 			urlInput.disabled = true;
-			dashiconsLock.classList.remove('hidden');
-			dashiconsLock.classList.add('visible');
-			dashiconsUnlock.classList.remove('visible');
-			dashiconsUnlock.classList.add('hidden');
+			dashiconsLock.classList.remove( 'hidden' );
+			dashiconsLock.classList.add( 'visible' );
+			dashiconsUnlock.classList.remove( 'visible' );
+			dashiconsUnlock.classList.add( 'hidden' );
 		}
 
 		function successAjaxButtonEvent(statusClass) {
-			formUserButton.classList.add(statusClass);
+			formUserButton.classList.add( statusClass );
 			successNotice.style.display = 'block';
 			if ('success' === statusClass) {
 				setTimeout(
 					function () {
-						formUserButton.classList.remove(statusClass);
+						formUserButton.classList.remove( statusClass );
 						successNotice.style.display = 'none';
 					},
 					1000
@@ -84,13 +82,12 @@ window.addEventListener(
 			}
 		}
 
-
-		var form = document.getElementById('admin-user-account-form');
+		var form = document.getElementById( 'admin-user-account-form' );
 		form.addEventListener(
 			'submit',
 			function (event) {
 				event.preventDefault();
-				saveMyAccountSettingsForm(event.target);
+				saveMyAccountSettingsForm( event.target );
 			}
 		);
 	}
