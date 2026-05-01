@@ -14,12 +14,12 @@ window.addEventListener(
 	'load',
 	function () {
 
-		formUserButton = document.getElementById( 'save-create-button' );
-		successNotice = document.getElementById( 'success-notice' );
-		lockUrlIcon = document.getElementById( 'lock-url' );
-		urlInput = document.getElementById( 'adu-form-input' );
+		formUserButton  = document.getElementById( 'save-create-button' );
+		successNotice   = document.getElementById( 'success-notice' );
+		lockUrlIcon     = document.getElementById( 'lock-url' );
+		urlInput        = document.getElementById( 'adu-form-input' );
 		dashiconsUnlock = document.getElementById( 'dashicons-unlock' );
-		dashiconsLock = document.getElementById( 'dashicons-lock' );
+		dashiconsLock   = document.getElementById( 'dashicons-lock' );
 
 		lockUrlIcon.addEventListener(
 			'click',

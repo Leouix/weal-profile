@@ -145,7 +145,7 @@ class Info_Tab {
 		}
 
 		foreach ( $allowed_fields as $allowed_field ) {
-			if ( in_array( $allowed_field, $meta_fields ) ) {
+			if ( in_array( $allowed_field, $meta_fields, true ) ) {
 				$user_data_obj->$allowed_field = $user_meta[ $allowed_field ][0];
 			} else {
 				$user_data_obj->$allowed_field = $user_data->$allowed_field;
