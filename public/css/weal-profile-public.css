@@ -4,80 +4,80 @@
  */
 
 #main-tabs {
-    display: flex;
+	display: flex;
 }
 
 #main-tabs .main-tabs-item {
-    width: 45px;
-    height: 110px;
-    border: 1px solid #fff;
-    border-radius: 7px;
-    background: #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 5px;
-    margin-bottom: 25px;
-    cursor: pointer;
+	width: 45px;
+	height: 110px;
+	border: 1px solid #fff;
+	border-radius: 7px;
+	background: #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 5px;
+	margin-bottom: 25px;
+	cursor: pointer;
 }
 
 #main-tabs .main-tabs-item.active {
-    background: #4e84ff;
-    height: 130px;
-    color: #ffffff;
+	background: #4e84ff;
+	height: 130px;
+	color: #ffffff;
 }
 
 #main-tabs .main-tabs-item .text {
-    rotate: -90deg;
-    width: 100%;
-    min-width: 85px;
-    font-size: 16px;
-    line-height: 1.1;
+	rotate: -90deg;
+	width: 100%;
+	min-width: 85px;
+	font-size: 16px;
+	line-height: 1.1;
 }
 
 .au-container {
-    padding: 25px;
-    min-height: 100vh;
+	padding: 25px;
+	min-height: 100vh;
 }
 
 @media screen and (min-width: 430px) {
-    .au-container {
-        padding: 35px;
-    }
+	.au-container {
+		padding: 35px;
+	}
 }
 
 .au-container form input {
-    padding: 8px 15px;
-    font-size: 16px;
-    margin: 8px 0 15px 0;
-    outline: none;
+	padding: 8px 15px;
+	font-size: 16px;
+	margin: 8px 0 15px 0;
+	outline: none;
 }
 
 .au-container form label {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 .au-container form input[type="submit"] {
-    cursor: pointer;
-    text-transform: uppercase;
-    border: none;
-    transition: 0.55s ease-in;
-    border-radius: 4px;
-    background: #4e84ff;
-    color: #fff;
-    width: 100%;
+	cursor: pointer;
+	text-transform: uppercase;
+	border: none;
+	transition: 0.55s ease-in;
+	border-radius: 4px;
+	background: #4e84ff;
+	color: #fff;
+	width: 100%;
 }
 
 .au-container form input[type="submit"].success {
-    background: green;
+	background: green;
 }
 
 .au-container form input[type="submit"].warning {
-    background: red;
+	background: red;
 }
 
 .au-container h2 {
-    font-size: 32px;
+	font-size: 32px;
 }
 
 html[data-darkreader-scheme="dark"] .au-container {
@@ -89,12 +89,12 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 }
 
 .au-comment-area {
-    margin-bottom: 35px;
+	margin-bottom: 35px;
 }
 
 .au-comment-area p {
-    margin: 10px 0;
-    font-size: 16px;
+	margin: 10px 0;
+	font-size: 16px;
 }
 
 /*@media screen and (min-width: 430px) {*/
@@ -102,36 +102,36 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 /*}*/
 
 @media screen and (min-width: 430px) {
-    .au-comment-area p {
-        margin: 10px 15px;
-    }
+	.au-comment-area p {
+		margin: 10px 15px;
+	}
 }
 
 .au-comment-area .post-link,
 .au-comment-area .post-link a {
-    color: #3F97FF;
+	color: #3F97FF;
 }
 
 .au-comment-area .comment-date {
-    margin-bottom: 0;
-    font-size: 14px;
+	margin-bottom: 0;
+	font-size: 14px;
 }
 
 .au-comment-area .comment-author {
-    margin-top: 4px;
-    font-size: 14px;
+	margin-top: 4px;
+	font-size: 14px;
 }
 
 #user-data-form {
-    max-width: 550px;
+	max-width: 550px;
 }
 
 #user-data-form .input-area {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 }
 
 #user-data-form #form-user-button {
-    display: none;
+	display: none;
 }

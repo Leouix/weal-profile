@@ -96,7 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					oninput="editingUserData(this)"
 					data-orig="<?php echo esc_html( $user_data_obj->description ); ?>"
 					value="<?php echo esc_html( $user_data_obj->description ); ?>"
-            >
+			>
 		</div>
 	<?php } ?>
 
