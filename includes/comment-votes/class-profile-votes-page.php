@@ -27,7 +27,7 @@ class Profile_Votes_Page {
 	public static function render( $user_id ) {
 		global $wpdb;
 
-		$table_name    = $wpdb->prefix . Comment_Votes::TABLE_NAME;
+		$table_name     = $wpdb->prefix . Comment_Votes::TABLE_NAME;
 		$comments_table = $wpdb->prefix . 'comments';
 
 		$user = get_user_by( 'id', $user_id );

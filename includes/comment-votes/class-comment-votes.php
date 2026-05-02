@@ -96,8 +96,8 @@ class Comment_Votes {
 			'weal-comment-votes-js',
 			'wealCommentVotesData',
 			array(
-				'root'    => esc_url_raw( rest_url() ),
-				'nonce'   => wp_create_nonce( 'wp_rest' ),
+				'root'       => esc_url_raw( rest_url() ),
+				'nonce'      => wp_create_nonce( 'wp_rest' ),
 				'isLoggedIn' => is_user_logged_in(),
 			)
 		);
@@ -128,7 +128,7 @@ class Comment_Votes {
 			$user_vote = $this->get_user_vote( $comment_id, get_current_user_id() );
 		}
 
-		$like_active_class   = ( 1 === $user_vote ) ? 'weal-vote-active' : '';
+		$like_active_class    = ( 1 === $user_vote ) ? 'weal-vote-active' : '';
 		$dislike_active_class = ( 0 === $user_vote ) ? 'weal-vote-active' : '';
 
 		$buttons_html  = '<div class="weal-vote-container" data-comment-id="' . esc_attr( $comment_id ) . '">';

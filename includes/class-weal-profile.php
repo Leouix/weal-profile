@@ -227,11 +227,11 @@ class Weal_Profile {
 
 		new Comment_Votes();
 
-        $this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
-        $this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
+		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
+		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
 		$this->loader->add_action( 'delete_user', $this, 'cleanup_user_avatar' );
 
-        $avatarService = new Weal_Profile_Avatar();
+		$avatarService = new Weal_Profile_Avatar();
 		$this->loader->add_filter( 'get_avatar', $avatarService, 'filter_get_avatar', 10, 5 );
 	}
 
