@@ -7,6 +7,8 @@
 
 namespace WealProfile\Includes\Manager;
 
+use WealProfile\Includes\Comment_Votes\Comment_Votes;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -43,7 +45,7 @@ class Activation_Manager {
 	 */
 	public function activate() {
 		$this->create_database_table();
-		\WealProfile\Includes\Comment_Votes\Comment_Votes::create_table();
+		Comment_Votes::create_table();
 		$this->settings_manager->clear_cache();
 		$this->initialize_settings();
 	}

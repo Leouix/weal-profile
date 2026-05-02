@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 use WealProfile\Admin\Admin_Settings;
+use WealProfile\Includes\Comment_Votes\Comment_Votes;
+use WealProfile\Includes\Comment_Votes\REST_Votes;
 use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Includes\Routes;
 
@@ -225,15 +227,17 @@ class Weal_Profile {
 		$routes_class = new Routes( $this->admin_settings );
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
 
-		$rest_votes = new \WealProfile\Includes\Comment_Votes\REST_Votes();
+		$rest_votes = new REST_Votes();
 		$this->loader->add_action( 'rest_api_init', $rest_votes, 'register_routes' );
 
-		new \WealProfile\Includes\Comment_Votes\Comment_Votes();
+		new Comment_Votes();
 
-		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
-
-		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
+        $this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
+        $this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
 		$this->loader->add_action( 'delete_user', $this, 'cleanup_user_avatar' );
+
+        $avatarService = new Weal_Profile_Avatar();
+		$this->loader->add_filter( 'get_avatar', $avatarService, 'filter_get_avatar', 10, 5 );
 	}
 
 	/**
