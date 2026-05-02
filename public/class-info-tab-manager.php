@@ -18,10 +18,7 @@ use stdClass;
  *
  * @package weal-profile
  */
-class Info_Tab {
-
-
-
+class Info_Tab_Manager {
 
 	/**
 	 * Logged user ID.

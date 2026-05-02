@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use WealProfile\Admin\Admin_Settings;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
-use WealProfile\Public\Info_Tab;
+use WealProfile\Public\Info_Tab_Manager;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -164,7 +164,7 @@ class Routes {
 		}
 
 		$post_data      = $request->get_params();
-		$info_tab_class = new Info_Tab( $this->current_user, $this->admin_settings );
+		$info_tab_class = new Info_Tab_Manager( $this->current_user, $this->admin_settings );
 		$info_tab_class->handle_user_saving( $post_data );
 
 		return new WP_REST_Response(
@@ -267,7 +267,7 @@ class Routes {
 	 * @return string
 	 */
 	private function info_tab() {
-		$info_tab_class = new Info_Tab( $this->current_user, $this->admin_settings );
+		$info_tab_class = new Info_Tab_Manager( $this->current_user, $this->admin_settings );
 		ob_start();
 		$info_tab_class->get_user_data();
 		return ob_get_clean();

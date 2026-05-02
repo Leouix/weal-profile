@@ -5,8 +5,6 @@
  * @package weal-profile
  */
 
-use WealProfile\Includes\Comment_Votes\Profile_Votes_Page;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

@@ -150,7 +150,7 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-routes.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-avatar.php';
 		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';
-		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab.php';
+		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-comment-votes.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-profile-votes-page.php';
 
