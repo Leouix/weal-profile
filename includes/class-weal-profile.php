@@ -147,7 +147,7 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-settings-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-public-page-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-routes.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/class-avatar.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-avatar.php';
 		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';
 		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab.php';
 

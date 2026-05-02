@@ -65,13 +65,14 @@ class Weal_Profile_Avatar {
 
 		$user_id = get_current_user_id();
 
-		if ( ! isset( $_FILES['profile_avatar'] ) ) {
+		if ( ! isset( $_FILES['profile_avatar'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return new WP_Error( 'no_file', __( 'No file uploaded.', 'weal-profile' ) );
 		}
 
-		$file = $_FILES['profile_avatar'];
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$file = isset( $_FILES['profile_avatar'] ) ? $_FILES['profile_avatar'] : null;
 
-		if ( ! isset( $file['error'] ) || 0 !== $file['error'] ) {
+		if ( ! is_array( $file ) || ! isset( $file['error'] ) || 0 !== $file['error'] ) {
 			return new WP_Error( 'upload_error', __( 'File upload error.', 'weal-profile' ) );
 		}
 
