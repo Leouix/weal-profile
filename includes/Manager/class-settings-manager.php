@@ -33,6 +33,7 @@ class Settings_Manager {
 		'user_url',
 		'nickname',
 		'description',
+		'avatar',
 	);
 
 	/**

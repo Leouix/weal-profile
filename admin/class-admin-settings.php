@@ -131,6 +131,7 @@ class Admin_Settings {
 			'first_name',
 			'last_name',
 			'description',
+			'avatar',
 		);
 
 		if ( ! isset( $post_data['show_user_fields_checkbox'] ) || ! is_array( $post_data['show_user_fields_checkbox'] ) ) {
