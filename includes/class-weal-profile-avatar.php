@@ -155,11 +155,11 @@ class Weal_Profile_Avatar {
 	public static function filter_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
 		$user_id = false;
 
-		// WordPress может передать сюда разные типы данных, нам нужно извлечь ID пользователя
+		// WordPress может передать сюда разные типы данных, нам нужно извлечь ID пользователя.
 		if ( is_numeric( $id_or_email ) ) {
 			$user_id = (int) $id_or_email;
 		} elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-			// Например, это объект комментария
+			// Например, это объект комментария.
 			$user_id = (int) $id_or_email->user_id;
 		} elseif ( $id_or_email instanceof WP_User ) {
 			$user_id = $id_or_email->ID;
@@ -170,12 +170,12 @@ class Weal_Profile_Avatar {
 			}
 		}
 
-		// Если нашли пользователя, проверяем нашу мету
+		// Если нашли пользователя, проверяем нашу мету.
 		if ( $user_id ) {
 			$custom_avatar_id = self::get_avatar_id( $user_id );
 
 			if ( $custom_avatar_id > 0 ) {
-				// Формируем HTML стандартными средствами WP, подставляя запрошенный размер
+				// Формируем HTML стандартными средствами WP, подставляя запрошенный размер.
 				$custom_avatar = wp_get_attachment_image(
 					$custom_avatar_id,
 					array( $size, $size ),
@@ -192,7 +192,7 @@ class Weal_Profile_Avatar {
 			}
 		}
 
-		// Если кастомного аватара нет, возвращаем стандартный Gravatar
+		// Если кастомного аватара нет, возвращаем стандартный Gravatar.
 		return $avatar;
 	}
 }

@@ -204,7 +204,6 @@ function checkTabGetParamsLoading() {
 
 	var params = getParameters( getNavUrl() );
 
-	// if ( 'my-comments' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
 	if ( 'info' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
 		getPage(
 			{
@@ -212,7 +211,7 @@ function checkTabGetParamsLoading() {
 			}
 		);
 		TabsSwitcherHelper.switch( 'tab-button-3' );
-	} else { // if ( 'info' === params?.tab ).
+	} else {
 		getPage(
 			{
 				clickId: 'tab-button-1',
