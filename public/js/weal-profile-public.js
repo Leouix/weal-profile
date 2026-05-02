@@ -209,3 +209,33 @@ function replaceUrlParam( paramValue ) {
 	queryParams.set( 'tab', paramValue );
 	history.replaceState( null, null, '?' + queryParams.toString() );
 }
+
+document.addEventListener(
+	'DOMContentLoaded',
+	function () {
+		const avatarInput = document.querySelector(
+			'.weal-profile-avatar-form input[type="file"][name="profile_avatar"]'
+		);
+
+		if ( ! avatarInput) {
+			return;
+		}
+
+		avatarInput.addEventListener(
+			'change',
+			function () {
+				if ( ! this.files || this.files.length === 0) {
+					return;
+				}
+
+				const form = this.closest( 'form' );
+
+				if ( ! form) {
+					return;
+				}
+
+				form.submit();
+			}
+		);
+	}
+);
