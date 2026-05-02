@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<h2>My comments</h2>
+<h2><?php echo esc_html__( 'My comments', 'weal-profile' ); ?></h2>
 
 <?php
 /**
@@ -27,16 +27,16 @@ if ( ! empty( $user_comments ) ) {
 		<div class="au-comment-area">
 		<?php
 
-		printf( '<p class="post-link">Post: <a href="%s" target="_blank">%s</a></p>', esc_url( $weal_profile_post_url ), esc_html( $weal_profile_post_title ) );
+		printf( '<p class="post-link">' . esc_html__( 'Post:', 'weal-profile' ) . ' <a href="%s" target="_blank">%s</a></p>', esc_url( $weal_profile_post_url ), esc_html( $weal_profile_post_title ) );
 
-		printf( '<p>Comment text: %s</p>', esc_html( $weal_profile_user_comment->comment_content ) );
+		printf( '<p>' . esc_html__( 'Comment text:', 'weal-profile' ) . ' %s</p>', esc_html( $weal_profile_user_comment->comment_content ) );
 
 		printf(
-			'<p class="comment-date">Date: %s</p>',
+			'<p class="comment-date">' . esc_html__( 'Date:', 'weal-profile' ) . ' %s</p>',
 			esc_html( gmdate( 'Y-m-d H:i', strtotime( $weal_profile_user_comment->comment_date ) ) )
 		);
 
-		printf( '<p class="comment-author">Author: %s</p>', esc_html( $weal_profile_user_comment->comment_author ) );
+		printf( '<p class="comment-author">' . esc_html__( 'Author:', 'weal-profile' ) . ' %s</p>', esc_html( $weal_profile_user_comment->comment_author ) );
 
 		?>
 		</div>
@@ -44,7 +44,7 @@ if ( ! empty( $user_comments ) ) {
 		<?php
 	}
 } else {
-	echo esc_html( 'No comments' );
+	echo esc_html__( 'No comments', 'weal-profile' );
 }
 
 ?>

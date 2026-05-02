@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 ?>
 
-<h2>User Info</h2>
+<h2><?php echo esc_html__( 'User Info', 'weal-profile' ); ?></h2>
 
 <form id="user-data-form" enctype="multipart/form-data">
 
 
 	<?php if ( isset( $user_data_obj->display_name ) ) { ?>
 		<div class="input-area">
-			<label for="display-name">Display Name:</label>
+			<label for="display-name"><?php echo esc_html__( 'Display Name:', 'weal-profile' ); ?></label>
 			<input
 					id="display-name"
 					name="display_name"
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( isset( $user_data_obj->nickname ) ) { ?>
 		<div class="input-area">
-			<label for="nickname">Nickname:</label>
+			<label for="nickname"><?php echo esc_html__( 'Nickname:', 'weal-profile' ); ?></label>
 			<input
 					id="nickname"
 					name="nickname"
@@ -50,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( isset( $user_data_obj->first_name ) ) { ?>
 		<div class="input-area">
-			<label for="first-name">First Name:</label>
+			<label for="first-name"><?php echo esc_html__( 'First Name:', 'weal-profile' ); ?></label>
 			<input
 					id="first-name"
 					name="first_name"
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( isset( $user_data_obj->last_name ) ) { ?>
 		<div class="input-area">
-			<label for="last-name">Last Name:</label>
+			<label for="last-name"><?php echo esc_html__( 'Last Name:', 'weal-profile' ); ?></label>
 			<input
 					id="last-name"
 					name="last_name"
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( isset( $user_data_obj->user_url ) ) { ?>
 		<div class="input-area">
-			<label for="user-url">Web-Site:</label>
+			<label for="user-url"><?php echo esc_html__( 'Web-Site:', 'weal-profile' ); ?></label>
 			<input
 					id="user-url"
 					name="user_url"
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php if ( isset( $user_data_obj->description ) ) { ?>
 		<div class="input-area">
-			<label for="description">Description:</label>
+			<label for="description"><?php echo esc_html__( 'Description:', 'weal-profile' ); ?></label>
 			<input
 					id="description"
 					name="description"
@@ -100,6 +100,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php } ?>
 
-	<input id="form-user-button" class="button  primary-button" type="submit" value="Save">
+	<input id="form-user-button" class="button  primary-button" type="submit" value="<?php echo esc_attr__( 'Save', 'weal-profile' ); ?>">
 
 </form>

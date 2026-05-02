@@ -181,7 +181,7 @@ class Weal_Profile {
 	 * @param array $settings Plugin settings.
 	 */
 	public function my_plugin_settings( $settings ) {
-		$settings[] = '<a href="' . get_admin_url( null, 'admin.php?page=weal-profile-admin' ) . '">Settings</a>';
+		$settings[] = '<a href="' . get_admin_url( null, 'admin.php?page=weal-profile-admin' ) . '">' . esc_html__( 'Settings', 'weal-profile' ) . '</a>';
 		return $settings;
 	}
 

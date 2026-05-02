@@ -36,17 +36,17 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 ?>
 	<div class="container au-container">
 		<div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-			<h1 class="wp-block-post-title">My Account</h1>
+			<h1 class="wp-block-post-title"><?php echo esc_html__( 'My Account', 'weal-profile' ); ?></h1>
 			<div id="main-tabs">
 				<div id="tab-button-1"
 					class="main-tabs-item"
 					onclick="switchTab(this)">
-					<div class="text">Comments</div>
+					<div class="text"><?php echo esc_html__( 'Comments', 'weal-profile' ); ?></div>
 				</div>
 				<div id="tab-button-3"
 					class="main-tabs-item"
 					onclick="switchTab(this)">
-					<div class="text">My Info</div>
+					<div class="text"><?php echo esc_html__( 'My Info', 'weal-profile' ); ?></div>
 				</div>
 			</div>
 
