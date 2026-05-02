@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use WealProfile\Admin\Admin_Settings;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
+use WealProfile\Includes\Comment_Votes\LikesVoteService;
 use WealProfile\Public\Info_Tab_Manager;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -255,6 +256,13 @@ class Routes {
 			'status'  => 'approve',
 		);
 		$user_comments = get_comments( $args );
+
+		$likes_service = new LikesVoteService();
+		$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
+
+		$total_likes    = $vote_data['total_likes'] ?? 0;
+		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
+		$top_comments   = $vote_data['top_comments'] ?? array();
 
 		ob_start();
 		include plugin_dir_path( __DIR__ ) . 'public/partials/tab-my-comments.php';

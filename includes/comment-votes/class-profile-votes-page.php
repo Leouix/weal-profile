@@ -21,60 +21,17 @@ class Profile_Votes_Page {
 	/**
 	 * Render the Comment Reactions block on the profile page.
 	 *
-	 * @param int $user_id User ID.
+	 * @param int   $user_id       User ID.
+	 * @param int   $total_likes    Total likes count.
+	 * @param int   $total_dislikes Total dislikes count.
+	 * @param array $top_comments   Top comments data.
 	 * @return string HTML output.
 	 */
-	public static function render( $user_id ) {
-		global $wpdb;
-
-		$table_name     = $wpdb->prefix . Comment_Votes::TABLE_NAME;
-		$comments_table = $wpdb->prefix . 'comments';
-
+	public static function render( $user_id, $total_likes = 0, $total_dislikes = 0, $top_comments = array() ) {
 		$user = get_user_by( 'id', $user_id );
 		if ( ! $user ) {
 			return '';
 		}
-
-		$user_email = $user->user_email;
-
-		$total_likes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i v
-                 INNER JOIN %i c ON v.comment_id = c.comment_ID
-                 WHERE c.comment_author_email = %s AND v.is_liked = 1', // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders
-				$table_name,
-				$comments_table,
-				$user_email
-			)
-		);
-
-		$total_dislikes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i v
-                 INNER JOIN %i c ON v.comment_id = c.comment_ID
-                 WHERE c.comment_author_email = %s AND v.is_liked = 0', // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders
-				$table_name,
-				$comments_table,
-				$user_email
-			)
-		);
-
-		$commentmeta_table = $wpdb->prefix . 'commentmeta';
-
-		$top_comments = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				"SELECT c.comment_ID, c.comment_content, c.comment_post_ID,
-                    COALESCE(m.meta_value, 0) as likes_count
-                FROM %i c
-                LEFT JOIN %i m ON c.comment_ID = m.comment_id AND m.meta_key = '_weal_likes_count'
-                WHERE c.comment_author_email = %s AND c.comment_approved = 1
-                ORDER BY COALESCE(m.meta_value, 0) DESC
-                LIMIT 3", // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders
-				$comments_table,
-				$commentmeta_table,
-				$user_email
-			)
-		);
 
 		ob_start();
 		?>
