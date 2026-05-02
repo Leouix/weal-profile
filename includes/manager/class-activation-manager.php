@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains the relevant methods and functions for the plugin
+ * Activation manager class.
  *
  * @package weal-profile
  */
@@ -10,7 +10,7 @@ namespace WealProfile\Includes\Manager;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+    exit;
 }
 
 /**
@@ -18,72 +18,62 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Activation_Manager {
 
+    /**
+     * Settings manager.
+     * @var Settings_Manager
+     */
+    private $settings_manager;
 
-	/**
-	 * Settings manager.
-	 *
-	 * @var Settings_Manager
-	 */
-	private $settings_manager;
-	/**
-	 * Page manager.
-	 *
-	 * @var Public_Page_Manager
-	 */
-	private $page_manager;
+    /**
+     * Page manager.
+     * @var Public_Page_Manager
+     */
+    private $page_manager;
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		$this->settings_manager = new Settings_Manager();
-		$this->page_manager     = new Public_Page_Manager();
-	}
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        $this->settings_manager = new Settings_Manager();
+        $this->page_manager     = new Public_Page_Manager();
+    }
 
-	/**
-	 * Activate plugin.
-	 */
-	public function activate() {
-		$this->create_database_table();
-		Comment_Votes::create_table();
-		$this->settings_manager->clear_cache();
-		$this->initialize_settings();
-	}
+    /**
+     * Activate plugin.
+     * @throws \Exception
+     */
+    public function activate() {
+        // Если Comment_Votes всё еще требует отдельную таблицу, оставляем.
+        // Если нет — её тоже можно перевести на мета-данные.
+        Comment_Votes::create_table();
 
-	/**
-	 * Create database table.
-	 */
-	private function create_database_table() {
-		global $wpdb;
+        $this->initialize_settings();
 
-		$charset_collate = $wpdb->get_charset_collate();
-		$table_name      = $wpdb->prefix . 'weal_profile_plugin';
+        // После инициализации настроек сбрасываем правила перезаписи URL
+        flush_rewrite_rules();
+    }
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            user_page_url varchar(255) NOT NULL,
-            fields_allowed_json varchar(255) NULL,
-            PRIMARY KEY  (id)
-        ) $charset_collate;";
+    /**
+     * Initialize settings.
+     * Теперь работает через Options API внутри Settings_Manager.
+     * @throws \Exception
+     */
+    private function initialize_settings() {
+        $existing_url = $this->settings_manager->get_user_page_url();
 
-		include_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $sql );
-	}
+        // Если настройка уже есть в wp_options, ничего не делаем
+        if ( $existing_url ) {
+            return;
+        }
 
-	/**
-	 * Initialize settings.
-	 */
-	private function initialize_settings() {
-		$existing_url = $this->settings_manager->get_user_page_url();
+        // 1. Находим свободный slug для страницы (например, 'my-account')
+        $slug = $this->page_manager->find_available_slug();
 
-		if ( $existing_url ) {
-			return;
-		}
+        // 2. Создаем физическую страницу в WordPress
+        $this->page_manager->create_page( $slug );
 
-		$slug = $this->page_manager->find_available_slug();
-		$this->page_manager->create_page( $slug );
-
-		$default_fields = $this->settings_manager->get_default_fields();
-		$this->settings_manager->save_settings( $slug, $default_fields );
-	}
+        // 3. Сохраняем настройки в таблицу wp_options
+        $default_fields = $this->settings_manager->get_default_fields();
+        $this->settings_manager->save_settings( $slug, $default_fields );
+    }
 }
