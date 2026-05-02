@@ -21,8 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @subpackage Weal_Profile/public/partials
  */
 
-$user_id     = get_current_user_id();
-$avatar_html = Weal_Profile_Avatar::get_avatar_html( $user_id );
+$weal_avatar_html = Weal_Profile_Avatar::get_avatar_html( get_current_user_id() );
+$weal_is_avatar_field_allowed = Weal_Profile_Avatar::get_is_avatar_field_allowed();
 
 if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 	?>
@@ -54,30 +54,35 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 						<div class="text"><?php echo esc_html__( 'My Info', 'weal-profile' ); ?></div>
 					</div>
 				</div>
-				<div class="avatar-area">
 
-					<div class="weal-profile-avatar-wrapper">
-						<?php echo wp_kses_post( $avatar_html ); ?>
+                <?php if ( $weal_is_avatar_field_allowed ) : ?>
+                    <div class="avatar-area">
 
-					</div>
+                        <div class="weal-profile-avatar-wrapper">
+                            <?php echo wp_kses_post( $weal_avatar_html ); ?>
 
-				</div>
+                        </div>
+
+                    </div>
+                <?php endif; ?>
 
 			</div>
 
-			<div class="weal-profile-avatar-forms">
-				<form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
-					<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
-					<input type="hidden" name="weal_profile_avatar_action" value="upload" />
-					<input type="file" name="profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
-				</form>
+			<?php if ( $weal_is_avatar_field_allowed ) : ?>
+                <div class="weal-profile-avatar-forms">
+                    <form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
+                        <?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+                        <input type="hidden" name="weal_profile_avatar_action" value="upload" />
+                        <input type="file" name="profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
+                    </form>
 
-				<form method="post" action="" class="weal-profile-avatar-form">
-					<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
-					<input type="hidden" name="weal_profile_avatar_action" value="remove" />
-					<button type="submit" title="Delete" class="button"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
-				</form>
-			</div>
+                    <form method="post" action="" class="weal-profile-avatar-form">
+                        <?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+                        <input type="hidden" name="weal_profile_avatar_action" value="remove" />
+                        <button type="submit" title="Delete" class="button"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
+                    </form>
+                </div>
+			<?php endif; ?>
 
 
 		<div id="container-results"></div>

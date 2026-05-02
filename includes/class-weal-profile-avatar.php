@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use WealProfile\Includes\Manager\Settings_Manager;
+
 /**
  * Class Weal_Profile_Avatar
  *
@@ -126,5 +128,17 @@ class Weal_Profile_Avatar {
 	 */
 	public static function cleanup_on_user_delete( $user_id ) {
 		self::remove_avatar( $user_id );
+	}
+
+	/**
+	 * Check if avatar field is allowed in plugin settings.
+	 *
+	 * @return bool True if avatar is in fields_allowed, false otherwise.
+	 */
+	public static function get_is_avatar_field_allowed() {
+		$settings_manager = new Settings_Manager();
+		$settings         = $settings_manager->get_settings();
+		$fields_allowed   = $settings['fields_allowed'] ?? array();
+		return in_array( 'avatar', $fields_allowed, true );
 	}
 }
