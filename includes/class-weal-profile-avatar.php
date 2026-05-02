@@ -141,4 +141,58 @@ class Weal_Profile_Avatar {
 		$fields_allowed   = $settings['fields_allowed'] ?? array();
 		return in_array( 'avatar', $fields_allowed, true );
 	}
+
+    /**
+     * Filter the standard WordPress avatar to use our custom one.
+     *
+     * @param string $avatar      HTML for the user's avatar.
+     * @param mixed  $id_or_email The Gravatar to retrieve. Accepts a user ID, Gravatar MD5 hash, user email, WP_User object, WP_Post object, or WP_Comment object.
+     * @param int    $size        Square avatar width and height in pixels to retrieve.
+     * @param string $default     URL to a default image to use if no avatar is available.
+     * @param string $alt         Alternative text to use in the avatar image tag.
+     * @return string Filtered avatar HTML.
+     */
+    public static function filter_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+        $user_id = false;
+
+        // WordPress может передать сюда разные типы данных, нам нужно извлечь ID пользователя
+        if ( is_numeric( $id_or_email ) ) {
+            $user_id = (int) $id_or_email;
+        } elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
+            // Например, это объект комментария
+            $user_id = (int) $id_or_email->user_id;
+        } elseif ( $id_or_email instanceof WP_User ) {
+            $user_id = $id_or_email->ID;
+        } elseif ( is_string( $id_or_email ) && is_email( $id_or_email ) ) {
+            $user = get_user_by( 'email', $id_or_email );
+            if ( $user ) {
+                $user_id = $user->ID;
+            }
+        }
+
+        // Если нашли пользователя, проверяем нашу мету
+        if ( $user_id ) {
+            $custom_avatar_id = self::get_avatar_id( $user_id );
+
+            if ( $custom_avatar_id > 0 ) {
+                // Формируем HTML стандартными средствами WP, подставляя запрошенный размер
+                $custom_avatar = wp_get_attachment_image(
+                    $custom_avatar_id,
+                    array( $size, $size ),
+                    false,
+                    array(
+                        'class' => 'avatar avatar-' . $size . ' photo',
+                        'alt'   => $alt ? $alt : __( 'Profile picture', 'weal-profile' ),
+                    )
+                );
+
+                if ( $custom_avatar ) {
+                    return $custom_avatar;
+                }
+            }
+        }
+
+        // Если кастомного аватара нет, возвращаем стандартный Gravatar
+        return $avatar;
+    }
 }
