@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! empty( $user_comments ) ) {
 
-	echo Profile_Votes_Page::render( get_current_user_id() );
+	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id() ) );
 
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );
