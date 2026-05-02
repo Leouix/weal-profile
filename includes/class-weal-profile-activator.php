@@ -21,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @subpackage Weal_Profile/includes
  */
 
-require_once plugin_dir_path( __FILE__ ) . 'Manager/class-settings-manager.php';
-require_once plugin_dir_path( __FILE__ ) . 'Manager/class-public-page-manager.php';
-require_once plugin_dir_path( __FILE__ ) . 'Manager/class-activation-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'manager/class-settings-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'manager/class-public-page-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'manager/class-activation-manager.php';
 
 /**
  * Activator class.

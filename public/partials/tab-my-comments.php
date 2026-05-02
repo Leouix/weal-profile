@@ -21,34 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 if ( ! empty( $user_comments ) ) {
-	foreach ( $user_comments as $weal_profile_user_comment ) {
 
-		$weal_profile_post_url   = get_permalink( $weal_profile_user_comment->comment_post_ID );
-		$weal_profile_post_title = get_the_title( $weal_profile_user_comment->comment_post_ID );
-		?>
-		<div class="au-comment-area">
-		<?php
+    echo Profile_Votes_Page::render( get_current_user_id() );
 
-		printf( '<p class="post-link">' . esc_html__( 'Post:', 'weal-profile' ) . ' <a href="%s" target="_blank">%s</a></p>', esc_url( $weal_profile_post_url ), esc_html( $weal_profile_post_title ) );
-
-		printf( '<p>' . esc_html__( 'Comment text:', 'weal-profile' ) . ' %s</p>', esc_html( $weal_profile_user_comment->comment_content ) );
-
-		printf(
-			'<p class="comment-date">' . esc_html__( 'Date:', 'weal-profile' ) . ' %s</p>',
-			esc_html( gmdate( 'Y-m-d H:i', strtotime( $weal_profile_user_comment->comment_date ) ) )
-		);
-
-		printf( '<p class="comment-author">' . esc_html__( 'Author:', 'weal-profile' ) . ' %s</p>', esc_html( $weal_profile_user_comment->comment_author ) );
-
-		?>
-		</div>
-
-		<?php
-	}
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );
 }
 
-echo Profile_Votes_Page::render( get_current_user_id() );
 
 ?>
