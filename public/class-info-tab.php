@@ -145,13 +145,10 @@ class Info_Tab {
 		}
 
 		foreach ( $allowed_fields as $allowed_field ) {
-			if ( 'avatar' === $allowed_field ) {
-				$avatar_id = get_user_meta( $this->logged_user_id, 'weal_profile_avatar_id', true );
-				$user_data_obj->avatar = $avatar_id ? wp_get_attachment_url( $avatar_id ) : null;
-			} elseif ( in_array( $allowed_field, $meta_fields, true ) ) {
-				$user_data_obj->$allowed_field = $user_meta[ $allowed_field ][0] ?? null;
+			if ( in_array( $allowed_field, $meta_fields, true ) ) {
+				$user_data_obj->$allowed_field = $user_meta[ $allowed_field ][0];
 			} else {
-				$user_data_obj->$allowed_field = $user_data->$allowed_field ?? null;
+				$user_data_obj->$allowed_field = $user_data->$allowed_field;
 			}
 		}
 
