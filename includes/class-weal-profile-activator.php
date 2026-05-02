@@ -5,6 +5,8 @@
  * @package weal-profile
  */
 
+use WealProfile\Includes\Manager\Activation_Manager;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -19,18 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @subpackage Weal_Profile/includes
  */
 
-require_once plugin_dir_path( __FILE__ ) . 'class-settings-manager.php';
-require_once plugin_dir_path( __FILE__ ) . 'class-public-page-manager.php';
-require_once plugin_dir_path( __FILE__ ) . 'class-activation-manager.php';
-
-use MyAccountPage\Includes\Activation_Manager;
+require_once plugin_dir_path( __FILE__ ) . 'Manager/class-settings-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'Manager/class-public-page-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'Manager/class-activation-manager.php';
 
 /**
  * Activator class.
  */
 class Weal_Profile_Activator {
-
-
 
 	/**
 	 * Activate plugin.

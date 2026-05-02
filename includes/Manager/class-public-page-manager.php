@@ -5,13 +5,13 @@
  * @package weal-profile
  */
 
-namespace WealProfile\Includes;
+namespace WealProfile\Includes\Manager;
+
+use Exception;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-use Exception;
 
 /**
  * Public page manager class.
@@ -108,12 +108,13 @@ class Public_Page_Manager {
 		}
 	}
 
-	/**
-	 * Update page URL.
-	 *
-	 * @param string $old_slug Old slug.
-	 * @param string $new_slug New slug.
-	 */
+    /**
+     * Update page URL.
+     *
+     * @param string $old_slug Old slug.
+     * @param string $new_slug New slug.
+     * @throws Exception
+     */
 	public function update_page_url( $old_slug, $new_slug ) {
 		$this->delete_page_by_slug( $old_slug );
 		$this->create_page( $new_slug );

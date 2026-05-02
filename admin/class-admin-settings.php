@@ -11,9 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use MyAccountPage\Includes\Settings_Manager;
-use WealProfile\Includes\Public_Page_Manager;
 use Exception;
+use WealProfile\Includes\Manager\Public_Page_Manager;
+use WealProfile\Includes\Manager\Settings_Manager;
 
 /**
  * Admin Settings Class.

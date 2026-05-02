@@ -5,7 +5,7 @@
  * @package weal-profile
  */
 
-namespace MyAccountPage\Includes;
+namespace WealProfile\Includes\Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

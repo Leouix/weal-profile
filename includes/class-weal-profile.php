@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @subpackage Weal_Profile/includes
  */
 
-use MyAccountPage\Includes\Settings_Manager;
 use WealProfile\Admin\Admin_Settings;
+use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Includes\Routes;
 
 /**
@@ -144,8 +144,8 @@ class Weal_Profile {
 		 */
 		include_once plugin_dir_path( __DIR__ ) . 'public/class-weal-profile-public.php';
 
-		include_once plugin_dir_path( __DIR__ ) . 'includes/class-settings-manager.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/class-public-page-manager.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/Manager/class-settings-manager.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/Manager/class-public-page-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-routes.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-avatar.php';
 		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';

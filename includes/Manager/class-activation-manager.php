@@ -5,13 +5,11 @@
  * @package weal-profile
  */
 
-namespace MyAccountPage\Includes;
+namespace WealProfile\Includes\Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-use WealProfile\Includes\Public_Page_Manager;
 
 /**
  * Activation manager class.
@@ -23,7 +21,7 @@ class Activation_Manager {
 	 * Settings manager.
 	 *
 	 * @var Settings_Manager
-	 */
+     */
 	private $settings_manager;
 	/**
 	 * Page manager.
@@ -58,7 +56,8 @@ class Activation_Manager {
 		$charset_collate = $wpdb->get_charset_collate();
 		$table_name      = $wpdb->prefix . 'weal_profile_plugin';
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		$sql = /** @lang text */
+            "CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(9) NOT NULL AUTO_INCREMENT,
             user_page_url varchar(255) NOT NULL,
             fields_allowed_json varchar(255) NULL,
