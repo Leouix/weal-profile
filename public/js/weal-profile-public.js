@@ -204,27 +204,21 @@ function checkTabGetParamsLoading() {
 
 	var params = getParameters( getNavUrl() );
 
-	if ( 'my-comments' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
-		getPage(
-			{
-				clickId: 'tab-button-1',
-			}
-		);
-		TabsSwitcherHelper.switch( 'tab-button-1' );
-	} else if ( 'users' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
-		getPage(
-			{
-				clickId: 'tab-button-2',
-			}
-		);
-		TabsSwitcherHelper.switch( 'tab-button-2' );
-	} else { // if ( 'info' === params?.tab ).
+	// if ( 'my-comments' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
+	if ( 'info' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
 		getPage(
 			{
 				clickId: 'tab-button-3',
 			}
 		);
 		TabsSwitcherHelper.switch( 'tab-button-3' );
+	} else { // if ( 'info' === params?.tab ).
+		getPage(
+			{
+				clickId: 'tab-button-1',
+			}
+		);
+		TabsSwitcherHelper.switch( 'tab-button-1' );
 	}
 
 }
