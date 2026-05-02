@@ -24,7 +24,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use WealProfile\Admin\Admin_Settings;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
-use WealProfile\Includes\Comment_Votes\REST_Votes;
 use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Includes\Routes;
 
@@ -153,7 +152,6 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';
 		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-comment-votes.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-rest-votes.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-profile-votes-page.php';
 
 		$this->loader = new Weal_Profile_Loader();
@@ -226,9 +224,6 @@ class Weal_Profile {
 
 		$routes_class = new Routes( $this->admin_settings );
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
-
-		$rest_votes = new REST_Votes();
-		$this->loader->add_action( 'rest_api_init', $rest_votes, 'register_routes' );
 
 		new Comment_Votes();
 
