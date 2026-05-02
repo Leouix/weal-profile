@@ -65,7 +65,7 @@ class Settings_Manager {
 	public function save_settings( string $user_page_url, $fields_allowed ) {
 
 		$data = array(
-            'user_page_url'  => sanitize_text_field( $user_page_url ),
+			'user_page_url'  => sanitize_text_field( $user_page_url ),
 			'fields_allowed' => array_map( 'sanitize_text_field', $fields_allowed ),
 		);
 

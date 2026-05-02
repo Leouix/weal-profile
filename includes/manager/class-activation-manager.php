@@ -53,7 +53,7 @@ class Activation_Manager {
 		$this->initialize_settings();
 
 		// После инициализации настроек сбрасываем правила перезаписи URL.
-		 flush_rewrite_rules();
+		flush_rewrite_rules();
 	}
 
 	/**
