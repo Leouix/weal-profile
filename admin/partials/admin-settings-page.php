@@ -45,10 +45,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div  class="sub-title"><?php esc_html_e( 'Which fields should be shown in the user account?', 'weal-profile' ); ?></div>
 
-        <div class="label-area">
-            <input type="checkbox" id="adu-avatar" name="show_user_fields_checkbox[]" value="avatar" <?php checked( in_array( 'avatar', $fields_allowed_array, true ) ); ?>>
-            <label for="adu-avatar"><?php esc_html_e( 'avatar', 'weal-profile' ); ?></label><br>
-        </div>
+		<div class="label-area">
+			<input type="checkbox" id="adu-avatar" name="show_user_fields_checkbox[]" value="avatar" <?php checked( in_array( 'avatar', $fields_allowed_array, true ) ); ?>>
+			<label for="adu-avatar"><?php esc_html_e( 'avatar', 'weal-profile' ); ?></label><br>
+		</div>
 
 		<div class="label-area">
 			<input type="checkbox" id="adu-display_name" name="show_user_fields_checkbox[]" value="display_name" <?php checked( in_array( 'display_name', $fields_allowed_array, true ) ); ?>>
