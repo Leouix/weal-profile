@@ -21,8 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @subpackage Weal_Profile/public/partials
  */
 
-$user_id = get_current_user_id();
-$avatar_html = Weal_Profile_Avatar::get_avatar_html($user_id);
+$user_id     = get_current_user_id();
+$avatar_html = Weal_Profile_Avatar::get_avatar_html( $user_id );
 
 if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 	?>
@@ -41,43 +41,43 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 	<div class="container au-container">
 		<div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
 			<h1 class="wp-block-post-title"><?php echo esc_html__( 'My Account', 'weal-profile' ); ?></h1>
-            <div class="weal-profile-top-area">
-                <div id="main-tabs">
-                    <div id="tab-button-1"
-                         class="main-tabs-item"
-                         onclick="switchTab(this)">
-                        <div class="text"><?php echo esc_html__( 'Comments', 'weal-profile' ); ?></div>
-                    </div>
-                    <div id="tab-button-3"
-                         class="main-tabs-item"
-                         onclick="switchTab(this)">
-                        <div class="text"><?php echo esc_html__( 'My Info', 'weal-profile' ); ?></div>
-                    </div>
-                </div>
-                <div class="avatar-area">
+			<div class="weal-profile-top-area">
+				<div id="main-tabs">
+					<div id="tab-button-1"
+						class="main-tabs-item"
+						onclick="switchTab(this)">
+						<div class="text"><?php echo esc_html__( 'Comments', 'weal-profile' ); ?></div>
+					</div>
+					<div id="tab-button-3"
+						class="main-tabs-item"
+						onclick="switchTab(this)">
+						<div class="text"><?php echo esc_html__( 'My Info', 'weal-profile' ); ?></div>
+					</div>
+				</div>
+				<div class="avatar-area">
 
-                    <div class="weal-profile-avatar-wrapper">
-                        <?php echo wp_kses_post( $avatar_html ); ?>
+					<div class="weal-profile-avatar-wrapper">
+						<?php echo wp_kses_post( $avatar_html ); ?>
 
-                    </div>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-            <div class="weal-profile-avatar-forms">
-                <form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
-                    <?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
-                    <input type="hidden" name="weal_profile_avatar_action" value="upload" />
-                    <input type="file" name="profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
-                </form>
+			<div class="weal-profile-avatar-forms">
+				<form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
+					<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+					<input type="hidden" name="weal_profile_avatar_action" value="upload" />
+					<input type="file" name="profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
+				</form>
 
-                <form method="post" action="" class="weal-profile-avatar-form">
-                    <?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
-                    <input type="hidden" name="weal_profile_avatar_action" value="remove" />
-                    <button type="submit" title="Delete" class="button"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
-                </form>
-            </div>
+				<form method="post" action="" class="weal-profile-avatar-form">
+					<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+					<input type="hidden" name="weal_profile_avatar_action" value="remove" />
+					<button type="submit" title="Delete" class="button"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
+				</form>
+			</div>
 
 
 		<div id="container-results"></div>
