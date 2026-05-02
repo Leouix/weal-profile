@@ -36,7 +36,7 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 ?>
 	<div class="container au-container">
 		<div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-			<h2>My Account</h2>
+			<h1 class="wp-block-post-title">My Account</h1>
 			<div id="main-tabs">
 				<div id="tab-button-1"
 					class="main-tabs-item"
