@@ -153,7 +153,7 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-comment-votes.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-profile-votes-page.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-likesvoteservice.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-likes-vote-service.php';
 
 		$this->loader = new Weal_Profile_Loader();
 	}

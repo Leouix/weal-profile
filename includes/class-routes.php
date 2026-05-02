@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use WealProfile\Admin\Admin_Settings;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
-use WealProfile\Includes\Comment_Votes\LikesVoteService;
+use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Public\Info_Tab_Manager;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -257,7 +257,7 @@ class Routes {
 		);
 		$user_comments = get_comments( $args );
 
-		$likes_service = new LikesVoteService();
+		$likes_service = new Likes_Vote_Service();
 		$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 
 		$total_likes    = $vote_data['total_likes'] ?? 0;

@@ -7,16 +7,14 @@
 
 namespace WealProfile\Includes\Comment_Votes;
 
-use wpdb;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Class LikesVoteService
+ * Class Likes_Vote_Service
  */
-class LikesVoteService {
+class Likes_Vote_Service {
 
 	/**
 	 * Get all vote data for a user.
