@@ -5,6 +5,8 @@
  * @package weal-profile
  */
 
+use WealProfile\Includes\Comment_Votes\Profile_Votes_Page;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -46,5 +48,7 @@ if ( ! empty( $user_comments ) ) {
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );
 }
+
+echo Profile_Votes_Page::render( get_current_user_id() );
 
 ?>

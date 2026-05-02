@@ -1,0 +1,147 @@
+.weal-vote-container {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: 12px;
+	vertical-align: middle;
+}
+
+.weal-vote-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background: #f7f7f7;
+	cursor: pointer;
+	font-size: 13px;
+	color: #555;
+	transition: all 0.2s ease;
+}
+
+.weal-vote-btn:hover {
+	background: #eaeaea;
+	border-color: #999;
+}
+
+.weal-vote-btn:focus {
+	outline: 2px solid #0073aa;
+	outline-offset: 1px;
+}
+
+.weal-vote-active {
+	background: #0073aa;
+	color: #fff;
+	border-color: #005a87;
+}
+
+.weal-vote-active:hover {
+	background: #005a87;
+}
+
+.weal-vote-active .dashicons {
+	color: #fff;
+}
+
+.weal-vote-count {
+	font-weight: 600;
+	min-width: 16px;
+	text-align: center;
+}
+
+.weal-vote-login-hint {
+	font-size: 12px;
+	color: #888;
+	font-style: italic;
+	margin-left: 8px;
+}
+
+.weal-comment-reactions {
+	margin-top: 30px;
+	padding: 20px;
+	background: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+}
+
+.weal-comment-reactions h3 {
+	margin-top: 0;
+	margin-bottom: 16px;
+	font-size: 20px;
+}
+
+.weal-reactions-summary {
+	display: flex;
+	gap: 24px;
+	margin-bottom: 20px;
+}
+
+.weal-reaction-stat {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 15px;
+}
+
+.weal-reaction-stat .dashicons {
+	font-size: 20px;
+}
+
+.weal-reaction-stat.weal-likes .dashicons {
+	color: #0073aa;
+}
+
+.weal-reaction-stat.weal-dislikes .dashicons {
+	color: #dc3232;
+}
+
+.weal-stat-value {
+	font-weight: 700;
+	font-size: 18px;
+}
+
+.weal-stat-label {
+	color: #555;
+}
+
+.weal-top-comments h4 {
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+.weal-top-comments ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.weal-top-comments li {
+	padding: 8px 0;
+	border-bottom: 1px solid #e0e0e0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.weal-top-comments li:last-child {
+	border-bottom: none;
+}
+
+.weal-top-comments a {
+	color: #0073aa;
+	text-decoration: none;
+	flex: 1;
+}
+
+.weal-top-comments a:hover {
+	text-decoration: underline;
+}
+
+.weal-comment-likes {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	color: #0073aa;
+	font-weight: 600;
+}

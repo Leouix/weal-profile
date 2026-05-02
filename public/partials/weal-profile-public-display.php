@@ -5,6 +5,8 @@
  * @package weal-profile
  */
 
+use WealProfile\Includes\Comment_Votes\Profile_Votes_Page;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -86,7 +88,6 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 
 
 		<div id="container-results"></div>
-
 
 	</div>
 </div>

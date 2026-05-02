@@ -150,6 +150,9 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-avatar.php';
 		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';
 		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-comment-votes.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-rest-votes.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-profile-votes-page.php';
 
 		$this->loader = new Weal_Profile_Loader();
 	}
@@ -221,6 +224,11 @@ class Weal_Profile {
 
 		$routes_class = new Routes( $this->admin_settings );
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
+
+		$rest_votes = new \WealProfile\Includes\Comment_Votes\REST_Votes();
+		$this->loader->add_action( 'rest_api_init', $rest_votes, 'register_routes' );
+
+		new \WealProfile\Includes\Comment_Votes\Comment_Votes();
 
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
 
