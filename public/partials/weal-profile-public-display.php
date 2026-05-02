@@ -50,9 +50,40 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 				</div>
 			</div>
 
-			<div id="container-results"></div>
+		<div id="container-results"></div>
+
+		<?php
+		$user_id = get_current_user_id();
+		$avatar_html = Weal_Profile_Avatar::get_avatar_html( $user_id );
+
+		if ( isset( $_GET['avatar_updated'] ) && '1' === $_GET['avatar_updated'] ) {
+			echo '<div class="notice notice-success"><p>' . esc_html__( 'Profile picture updated.', 'weal-profile' ) . '</p></div>';
+		}
+
+		if ( isset( $_GET['avatar_removed'] ) && '1' === $_GET['avatar_removed'] ) {
+			echo '<div class="notice notice-success"><p>' . esc_html__( 'Profile picture removed.', 'weal-profile' ) . '</p></div>';
+		}
+		?>
+
+		<div class="weal-profile-avatar-wrapper">
+			<?php echo wp_kses_post( $avatar_html ); ?>
 		</div>
+
+		<form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
+			<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+			<input type="hidden" name="weal_profile_avatar_action" value="upload" />
+			<input type="file" name="profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
+			<button type="submit" class="button button-primary"><?php esc_html_e( 'Upload Avatar', 'weal-profile' ); ?></button>
+		</form>
+
+		<form method="post" action="" class="weal-profile-avatar-form">
+			<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+			<input type="hidden" name="weal_profile_avatar_action" value="remove" />
+			<button type="submit" class="button"><?php esc_html_e( 'Remove Avatar', 'weal-profile' ); ?></button>
+		</form>
 	</div>
+</div>
+
 
 
 <?php

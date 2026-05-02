@@ -129,3 +129,26 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 #user-data-form #form-user-button {
 	display: none;
 }
+
+.weal-profile-avatar-wrapper {
+	margin-bottom: 20px;
+}
+
+.weal-profile-avatar-wrapper img {
+	width: 96px;
+	height: 96px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.weal-profile-avatar-form {
+	margin-top: 15px;
+}
+
+.weal-profile-avatar-form input[type="file"] {
+	margin-bottom: 10px;
+}
+
+.weal-profile-avatar-form .button {
+	margin-right: 10px;
+}

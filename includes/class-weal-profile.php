@@ -147,6 +147,7 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-settings-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-public-page-manager.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-routes.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/class-avatar.php';
 		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';
 		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab.php';
 
@@ -222,6 +223,9 @@ class Weal_Profile {
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
 
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
+
+		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
+		$this->loader->add_action( 'delete_user', $this, 'cleanup_user_avatar' );
 	}
 
 	/**
@@ -267,6 +271,50 @@ class Weal_Profile {
 			return null;
 		}
 		return $template;
+	}
+
+	/**
+	 * Handle avatar upload and removal actions.
+	 */
+	public function handle_avatar_actions() {
+		if ( ! isset( $_POST['weal_profile_avatar_action'] ) ) {
+			return;
+		}
+
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['weal_profile_avatar_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['weal_profile_avatar_nonce'] ) ), 'weal_profile_avatar_action' ) ) {
+			return;
+		}
+
+		$action = sanitize_text_field( wp_unslash( $_POST['weal_profile_avatar_action'] ) );
+
+		$redirect_url = remove_query_arg( array( 'avatar_updated', 'avatar_removed' ) );
+
+		if ( 'upload' === $action ) {
+			$result = Weal_Profile_Avatar::handle_upload();
+			if ( ! is_wp_error( $result ) ) {
+				$redirect_url = add_query_arg( 'avatar_updated', '1', $redirect_url );
+			}
+		} elseif ( 'remove' === $action ) {
+			$user_id = get_current_user_id();
+			Weal_Profile_Avatar::remove_avatar( $user_id );
+			$redirect_url = add_query_arg( 'avatar_removed', '1', $redirect_url );
+		}
+
+		wp_safe_redirect( $redirect_url );
+		exit;
+	}
+
+	/**
+	 * Clean up user avatar on user deletion.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public function cleanup_user_avatar( $user_id ) {
+		Weal_Profile_Avatar::cleanup_on_user_delete( $user_id );
 	}
 	/**
 	 * Add user ID to query vars.
