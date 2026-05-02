@@ -34,24 +34,26 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 	get_header();
 }
 ?>
+	<div class="container au-container">
+		<div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+			<h2>My Account</h2>
+			<div id="main-tabs">
+				<div id="tab-button-1"
+					class="main-tabs-item"
+					onclick="switchTab(this)">
+					<div class="text">Comments</div>
+				</div>
+				<div id="tab-button-3"
+					class="main-tabs-item"
+					onclick="switchTab(this)">
+					<div class="text">My Info</div>
+				</div>
+			</div>
 
-	<div class="au-container">
-		<h2>My Account</h2>
-		<div id="main-tabs">
-			<div id="tab-button-1"
-				class="main-tabs-item"
-				onclick="switchTab(this)">
-				<div class="text">Comments</div>
-			</div>
-			<div id="tab-button-3"
-				class="main-tabs-item"
-				onclick="switchTab(this)">
-				<div class="text">My Info</div>
-			</div>
+			<div id="container-results"></div>
 		</div>
-
-		<div id="container-results"></div>
 	</div>
+
 
 <?php
 if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
