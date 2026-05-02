@@ -113,7 +113,7 @@ class Public_Page_Manager {
 	 *
 	 * @param string $old_slug Old slug.
 	 * @param string $new_slug New slug.
-	 * @throws Exception
+	 * @throws Exception If page creation fails.
 	 */
 	public function update_page_url( $old_slug, $new_slug ) {
 		$this->delete_page_by_slug( $old_slug );
