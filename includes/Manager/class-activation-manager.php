@@ -21,7 +21,7 @@ class Activation_Manager {
 	 * Settings manager.
 	 *
 	 * @var Settings_Manager
-     */
+	 */
 	private $settings_manager;
 	/**
 	 * Page manager.
@@ -57,7 +57,7 @@ class Activation_Manager {
 		$table_name      = $wpdb->prefix . 'weal_profile_plugin';
 
 		$sql = /** @lang text */
-            "CREATE TABLE IF NOT EXISTS $table_name (
+			"CREATE TABLE IF NOT EXISTS $table_name (
             id mediumint(9) NOT NULL AUTO_INCREMENT,
             user_page_url varchar(255) NOT NULL,
             fields_allowed_json varchar(255) NULL,
