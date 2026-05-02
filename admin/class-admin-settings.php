@@ -78,15 +78,16 @@ class Admin_Settings {
 	 */
 	public function handle_saving( $post_data ) {
 		$this->verify_nonce( $post_data );
-		$this->validate_table_exists();
 
 		$fields = $this->validate_fields( $post_data );
-		$url    = $this->validate_url( $post_data );
+		$validatedUrl    = $this->validate_url( $post_data );
 
-		if ( null !== $url ) {
-			$this->process_url_change( $url );
+		if ( !empty( $validatedUrl) ) {
+			$this->process_url_change( $validatedUrl );
 		}
-		$this->settings_manager->save_settings( $url, $fields );
+
+        $requiredUrlForUpdate = $validatedUrl ?? $this->current_settings[ 'user_page_url'];
+		$this->settings_manager->save_settings( $requiredUrlForUpdate, $fields );
 	}
 
 	/**
@@ -101,18 +102,6 @@ class Admin_Settings {
 
 		if ( ! wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
 			throw new Exception( esc_html__( 'Security check failed', 'weal-profile' ) );
-		}
-	}
-
-	/**
-	 * Validate table exists.
-	 *
-	 * @return void
-	 * @throws Exception If table does not exist.
-	 */
-	private function validate_table_exists() {
-		if ( ! $this->settings_manager->is_table_exists() ) {
-			throw new Exception( esc_html__( 'Plugin table does not exist', 'weal-profile' ) );
 		}
 	}
 
@@ -213,14 +202,5 @@ class Admin_Settings {
 		$fields_allowed_array = $this->get_fields_allowed();
 
 		include __DIR__ . '/partials/admin-settings-page.php';
-	}
-
-	/**
-	 * Check if plugin table exists.
-	 *
-	 * @return bool True if table exists.
-	 */
-	public function is_plugin_table_exists() {
-		return $this->settings_manager->is_table_exists();
 	}
 }

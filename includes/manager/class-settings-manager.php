@@ -18,6 +18,11 @@ class Settings_Manager {
 
 	private const OPTION_NAME = 'weal_profile_settings';
 
+	/**
+	 * Default fields for the profile.
+	 *
+	 * @var array
+	 */
 	private $default_fields = array(
 		'display_name',
 		'user_url',
@@ -26,6 +31,11 @@ class Settings_Manager {
 		'avatar',
 	);
 
+	/**
+	 * Get plugin settings.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$settings = get_option( self::OPTION_NAME, array() );
 
@@ -35,29 +45,38 @@ class Settings_Manager {
 		);
 	}
 
+	/**
+	 * Get user page URL.
+	 *
+	 * @return string|null
+	 */
 	public function get_user_page_url() {
 		$settings = $this->get_settings();
 		return $settings['user_page_url'] ?? null;
 	}
 
-	public function save_settings( $user_page_url, $fields_allowed ) {
+	/**
+	 * Save plugin settings.
+	 *
+	 * @param string $user_page_url User page URL.
+	 * @param array  $fields_allowed Allowed fields.
+	 * @return bool
+	 */
+	public function save_settings( string $user_page_url, $fields_allowed ) {
+
 		$data = array(
-			'user_page_url'  => sanitize_text_field( $user_page_url ),
+            'user_page_url'  => sanitize_text_field( $user_page_url ),
 			'fields_allowed' => array_map( 'sanitize_text_field', $fields_allowed ),
 		);
 
 		return update_option( self::OPTION_NAME, $data );
 	}
 
-	public function is_table_exists() {
-		// Больше не требуется при использовании Options API
-		return true;
-	}
-
-	public function clear_cache() {
-		// Options API в WordPress кэшируется автоматически (alloptions)
-	}
-
+	/**
+	 * Get default fields.
+	 *
+	 * @return array
+	 */
 	public function get_default_fields() {
 		return $this->default_fields;
 	}
