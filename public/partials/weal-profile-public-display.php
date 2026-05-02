@@ -56,13 +56,7 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 		$user_id     = get_current_user_id();
 		$avatar_html = Weal_Profile_Avatar::get_avatar_html( $user_id );
 
-		if ( isset( $_GET['avatar_updated'] ) && '1' === $_GET['avatar_updated'] ) {
-			echo '<div class="notice notice-success"><p>' . esc_html__( 'Profile picture updated.', 'weal-profile' ) . '</p></div>';
-		}
 
-		if ( isset( $_GET['avatar_removed'] ) && '1' === $_GET['avatar_removed'] ) {
-			echo '<div class="notice notice-success"><p>' . esc_html__( 'Profile picture removed.', 'weal-profile' ) . '</p></div>';
-		}
 		?>
 
 		<div class="weal-profile-avatar-wrapper">

@@ -294,14 +294,10 @@ class Weal_Profile {
 		$redirect_url = remove_query_arg( array( 'avatar_updated', 'avatar_removed' ) );
 
 		if ( 'upload' === $action ) {
-			$result = Weal_Profile_Avatar::handle_upload();
-			if ( ! is_wp_error( $result ) ) {
-				$redirect_url = add_query_arg( 'avatar_updated', '1', $redirect_url );
-			}
+			Weal_Profile_Avatar::handle_upload();
 		} elseif ( 'remove' === $action ) {
 			$user_id = get_current_user_id();
 			Weal_Profile_Avatar::remove_avatar( $user_id );
-			$redirect_url = add_query_arg( 'avatar_removed', '1', $redirect_url );
 		}
 
 		wp_safe_redirect( $redirect_url );
