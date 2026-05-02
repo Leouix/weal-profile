@@ -41,7 +41,7 @@
 	transition: 0.35s ease-in;
 }
 
-.au-container form input {
+.au-container #container-results form input {
 	padding: 8px 15px;
 	font-size: 16px;
 	margin: 8px 0 15px 0;
@@ -92,10 +92,6 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	font-size: 16px;
 }
 
-/*@media screen and (min-width: 430px) {*/
-/*    */
-/*}*/
-
 @media screen and (min-width: 430px) {
 	.au-comment-area p {
 		margin: 10px 15px;
@@ -132,24 +128,42 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 }
 
 .weal-profile-avatar-wrapper {
-	margin-bottom: 20px;
+
 }
 
 .weal-profile-avatar-wrapper img {
-	width: 96px;
-	height: 96px;
+	width: 150px;
+	height: 150px;
 	border-radius: 50%;
 	object-fit: cover;
 }
 
-.weal-profile-avatar-form {
-	margin-top: 15px;
+.weal-profile-avatar-forms {
+	display: flex;
+	justify-content: end;
+	font-size: 9px;
 }
 
 .weal-profile-avatar-form input[type="file"] {
-	margin-bottom: 10px;
+	max-width: 135px;
+	cursor: pointer;
+	font-size: 9px;
+}
+
+.weal-profile-avatar-form button[type="submit"] {
+	cursor: pointer;
+	font-size: 9px;
+	color: #fff;
+	background: #ff6161;
+	border: none;
+	border-radius: 3px;
 }
 
 .weal-profile-avatar-form .button {
-	margin-right: 10px;
+
+}
+
+.weal-profile-top-area {
+	display: flex;
+	justify-content: space-between;
 }
