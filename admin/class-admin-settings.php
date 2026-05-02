@@ -79,15 +79,15 @@ class Admin_Settings {
 	public function handle_saving( $post_data ) {
 		$this->verify_nonce( $post_data );
 
-		$fields       = $this->validate_fields( $post_data );
-		$validatedUrl = $this->validate_url( $post_data );
+		$fields        = $this->validate_fields( $post_data );
+		$validated_url = $this->validate_url( $post_data );
 
-		if ( ! empty( $validatedUrl ) ) {
-			$this->process_url_change( $validatedUrl );
+		if ( ! empty( $validated_url ) ) {
+			$this->process_url_change( $validated_url );
 		}
 
-		$requiredUrlForUpdate = $validatedUrl ?? $this->current_settings['user_page_url'];
-		$this->settings_manager->save_settings( $requiredUrlForUpdate, $fields );
+		$required_url_for_update = $validated_url ?? $this->current_settings['user_page_url'];
+		$this->settings_manager->save_settings( $required_url_for_update, $fields );
 	}
 
 	/**
