@@ -297,7 +297,7 @@ class Routes implements ModuleSingletonInterface {
 		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
 
 		if ( $comment_votes_enabled ) {
-			$likes_service = Likes_Vote_Service::get_instance();
+			$likes_service = new Likes_Vote_Service();
 			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 		} else {
 			$vote_data = array(
