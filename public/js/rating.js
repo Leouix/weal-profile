@@ -10,16 +10,14 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 	containers.forEach( function ( container ) {
 		var postId = container.getAttribute( 'data-post-id' );
-		var stars  = container.querySelectorAll( '.rating-stars .dashicons' );
+		var stars = container.querySelectorAll( '.rating-stars .star-wrapper' );
 		var cookieName = 'weal_voted_post_' + postId;
 
-		// Check if user already voted via cookie.
 		if ( document.cookie.indexOf( cookieName + '=1' ) !== -1 ) {
 			lockStars( container, true );
 			return;
 		}
 
-		// Hover effect.
 		stars.forEach( function ( star ) {
 			star.addEventListener( 'mouseenter', function () {
 				var rate = parseInt( star.getAttribute( 'data-rate' ), 10 );
@@ -30,7 +28,6 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				resetStars( stars );
 			} );
 
-			// Click handler.
 			star.addEventListener( 'click', function () {
 				var rate = parseInt( star.getAttribute( 'data-rate' ), 10 );
 				sendRating( postId, rate, container );
@@ -38,46 +35,26 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		} );
 	} );
 
-	/**
-	 * Highlights stars up to a specific index.
-	 *
-	 * @param {NodeList} stars - The star elements.
-	 * @param {number} rate - The rating value.
-	 */
 	function highlightStars( stars, rate ) {
-		stars.forEach( function ( s ) {
-			var r = parseInt( s.getAttribute( 'data-rate' ), 10 );
-			if ( r <= rate ) {
-				s.classList.remove( 'dashicons-star-empty' );
-				s.classList.add( 'dashicons-star-filled' );
+		stars.forEach( function ( star ) {
+			var currentRate = parseInt( star.getAttribute( 'data-rate' ), 10 );
+
+			if ( currentRate <= rate ) {
+				star.style.setProperty( '--fill', '100%' );
 			} else {
-				s.classList.remove( 'dashicons-star-filled' );
-				s.classList.add( 'dashicons-star-empty' );
+				star.style.setProperty( '--fill', '0%' );
 			}
 		} );
 	}
 
-	/**
-	 * Resets stars to empty state.
-	 *
-	 * @param {NodeList} stars - The star elements.
-	 */
 	function resetStars( stars ) {
-		stars.forEach( function ( s ) {
-			s.classList.remove( 'dashicons-star-filled' );
-			s.classList.add( 'dashicons-star-empty' );
+		stars.forEach( function ( star ) {
+			var initialFill = star.getAttribute( 'data-initial-fill' ) || '0%';
+			star.style.setProperty( '--fill', initialFill );
 		} );
 	}
 
-	/**
-	 * Sends rating via REST API.
-	 *
-	 * @param {string} postId - The post ID.
-	 * @param {number} rating - The rating value.
-	 * @param {HTMLElement} container - The rating container.
-	 */
 	function sendRating( postId, rating, container ) {
-		var stars = container.querySelectorAll( '.rating-stars .dashicons' );
 		lockStars( container, false );
 
 		fetch( wealRating.apiUrl, {
@@ -97,8 +74,11 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			.then( function ( data ) {
 				if ( data.success ) {
 					updateUI( container, data.data.average, data.data.count );
-					// Set cookie for 1 year.
-					document.cookie = 'weal_voted_post_' + postId + '=1; path=/; max-age=' + 60 * 60 * 24 * 365;
+					document.cookie =
+						'weal_voted_post_' +
+						postId +
+						'=1; path=/; max-age=' +
+						60 * 60 * 24 * 365;
 				} else {
 					alert( data.data.message || 'Error' );
 					lockStars( container, true );
@@ -110,46 +90,64 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			} );
 	}
 
-	/**
-	 * Updates the UI with new rating data.
-	 *
-	 * @param {HTMLElement} container - The rating container.
-	 * @param {number} average - New average.
-	 * @param {number} count - New count.
-	 */
 	function updateUI( container, average, count ) {
 		var avgEl = container.querySelector( '.average-value' );
 		var cntEl = container.querySelector( '.count-value' );
+		var stars = container.querySelectorAll( '.rating-stars .star-wrapper' );
 
 		if ( avgEl ) {
 			avgEl.textContent = average;
 		}
+
 		if ( cntEl ) {
 			cntEl.textContent = count;
 		}
 
-		// Update schema meta tags.
-		var metaValue = container.querySelector( 'meta[itemprop="ratingValue"]' );
-		var metaCount = container.querySelector( 'meta[itemprop="ratingCount"]' );
-		if ( metaValue ) metaValue.setAttribute( 'content', average );
-		if ( metaCount ) metaCount.setAttribute( 'content', count );
+		stars.forEach( function ( star, index ) {
+			var i = index + 1;
+			var fill = '0%';
+
+			if ( average >= i ) {
+				fill = '100%';
+			} else if ( average < ( i - 1 ) ) {
+				fill = '0%';
+			} else {
+				fill = ( ( average - ( i - 1 ) ) * 100 ) + '%';
+			}
+
+			star.setAttribute( 'data-initial-fill', fill );
+			star.style.setProperty( '--fill', fill );
+		} );
+
+		var metaValue = container.querySelector(
+			'meta[itemprop="ratingValue"]'
+		);
+		var metaCount = container.querySelector(
+			'meta[itemprop="ratingCount"]'
+		);
+
+		if ( metaValue ) {
+			metaValue.setAttribute( 'content', average );
+		}
+
+		if ( metaCount ) {
+			metaCount.setAttribute( 'content', count );
+		}
 
 		lockStars( container, true );
 	}
 
-	/**
-	 * Locks the stars visually.
-	 *
-	 * @param {HTMLElement} container - The rating container.
-	 * @param {boolean} voted - Whether the user has voted.
-	 */
 	function lockStars( container, voted ) {
-		var stars = container.querySelectorAll( '.rating-stars .dashicons' );
-		stars.forEach( function ( s ) {
-			s.style.cursor = voted ? 'default' : 'pointer';
-			s.style.opacity = voted ? '0.6' : '1';
+		var stars = container.querySelectorAll(
+			'.rating-stars .star-wrapper'
+		);
+
+		stars.forEach( function ( star ) {
+			star.style.cursor = voted ? 'default' : 'pointer';
+			star.style.opacity = voted ? '0.6' : '1';
+
 			if ( voted ) {
-				s.classList.add( 'voted' );
+				star.classList.add( 'voted' );
 			}
 		} );
 	}
