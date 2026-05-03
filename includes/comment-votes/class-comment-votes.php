@@ -7,6 +7,7 @@
 
 namespace WealProfile\Includes\Comment_Votes;
 
+use ModuleSingletonInterface;
 use wpdb;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Comment_Votes
  */
-class Comment_Votes {
+class Comment_Votes implements ModuleSingletonInterface {
 
 	/**
 	 * Table name without prefix.
@@ -37,7 +38,7 @@ class Comment_Votes {
 	 *
 	 * @return Comment_Votes
 	 */
-	public static function get_instance() {
+	public static function instance() {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}

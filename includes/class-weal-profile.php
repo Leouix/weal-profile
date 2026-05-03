@@ -224,10 +224,10 @@ class Weal_Profile {
 			$this->loader->add_action( 'init', $this, 'my_custom_add_user_id_to_query_vars' );
 		}
 
-		$routes_class = Routes::get_instance( $this->admin_settings );
+		$routes_class = Routes::instance( $this->admin_settings );
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
 
-		Comment_Votes::get_instance();
+		Comment_Votes::instance();
 		Weal_Profile_Rating::instance();
 
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );

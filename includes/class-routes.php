@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use ModuleSingletonInterface;
 use WealProfile\Admin\Admin_Settings;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
 use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
@@ -25,7 +26,7 @@ use Exception;
  *
  * @package weal-profile
  */
-class Routes {
+class Routes implements ModuleSingletonInterface {
 
 	/**
 	 * The single instance of the class.
@@ -64,7 +65,7 @@ class Routes {
 	 * @param mixed $admin_settings Admin settings (used only on first call).
 	 * @return Routes
 	 */
-	public static function get_instance( $admin_settings = null ) {
+	public static function instance( $admin_settings = null ) {
 		if ( null === self::$instance ) {
 			self::$instance = new self( $admin_settings );
 		}

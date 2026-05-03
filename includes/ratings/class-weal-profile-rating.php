@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class Weal_Profile_Rating
  */
-class Weal_Profile_Rating {
+class Weal_Profile_Rating implements ModuleSingletonInterface {
 
 	/**
 	 * The single instance of the class.
@@ -189,4 +189,11 @@ class Weal_Profile_Rating {
 			)
 		);
 	}
+
+    /**
+     * @throws Exception
+     */
+    public function __wakeup() {
+        throw new \Exception( 'Cannot unserialize a singleton.' );
+    }
 }
