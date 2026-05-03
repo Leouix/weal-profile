@@ -250,7 +250,7 @@ class Routes implements ModuleSingletonInterface {
 			case 'users':
 				$html = $this->users_tab();
 				break;
-			case 'my-comments':
+			case 'activity':
 				$html = $this->my_comments_tab();
 				break;
 			case 'info':

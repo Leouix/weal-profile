@@ -104,7 +104,11 @@ function getPage( clickData ) {
 		if ( 4 === this.readyState && 200 === this.status ) {
 			var json                   = JSON.parse( this.response );
 			containerResults.innerHTML = json.html;
-			replaceUrlParam( TabsSwitcherHelper.getTabName( clickId ) );
+
+			const check1 = TabsSwitcherHelper.getTabName( clickId );
+
+			console.log(check1)
+			replaceUrlParam( check1 );
 
 			if ( 'info' === TabsSwitcherHelper.getTabName( clickId ) ) {
 				triggerUserForm();
@@ -146,7 +150,7 @@ function toggleBtn( isFormChanged ) {
 
 class TabsSwitcherHelper {
 	static tabs = {
-		'tab-button-1': 'my-comments',
+		'tab-button-1': 'activity',
 		'tab-button-2': 'users',
 		'tab-button-3': 'info',
 	};
