@@ -44,6 +44,7 @@ On the public account page, logged-in users can:
 - Upload and remove a custom profile avatar
 - View a list of all comments they have posted on the site
 - Open direct links to related posts and discussions
+- 5-star post rating system
 
 ### Comment Activity Center
 
