@@ -26,9 +26,49 @@ class Comment_Votes {
 	const TABLE_NAME = 'weal_comment_votes';
 
 	/**
-	 * Initialize the class.
+	 * The single instance of the class.
+	 *
+	 * @var Comment_Votes|null
 	 */
-	public function __construct() {
+	private static $instance = null;
+
+	/**
+	 * Returns the main instance of the class.
+	 *
+	 * @return Comment_Votes
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Private constructor to prevent creating a new instance via 'new'.
+	 */
+	private function __construct() {
+		$this->init_hooks();
+	}
+
+	/**
+	 * Private clone method to prevent cloning of the instance.
+	 */
+	private function __clone() {}
+
+	/**
+	 * Private wakeup method to prevent unserializing of the instance.
+	 *
+	 * @throws \Exception If attempting to unserialize.
+	 */
+	public function __wakeup() {
+		throw new \Exception( 'Cannot unserialize a singleton.' );
+	}
+
+	/**
+	 * Initialize hooks for the class.
+	 */
+	private function init_hooks() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_filter( 'comment_text', array( $this, 'append_vote_buttons' ), 10, 2 );
 	}

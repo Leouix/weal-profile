@@ -28,6 +28,13 @@ use Exception;
 class Routes {
 
 	/**
+	 * The single instance of the class.
+	 *
+	 * @var Routes|null
+	 */
+	private static $instance = null;
+
+	/**
 	 * Current user.
 	 *
 	 * @var mixed
@@ -52,12 +59,39 @@ class Routes {
 	private $admin_settings;
 
 	/**
-	 * Constructor.
+	 * Returns the main instance of the class.
+	 *
+	 * @param mixed $admin_settings Admin settings (used only on first call).
+	 * @return Routes
+	 */
+	public static function get_instance( $admin_settings = null ) {
+		if ( null === self::$instance ) {
+			self::$instance = new self( $admin_settings );
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Private constructor to prevent creating a new instance via 'new'.
 	 *
 	 * @param mixed $admin_settings Admin settings.
 	 */
-	public function __construct( $admin_settings ) {
+	private function __construct( $admin_settings ) {
 		$this->admin_settings = $admin_settings;
+	}
+
+	/**
+	 * Private clone method to prevent cloning of the instance.
+	 */
+	private function __clone() {}
+
+	/**
+	 * Private wakeup method to prevent unserializing of the instance.
+	 *
+	 * @throws \Exception If attempting to unserialize.
+	 */
+	public function __wakeup() {
+		throw new \Exception( 'Cannot unserialize a singleton.' );
 	}
 
 	/**
@@ -257,7 +291,7 @@ class Routes {
 		);
 		$user_comments = get_comments( $args );
 
-		$likes_service = new Likes_Vote_Service();
+		$likes_service = Likes_Vote_Service::get_instance();
 		$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 
 		$total_likes    = $vote_data['total_likes'] ?? 0;

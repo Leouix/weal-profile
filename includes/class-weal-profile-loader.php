@@ -32,7 +32,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Weal_Profile_Loader {
 
-
+	/**
+	 * The single instance of the class.
+	 *
+	 * @var Weal_Profile_Loader|null
+	 */
+	private static $instance = null;
 
 	/**
 	 * The array of actions registered with WordPress.
@@ -53,14 +58,39 @@ class Weal_Profile_Loader {
 	protected $filters;
 
 	/**
-	 * Initialize the collections used to maintain the actions and filters.
+	 * Returns the main instance of the class.
+	 *
+	 * @return Weal_Profile_Loader
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Private constructor to prevent creating a new instance via 'new'.
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct() {
-
+	private function __construct() {
 		$this->actions = array();
 		$this->filters = array();
+	}
+
+	/**
+	 * Private clone method to prevent cloning of the instance.
+	 */
+	private function __clone() {}
+
+	/**
+	 * Private wakeup method to prevent unserializing of the instance.
+	 *
+	 * @throws \Exception If attempting to unserialize.
+	 */
+	public function __wakeup() {
+		throw new \Exception( 'Cannot unserialize a singleton.' );
 	}
 
 	/**

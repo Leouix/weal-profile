@@ -17,6 +17,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Likes_Vote_Service {
 
 	/**
+	 * The single instance of the class.
+	 *
+	 * @var Likes_Vote_Service|null
+	 */
+	private static $instance = null;
+
+	/**
+	 * Returns the main instance of the class.
+	 *
+	 * @return Likes_Vote_Service
+	 */
+	public static function get_instance() {
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Private constructor to prevent creating a new instance via 'new'.
+	 */
+	private function __construct() {}
+
+	/**
+	 * Private clone method to prevent cloning of the instance.
+	 */
+	private function __clone() {}
+
+	/**
+	 * Private wakeup method to prevent unserializing of the instance.
+	 *
+	 * @throws \Exception If attempting to unserialize.
+	 */
+	public function __wakeup() {
+		throw new \Exception( 'Cannot unserialize a singleton.' );
+	}
+
+	/**
 	 * Get all vote data for a user.
 	 *
 	 * @param int $user_id User ID.
