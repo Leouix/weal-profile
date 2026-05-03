@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use WealProfile\Admin\Admin_Settings;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
 use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
+use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Public\Info_Tab_Manager;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -257,8 +258,19 @@ class Routes {
 		);
 		$user_comments = get_comments( $args );
 
-		$likes_service = new Likes_Vote_Service();
-		$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
+		$settings            = ( new Settings_Manager() )->get_settings();
+		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
+
+		if ( $comment_votes_enabled ) {
+			$likes_service = new Likes_Vote_Service();
+			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
+		} else {
+			$vote_data = array(
+				'total_likes'    => 0,
+				'total_dislikes' => 0,
+				'top_comments'   => array(),
+			);
+		}
 
 		$total_likes    = $vote_data['total_likes'] ?? 0;
 		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
@@ -289,6 +301,15 @@ class Routes {
 	 */
 	public function handle_vote( $request ) {
 		global $wpdb;
+
+		$settings = ( new Settings_Manager() )->get_settings();
+		if ( empty( $settings['comment_votes_enabled'] ) ) {
+			return new WP_Error(
+				'votes_disabled',
+				esc_html__( 'Comment votes are disabled', 'weal-profile' ),
+				array( 'status' => 403 )
+			);
+		}
 
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
