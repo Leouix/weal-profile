@@ -25,9 +25,16 @@ class Profile_Votes_Page {
 	 * @param int   $total_likes    Total likes count.
 	 * @param int   $total_dislikes Total dislikes count.
 	 * @param array $top_comments   Top comments data.
+	 * @param bool $liking_allowed   Is module allowed to like comments.
 	 * @return string HTML output.
 	 */
-	public static function render( $user_id, $total_likes = 0, $total_dislikes = 0, $top_comments = array(), $liking_allowed = true ) {
+	public static function render(
+            $user_id,
+            $total_likes = 0,
+            $total_dislikes = 0,
+            $top_comments = array(),
+            $liking_allowed = true
+    ) {
 		$user = get_user_by( 'id', $user_id );
 		if ( ! $user ) {
 			return '';
