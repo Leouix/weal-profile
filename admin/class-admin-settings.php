@@ -81,13 +81,14 @@ class Admin_Settings {
 
 		$fields        = $this->validate_fields( $post_data );
 		$validated_url = $this->validate_url( $post_data );
+		$votes_enabled = $this->validate_votes_setting( $post_data );
 
 		if ( ! empty( $validated_url ) ) {
 			$this->process_url_change( $validated_url );
 		}
 
 		$required_url_for_update = $validated_url ?? $this->current_settings['user_page_url'];
-		$this->settings_manager->save_settings( $required_url_for_update, $fields );
+		$this->settings_manager->save_settings( $required_url_for_update, $fields, $votes_enabled );
 	}
 
 	/**
@@ -175,6 +176,16 @@ class Admin_Settings {
 	}
 
 	/**
+	 * Validate comment votes setting.
+	 *
+	 * @param  array $post_data Post data.
+	 * @return bool
+	 */
+	private function validate_votes_setting( $post_data ) {
+		return ! empty( $post_data['comment_votes_enabled'] );
+	}
+
+	/**
 	 * Get user page URL.
 	 *
 	 * @return string User page URL.
@@ -198,8 +209,9 @@ class Admin_Settings {
 	 * @return void
 	 */
 	public function get_my_account_settings_page() {
-		$user_page_url        = $this->get_user_page_url();
-		$fields_allowed_array = $this->get_fields_allowed();
+		$user_page_url         = $this->get_user_page_url();
+		$fields_allowed_array  = $this->get_fields_allowed();
+		$comment_votes_enabled = $this->current_settings['comment_votes_enabled'] ?? true;
 
 		include __DIR__ . '/partials/admin-settings-page.php';
 	}

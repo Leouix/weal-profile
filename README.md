@@ -1,6 +1,6 @@
 # Weal Profile
 
-**Contributors:** Leouix  
+**Contributors:** Weal  
 **Tags:** manage-user-page, user-profile, user-account, account-page  
 **Donate link:** https://weal.cloud/  
 **Requires at least:** 6.2  
@@ -29,6 +29,7 @@ Administrators can:
 
 Available profile fields:
 
+- Avatar\Gravatar
 - Display Name
 - Website URL
 - Nickname
@@ -40,19 +41,16 @@ Available profile fields:
 
 On the public account page, logged-in users can:
 
-- Edit their personal profile information (based on admin settings)
-- Upload and remove a custom profile avatar
-- View a list of all comments they have posted on the site
-- Open direct links to related posts and discussions
-- 5-star post rating system
+* Edit their personal profile information (based on admin settings)
+* Upload and remove a profile avatar
+* View a list of all comments they have posted on the site
+* Vote on comments using a like/dislike rating system
+* Open direct links to related posts and discussions
+* 5-star post rating system
 
 ### Comment Activity Center
 
 The plugin provides a convenient centralized space where users can track their comment history and quickly return to conversations they participated in.
-
-### Avatar Support
-
-Users can upload a custom profile avatar directly from the account page. Uploaded avatars are stored in the WordPress Media Library and can be removed at any time.
 
 ## Installation
 

@@ -9,6 +9,7 @@ namespace WealProfile\Includes\Comment_Votes;
 
 use ModuleSingletonInterface;
 use wpdb;
+use WealProfile\Includes\Manager\Settings_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,8 +71,12 @@ class Comment_Votes implements ModuleSingletonInterface {
 	 * Initialize hooks for the class.
 	 */
 	private function init_hooks() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_filter( 'comment_text', array( $this, 'append_vote_buttons' ), 10, 2 );
+        $settings = ( new Settings_Manager() )->get_settings();
+
+        if ( ! empty( $settings['comment_votes_enabled'] ) ) {
+            add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+            add_filter( 'comment_text', array( $this, 'append_vote_buttons' ), 10, 2 );
+        }
 	}
 
 	/**
