@@ -153,8 +153,8 @@ class Weal_Profile_Rating implements ModuleSingletonInterface {
 	 * Handles the rating request.
 	 *
 	 * @param WP_REST_Request $request The request object.
-	 * @return WP_REST_Response
-	 */
+	 * @return WP_REST_Response|null
+     */
 	public function process_rating_request( $request ) {
 		$post_id = intval( $request->get_param( 'post_id' ) );
 		$rating  = intval( $request->get_param( 'rating' ) );
