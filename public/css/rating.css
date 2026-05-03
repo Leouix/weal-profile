@@ -1,0 +1,40 @@
+.post-rating {
+	margin-top: 30px;
+	padding: 20px;
+	border-top: 1px solid #eee;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.post-rating .rating-label {
+	font-weight: 600;
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+.post-rating .rating-stars {
+	font-size: 24px;
+	line-height: 1;
+	margin-bottom: 10px;
+}
+
+.post-rating .rating-stars .dashicons {
+	cursor: pointer;
+	color: #f0c040;
+	transition: color 0.2s ease;
+}
+
+.post-rating .rating-stars .dashicons.voted,
+.post-rating .rating-stars .dashicons[style*="cursor: default"] {
+	cursor: default;
+	opacity: 0.6;
+}
+
+.post-rating .rating-result {
+	font-size: 14px;
+	color: #666;
+}
+
+.post-rating .rating-result .average-value {
+	font-weight: bold;
+	color: #333;
+}

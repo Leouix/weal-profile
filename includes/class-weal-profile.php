@@ -154,6 +154,7 @@ class Weal_Profile {
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-comment-votes.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-profile-votes-page.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-likes-vote-service.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/ratings/class-weal-profile-rating.php';
 
 		$this->loader = new Weal_Profile_Loader();
 	}
@@ -227,6 +228,7 @@ class Weal_Profile {
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
 
 		new Comment_Votes();
+		Weal_Profile_Rating::instance();
 
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
 		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
