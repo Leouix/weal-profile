@@ -7,7 +7,6 @@
 
 namespace WealProfile\Includes\Manager;
 
-use WealProfile\Includes\Comment_Votes\Comment_Votes;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,9 +45,6 @@ class Activation_Manager {
 	 * @throws \Exception If activation fails.
 	 */
 	public function activate() {
-		// Если Comment_Votes всё еще требует отдельную таблицу, оставляем.
-		// Если нет — её тоже можно перевести на мета-данные.
-		Comment_Votes::create_table();
 
 		$this->initialize_settings();
 
