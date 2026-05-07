@@ -107,7 +107,6 @@ function getPage( clickData ) {
 
 			const check1 = TabsSwitcherHelper.getTabName( clickId );
 
-			console.log(check1)
 			replaceUrlParam( check1 );
 
 			if ( 'info' === TabsSwitcherHelper.getTabName( clickId ) ) {

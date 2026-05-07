@@ -291,7 +291,7 @@ class Routes implements ModuleSingletonInterface {
 		);
 		$user_comments = get_comments( $args );
 
-		$settings            = ( new Settings_Manager() )->get_settings();
+		$settings              = ( new Settings_Manager() )->get_settings();
 		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
 
 		if ( $comment_votes_enabled ) {
@@ -325,5 +325,4 @@ class Routes implements ModuleSingletonInterface {
 		$info_tab_class->get_user_data();
 		return ob_get_clean();
 	}
-
 }

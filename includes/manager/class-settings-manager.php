@@ -40,8 +40,8 @@ class Settings_Manager {
 		$settings = get_option( self::OPTION_NAME, array() );
 
 		return array(
-			'user_page_url'        => $settings['user_page_url'] ?? null,
-			'fields_allowed'       => $settings['fields_allowed'] ?? $this->default_fields,
+			'user_page_url'         => $settings['user_page_url'] ?? null,
+			'fields_allowed'        => $settings['fields_allowed'] ?? $this->default_fields,
 			'comment_votes_enabled' => $settings['comment_votes_enabled'] ?? true,
 		);
 	}
@@ -67,8 +67,8 @@ class Settings_Manager {
 	public function save_settings( string $user_page_url, $fields_allowed, $comment_votes_enabled = true ) {
 
 		$data = array(
-			'user_page_url'        => sanitize_text_field( $user_page_url ),
-			'fields_allowed'       => array_map( 'sanitize_text_field', $fields_allowed ),
+			'user_page_url'         => sanitize_text_field( $user_page_url ),
+			'fields_allowed'        => array_map( 'sanitize_text_field', $fields_allowed ),
 			'comment_votes_enabled' => (bool) $comment_votes_enabled,
 		);
 
