@@ -191,7 +191,9 @@ class Weal_Profile_Rating implements ModuleSingletonInterface {
 	}
 
 	/**
-	 * @throws Exception
+	 * Prevent unserialization of singleton.
+	 *
+	 * @throws \Exception When unserialization is attempted.
 	 */
 	public function __wakeup() {
 		throw new \Exception( 'Cannot unserialize a singleton.' );
