@@ -171,11 +171,9 @@ class Weal_Profile {
 
 		$plugin_admin = new Weal_Profile_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		if ( $this->is_current_admin_page_url() ) {
-			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-			$this->loader->add_action( 'admin_enqueue_scripts', $this, 'localize_admin_script_data' );
-		}
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'localize_admin_script_data' );
 
 		$this->loader->add_action( 'admin_menu', $this, 'add_menu_page_weal_profile' );
 		$this->loader->add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__, 1 ) . '/weal-profile.php' ), $this, 'my_plugin_settings' );
@@ -260,10 +258,8 @@ class Weal_Profile {
 	 * Check if current page is admin page URL.
 	 */
 	public function is_current_admin_page_url() {
-		global $pagenow;
-		return 'admin.php' === $pagenow
-		&& isset( $_GET['page'] )
-		&& 'weal-profile-admin' === $_GET['page'];
+		$screen = get_current_screen();
+		return $screen && 'toplevel_page_weal-profile-admin' === $screen->id;
 	}
 
 	/**
@@ -347,6 +343,10 @@ class Weal_Profile {
 	 * Localize admin script data.
 	 */
 	public function localize_admin_script_data() {
+		if ( ! $this->is_current_admin_page_url() ) {
+			return;
+		}
+
 		wp_localize_script(
 			$this->plugin_name,
 			'myAccountAdminData',

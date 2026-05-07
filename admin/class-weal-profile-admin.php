@@ -70,18 +70,10 @@ class Weal_Profile_Admin {
 	 * @since 1.0.0
 	 */
 	public function enqueue_styles() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Weal_Profile_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Weal_Profile_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		$screen = get_current_screen();
+		if ( ! $screen || 'toplevel_page_weal-profile-admin' !== $screen->id ) {
+			return;
+		}
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/weal-profile-admin.css', array(), $this->version, 'all' );
 	}
@@ -92,18 +84,10 @@ class Weal_Profile_Admin {
 	 * @since 1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Weal_Profile_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Weal_Profile_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		$screen = get_current_screen();
+		if ( ! $screen || 'toplevel_page_weal-profile-admin' !== $screen->id ) {
+			return;
+		}
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/weal-profile-admin.js', array( 'jquery' ), $this->version, false );
 	}
