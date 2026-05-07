@@ -132,7 +132,7 @@ class Weal_Profile {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		include_once plugin_dir_path( __DIR__ ) . 'includes/ModuleSingletonInterface.php';
+		include_once plugin_dir_path( __DIR__ ) . 'includes/module-singleton-interface.php';
 		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-loader.php';
 
 		/**
