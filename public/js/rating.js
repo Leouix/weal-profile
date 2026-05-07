@@ -1,3 +1,9 @@
+/**
+ * Rating JavaScript functionality.
+ *
+ * @package weal-profile
+ */
+
 /* global wealRating */
 'use strict';
 
