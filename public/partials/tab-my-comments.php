@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * User comments variable.
  *
- * @var $weal_profile_user_comments
+ * @var $user_comments
  */
 
-if ( ! empty( $weal_profile_user_comments ) ) {
+if ( ! empty( $user_comments ) ) {
 
 	?>
 	<div class="weal-comment-reactions">
@@ -26,7 +26,7 @@ if ( ! empty( $weal_profile_user_comments ) ) {
 			<div class="weal-top-comments">
 				<h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
 				<ul>
-					<?php foreach ( $weal_profile_user_comments as $weal_profile_user_comment ) : ?>
+					<?php foreach ( $user_comments as $weal_profile_user_comment ) : ?>
 						<li>
 							<a href="<?php echo esc_url( get_permalink( $weal_profile_user_comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $weal_profile_user_comment->comment_ID ); ?>">
 								<?php echo esc_html( wp_trim_words( $weal_profile_user_comment->comment_content, 10, '...' ) ); ?>
