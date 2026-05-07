@@ -7,7 +7,6 @@
 
 namespace WealProfile\Includes\Manager;
 
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

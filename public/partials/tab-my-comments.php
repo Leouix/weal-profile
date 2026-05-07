@@ -22,27 +22,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! empty( $user_comments ) ) {
 
-    ?>
-    <div class="weal-comment-reactions">
+	?>
+	<div class="weal-comment-reactions">
 
-        <?php if ( ! empty( $user_comments ) ) : ?>
-            <div class="weal-top-comments">
-                <h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
-                <ul>
-                    <?php foreach ( $user_comments as $comment ) : ?>
-                        <li>
-                            <a href="<?php echo esc_url( get_permalink( $comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
-                                <?php echo esc_html( wp_trim_words( $comment->comment_content, 10, '...' ) ); ?>
-                            </a>
+			<div class="weal-top-comments">
+				<h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
+				<ul>
+					<?php foreach ( $user_comments as $user_comment ) : ?>
+						<li>
+							<a href="<?php echo esc_url( get_permalink( $user_comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $user_comment->comment_ID ); ?>">
+								<?php echo esc_html( wp_trim_words( $user_comment->comment_content, 10, '...' ) ); ?>
+							</a>
 
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-    </div>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+	</div>
 
-    <?php
+	<?php
 
 
 } else {
