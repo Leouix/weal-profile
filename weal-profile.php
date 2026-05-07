@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Plugin Name:       Weal Profile
  * Plugin URI:        https://weal.cloud
- * Description:       Public page personal account of the user.
+ * Description:       Creates a personal account page where logged-in users can manage their profile information and review their site activity.
  * Version:           1.0.0
  * Author:            leouix
  * Author URI:        https://github.com/Leouix/
