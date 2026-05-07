@@ -50,7 +50,7 @@ class Weal_Profile_Rating implements ModuleSingletonInterface {
 			return;
 		}
 
-		$plugin_url  = WEAL_PROFILE_PLUGIN_URL;
+		$plugin_url = WEAL_PROFILE_PLUGIN_URL;
 
 		wp_enqueue_style(
 			'weal-rating-css',
