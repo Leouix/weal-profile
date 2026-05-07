@@ -148,11 +148,11 @@ class Weal_Profile_Avatar {
 	 * @param string $avatar      HTML for the user's avatar.
 	 * @param mixed  $id_or_email The Gravatar to retrieve. Accepts a user ID, Gravatar MD5 hash, user email, WP_User object, WP_Post object, or WP_Comment object.
 	 * @param int    $size        Square avatar width and height in pixels to retrieve.
-	 * @param string $default     URL to a default image to use if no avatar is available.
+	 * @param string $default_url     URL to a default_url image to use if no avatar is available.
 	 * @param string $alt         Alternative text to use in the avatar image tag.
 	 * @return string Filtered avatar HTML.
 	 */
-	public static function filter_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+	public static function filter_get_avatar( $avatar, $id_or_email, $size, $default_url, $alt ) {
 		$user_id = false;
 
 		// WordPress может передать сюда разные типы данных, нам нужно извлечь ID пользователя.
