@@ -43,12 +43,8 @@ On the public account page, logged-in users can:
 
 * Edit their personal profile information (based on admin settings)
 * Upload and remove a profile avatar
-* View a list of all comments they have posted on the site
-* Vote on comments using a like/dislike rating system
-* Open direct links to related posts and discussions
-* 5-star post rating system
 
-### Comment Activity Center
+### Activity Center
 
 The plugin provides a convenient centralized space where users can track their comment history and quickly return to conversations they participated in.
 
