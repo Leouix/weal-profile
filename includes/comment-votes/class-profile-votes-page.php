@@ -44,7 +44,7 @@ class Profile_Votes_Page {
 		?>
 		<div class="weal-comment-reactions">
 
-			<?php if ( $liking_allowed === true ) : ?>
+			<?php if ( true === $liking_allowed ) : ?>
 
 				<h3><?php esc_html_e( 'Comment Reactions', 'weal-profile' ); ?></h3>
 				<div class="weal-reactions-summary">
