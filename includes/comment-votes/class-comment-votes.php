@@ -143,6 +143,13 @@ class Comment_Votes implements ModuleSingletonInterface {
 	 * @return string
 	 */
 	public function append_vote_buttons( $comment_text, $comment = null ) {
+
+        $settings       = ( new Settings_Manager() )->get_settings();
+        $liking_allowed = $settings['comment_votes_enabled'];
+        if ( ! $liking_allowed ) {
+            return $comment_text;
+        }
+
 		if ( ! $comment ) {
 			$comment = get_comment();
 		}

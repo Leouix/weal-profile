@@ -31,8 +31,7 @@ if ( ! empty( $user_comments ) ) {
 	$top_comments   = $vote_data['top_comments'] ?? array();
 
 	$settings       = ( new Settings_Manager() )->get_settings();
-	$liking_allowed = $settings['comment_votes_enabled'] ?? true;
-
+	$liking_allowed = $settings['comment_votes_enabled'];
 
 	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id(), $total_likes, $total_dislikes, $top_comments, $liking_allowed ) );
 
