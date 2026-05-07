@@ -111,14 +111,14 @@ class Comment_Votes implements ModuleSingletonInterface {
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
 			'weal-comment-votes-css',
-			plugin_dir_url( dirname( __DIR__ ) ) . 'public/css/comment-votes.css',
+			WEAL_PROFILE_PLUGIN_URL . 'public/css/comment-votes.css',
 			array( 'dashicons' ),
 			WEAL_PROFILE_VERSION
 		);
 
 		wp_enqueue_script(
 			'weal-comment-votes-js',
-			plugin_dir_url( dirname( __DIR__ ) ) . 'public/js/comment-votes.js',
+			WEAL_PROFILE_PLUGIN_URL . 'public/js/comment-votes.js',
 			array(),
 			WEAL_PROFILE_VERSION,
 			true

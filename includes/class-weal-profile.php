@@ -132,30 +132,30 @@ class Weal_Profile {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		include_once plugin_dir_path( __DIR__ ) . 'includes/module-singleton-interface.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-loader.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/module-singleton-interface.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/class-weal-profile-loader.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		include_once plugin_dir_path( __DIR__ ) . 'admin/class-weal-profile-admin.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'admin/class-weal-profile-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		include_once plugin_dir_path( __DIR__ ) . 'public/class-weal-profile-public.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'public/class-weal-profile-public.php';
 
-		include_once plugin_dir_path( __DIR__ ) . 'includes/manager/class-settings-manager.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/manager/class-public-page-manager.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/class-routes.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/class-weal-profile-avatar.php';
-		include_once plugin_dir_path( __DIR__ ) . 'admin/class-admin-settings.php';
-		include_once plugin_dir_path( __DIR__ ) . 'public/class-info-tab-manager.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-comment-votes.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-profile-votes-page.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/comment-votes/class-likes-vote-service.php';
-		include_once plugin_dir_path( __DIR__ ) . 'includes/ratings/class-weal-profile-rating.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/manager/class-settings-manager.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/manager/class-public-page-manager.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/class-routes.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/class-weal-profile-avatar.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'admin/class-admin-settings.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'public/class-info-tab-manager.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-profile-votes-page.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-likes-vote-service.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/ratings/class-weal-profile-rating.php';
 
 		$this->loader = Weal_Profile_Loader::get_instance();
 	}
@@ -276,7 +276,7 @@ class Weal_Profile {
 			if ( ! is_user_logged_in() ) {
 				auth_redirect();
 			}
-			load_template( WP_PLUGIN_DIR . '/weal-profile/public/partials/weal-profile-public-display.php', false );
+			load_template( WEAL_PROFILE_PLUGIN_DIR . 'public/partials/weal-profile-public-display.php', false );
 			return null;
 		}
 		return $template;

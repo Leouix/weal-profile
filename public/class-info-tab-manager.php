@@ -149,7 +149,7 @@ class Info_Tab_Manager {
 			}
 		}
 
-		return include plugin_dir_path( __DIR__ ) . 'public/partials/tab-info.php';
+		return include WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-info.php';
 	}
 
 	/**

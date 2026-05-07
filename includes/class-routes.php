@@ -275,7 +275,7 @@ class Routes implements ModuleSingletonInterface {
 	 */
 	private function users_tab() {
 		ob_start();
-		include plugin_dir_path( __DIR__ ) . 'public/partials/tab-users.php';
+		include WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-users.php';
 		return ob_get_clean();
 	}
 
@@ -310,7 +310,7 @@ class Routes implements ModuleSingletonInterface {
 		$top_comments   = $vote_data['top_comments'] ?? array();
 
 		ob_start();
-		include plugin_dir_path( __DIR__ ) . 'public/partials/tab-my-comments.php';
+		include WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
 		return ob_get_clean();
 	}
 
