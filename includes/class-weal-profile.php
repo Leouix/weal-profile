@@ -23,7 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 use WealProfile\Admin\Admin_Settings;
-use WealProfile\Includes\Comment_Votes\Comment_Votes;
 use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Includes\Routes;
 
@@ -152,10 +151,6 @@ class Weal_Profile {
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/class-weal-profile-avatar.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'admin/class-admin-settings.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'public/class-info-tab-manager.php';
-		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
-		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-profile-votes-page.php';
-		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-likes-vote-service.php';
-		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/ratings/class-weal-profile-rating.php';
 
 		$this->loader = Weal_Profile_Loader::get_instance();
 	}
@@ -225,9 +220,6 @@ class Weal_Profile {
 
 		$routes_class = Routes::instance( $this->admin_settings );
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
-
-		Comment_Votes::instance();
-		Weal_Profile_Rating::instance();
 
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
 		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );

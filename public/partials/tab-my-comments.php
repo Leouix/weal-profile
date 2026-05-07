@@ -5,15 +5,13 @@
  * @package weal-profile
  */
 
-use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
-use WealProfile\Includes\Comment_Votes\Profile_Votes_Page;
 use WealProfile\Includes\Manager\Settings_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<h2><?php echo esc_html__( 'My comments', 'weal-profile' ); ?></h2>
+
 
 <?php
 /**
@@ -24,16 +22,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! empty( $user_comments ) ) {
 
-	$weal_profile_likes_service  = new Likes_Vote_Service();
-	$weal_profile_vote_data      = $weal_profile_likes_service->get_user_vote_data( $this->current_user );
-	$weal_profile_total_likes    = $weal_profile_vote_data['total_likes'] ?? 0;
-	$weal_profile_total_dislikes = $weal_profile_vote_data['total_dislikes'] ?? 0;
-	$weal_profile_top_comments   = $weal_profile_vote_data['top_comments'] ?? array();
+    ?>
+    <div class="weal-comment-reactions">
 
-	$weal_profile_settings       = ( new Settings_Manager() )->get_settings();
-	$weal_profile_liking_allowed = $weal_profile_settings['comment_votes_enabled'];
+        <?php if ( ! empty( $user_comments ) ) : ?>
+            <div class="weal-top-comments">
+                <h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
+                <ul>
+                    <?php foreach ( $user_comments as $comment ) : ?>
+                        <li>
+                            <a href="<?php echo esc_url( get_permalink( $comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
+                                <?php echo esc_html( wp_trim_words( $comment->comment_content, 10, '...' ) ); ?>
+                            </a>
 
-	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id(), $weal_profile_total_likes, $weal_profile_total_dislikes, $weal_profile_top_comments, $weal_profile_liking_allowed ) );
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <?php
+
 
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );

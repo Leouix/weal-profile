@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use ModuleSingletonInterface;
 use WealProfile\Admin\Admin_Settings;
-use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Public\Info_Tab_Manager;
 use WP_REST_Request;
@@ -128,28 +127,6 @@ class Routes implements ModuleSingletonInterface {
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'admin_save_page_settings' ),
 				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
-			)
-		);
-
-		register_rest_route(
-			'weal-profile/v1',
-			'/comment-vote',
-			array(
-				'methods'             => 'POST',
-				'callback'            => array( new Likes_Vote_Service(), 'handle_vote' ),
-				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
-				'args'                => array(
-					'comment_id' => array(
-						'required'          => true,
-						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
-					),
-					'vote_type'  => array(
-						'required' => true,
-						'type'     => 'string',
-						'enum'     => array( 'like', 'dislike' ),
-					),
-				),
 			)
 		);
 	}
@@ -290,24 +267,6 @@ class Routes implements ModuleSingletonInterface {
 			'status'  => 'approve',
 		);
 		$user_comments = get_comments( $args );
-
-		$settings              = ( new Settings_Manager() )->get_settings();
-		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
-
-		if ( $comment_votes_enabled ) {
-			$likes_service = new Likes_Vote_Service();
-			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
-		} else {
-			$vote_data = array(
-				'total_likes'    => 0,
-				'total_dislikes' => 0,
-				'top_comments'   => array(),
-			);
-		}
-
-		$total_likes    = $vote_data['total_likes'] ?? 0;
-		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
-		$top_comments   = $vote_data['top_comments'] ?? array();
 
 		ob_start();
 		include WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
