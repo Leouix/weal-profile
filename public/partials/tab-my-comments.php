@@ -24,16 +24,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! empty( $user_comments ) ) {
 
-	$likes_service  = new Likes_Vote_Service();
-	$vote_data      = $likes_service->get_user_vote_data( $this->current_user );
-	$total_likes    = $vote_data['total_likes'] ?? 0;
-	$total_dislikes = $vote_data['total_dislikes'] ?? 0;
-	$top_comments   = $vote_data['top_comments'] ?? array();
+	$weal_profile_likes_service  = new Likes_Vote_Service();
+	$weal_profile_vote_data      = $weal_profile_likes_service->get_user_vote_data( $this->current_user );
+	$weal_profile_total_likes    = $weal_profile_vote_data['total_likes'] ?? 0;
+	$weal_profile_total_dislikes = $weal_profile_vote_data['total_dislikes'] ?? 0;
+	$weal_profile_top_comments   = $weal_profile_vote_data['top_comments'] ?? array();
 
-	$settings       = ( new Settings_Manager() )->get_settings();
-	$liking_allowed = $settings['comment_votes_enabled'];
+	$weal_profile_settings       = ( new Settings_Manager() )->get_settings();
+	$weal_profile_liking_allowed = $weal_profile_settings['comment_votes_enabled'];
 
-	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id(), $total_likes, $total_dislikes, $top_comments, $liking_allowed ) );
+	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id(), $weal_profile_total_likes, $weal_profile_total_dislikes, $weal_profile_top_comments, $weal_profile_liking_allowed ) );
 
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );
