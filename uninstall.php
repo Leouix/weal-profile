@@ -38,6 +38,5 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+require_once plugin_dir_path( __FILE__ ) . 'includes/module-singleton-interface.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/comment-votes/class-comment-votes.php';
-
-\WealProfile\Includes\Comment_Votes\Comment_Votes::drop_table();

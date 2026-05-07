@@ -101,16 +101,6 @@ class Comment_Votes implements ModuleSingletonInterface {
 	}
 
 	/**
-	 * Drop the custom table on uninstall.
-	 */
-	public static function drop_table() {
-		global $wpdb;
-
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
-		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $table_name ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-	}
-
-	/**
 	 * Enqueue frontend assets.
 	 */
 	public function enqueue_assets() {
