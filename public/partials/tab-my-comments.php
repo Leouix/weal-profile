@@ -5,8 +5,6 @@
  * @package weal-profile
  */
 
-use WealProfile\Includes\Manager\Settings_Manager;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -42,10 +40,8 @@ if ( ! empty( $user_comments ) ) {
 
 	<?php
 
-
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );
 }
-
 
 ?>
