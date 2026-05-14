@@ -38,4 +38,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-require_once plugin_dir_path(__FILE__) . 'includes/weal-profile-module-singleton-interface.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/weal-profile-module-singleton-interface.php';
