@@ -11,20 +11,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use ModuleSingletonInterface;
+use Exception;
 use WealProfile\Admin\Admin_Settings;
-use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Public\Info_Tab_Manager;
 use WP_REST_Request;
 use WP_REST_Response;
-use Exception;
 
 /**
  * Routes Class.
  *
  * @package weal-profile
  */
-class Routes implements ModuleSingletonInterface {
+class Routes implements Weal_Profile_Module_Singleton_Interface {
 
 	/**
 	 * The single instance of the class.

@@ -5,11 +5,13 @@
  * @package weal-profile
  */
 
+namespace WealProfile\Includes;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-interface ModuleSingletonInterface {
+interface Weal_Profile_Module_Singleton_Interface {
 
 	/**
 	 * Get the singleton instance.
