@@ -318,7 +318,7 @@ class Weal_Profile {
 	 */
 	public function my_custom_add_user_id_to_query_vars() {
 		global $wp_query;
-		$wp_query->set( 'current_user_id', get_current_user_id() );
+		$wp_query->set( 'weal_profile_current_user_id', get_current_user_id() );
 	}
 
 	/**
@@ -327,7 +327,7 @@ class Weal_Profile {
 	public function localize_script_data() {
 		wp_localize_script(
 			$this->plugin_name,
-			'myAccountPageData',
+			'wealProfilePageData',
 			array(
 				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'root'  => esc_url_raw( rest_url() ),
@@ -345,7 +345,7 @@ class Weal_Profile {
 
 		wp_localize_script(
 			$this->plugin_name,
-			'myAccountAdminData',
+			'wealProfileAdminData',
 			array(
 				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'root'  => esc_url_raw( rest_url() ),

@@ -22,7 +22,7 @@ window.addEventListener(
 		checkTabGetParamsLoading();
 
 		const avatarInput = document.querySelector(
-			'.weal-profile-avatar-form input[type="file"][name="profile_avatar"]'
+			'.weal-profile-avatar-form input[type="file"][name="weal_profile_avatar"]'
 		);
 
 		if ( ! avatarInput) {
@@ -66,8 +66,8 @@ function userFormSubmit( elForm ) {
 	var formData = new FormData( elForm );
 
 	var xhr = new XMLHttpRequest();
-	xhr.open( 'POST', myAccountPageData.root + 'my-account/v1/info-tab/', true );
-	xhr.setRequestHeader( 'X-WP-Nonce', myAccountPageData.nonce );
+	xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/info-tab/', true );
+	xhr.setRequestHeader( 'X-WP-Nonce', wealProfilePageData.nonce );
 	xhr.onreadystatechange = function ( res ) {
 		if ( 4 === this.readyState && 200 === this.status ) {
 			console.log( this.response );
@@ -98,8 +98,8 @@ function getPage( clickData ) {
 	formData.append( 'tabName', TabsSwitcherHelper.getTabName( clickId ) );
 
 	var xhr = new XMLHttpRequest();
-	xhr.open( 'POST', myAccountPageData.root + 'my-account/v1/switch-tab-ajax/', true );
-	xhr.setRequestHeader( 'X-WP-Nonce', myAccountPageData.nonce );
+	xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/switch-tab-ajax/', true );
+	xhr.setRequestHeader( 'X-WP-Nonce', wealProfilePageData.nonce );
 	xhr.onreadystatechange = function ( res ) {
 		if ( 4 === this.readyState && 200 === this.status ) {
 			var json                   = JSON.parse( this.response );

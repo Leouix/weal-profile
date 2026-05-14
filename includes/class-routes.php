@@ -110,7 +110,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	public function route_reg() {
 
 		register_rest_route(
-			'my-account/v1',
+			'weal-profile/v1',
 			'/switch-tab-ajax/',
 			array(
 				'methods'             => 'POST',
@@ -120,7 +120,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		);
 
 		register_rest_route(
-			'my-account/v1',
+			'weal-profile/v1',
 			'/info-tab/',
 			array(
 				'methods'             => 'POST',
@@ -130,7 +130,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		);
 
 		register_rest_route(
-			'my-account/v1',
+			'weal-profile/v1',
 			'/admin-save-page-settings/',
 			array(
 				'methods'             => 'POST',

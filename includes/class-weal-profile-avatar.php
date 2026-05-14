@@ -71,12 +71,12 @@ class Weal_Profile_Avatar {
 			return new WP_Error( 'forbidden', __( 'You do not have permission to upload avatars.', 'weal-profile' ) );
 		}
 
-		if ( ! isset( $_FILES['profile_avatar'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_FILES['weal_profile_avatar'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return new WP_Error( 'no_file', __( 'No file uploaded.', 'weal-profile' ) );
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$file = isset( $_FILES['profile_avatar'] ) ? $_FILES['profile_avatar'] : null;
+		$file = isset( $_FILES['weal_profile_avatar'] ) ? $_FILES['weal_profile_avatar'] : null;
 
 		if ( ! is_array( $file ) || ! isset( $file['error'] ) || 0 !== (int) $file['error'] ) {
 			return new WP_Error( 'upload_error', __( 'File upload error.', 'weal-profile' ) );
@@ -90,7 +90,7 @@ class Weal_Profile_Avatar {
 		require_once ABSPATH . 'wp-admin/includes/image.php';
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 
-		$attachment_id = media_handle_upload( 'profile_avatar', 0 );
+		$attachment_id = media_handle_upload( 'weal_profile_avatar', 0 );
 
 		if ( is_wp_error( $attachment_id ) ) {
 			return $attachment_id;

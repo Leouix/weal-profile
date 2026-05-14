@@ -73,7 +73,7 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 					<form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
 						<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
 						<input type="hidden" name="weal_profile_avatar_action" value="upload" />
-						<input type="file" name="profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
+						<input type="file" name="weal_profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
 					</form>
 
 					<form method="post" action="" class="weal-profile-avatar-form">

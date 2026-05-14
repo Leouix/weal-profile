@@ -46,8 +46,8 @@ window.addEventListener(
 			var formData = new FormData( elForm );
 
 			var xhr = new XMLHttpRequest();
-			xhr.open( 'POST', myAccountAdminData.root + 'my-account/v1/admin-save-page-settings/', true );
-			xhr.setRequestHeader( 'X-WP-Nonce', myAccountAdminData.nonce );
+			xhr.open( 'POST', wealProfileAdminData.root + 'weal-profile/v1/admin-save-page-settings/', true );
+			xhr.setRequestHeader( 'X-WP-Nonce', wealProfileAdminData.nonce );
 			xhr.onreadystatechange = function (res) {
 				if (4 === this.readyState && 200 === this.status) {
 					successAjaxButtonEvent( 'success' );

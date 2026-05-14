@@ -33,13 +33,13 @@ class Admin_Settings {
 	 *
 	 * @var string
 	 */
-	private const NONCE_ACTION = 'my_account_admin_save';
+	private const NONCE_ACTION = 'weal_profile_admin_save';
 	/**
 	 * Nonce field.
 	 *
 	 * @var string
 	 */
-	private const NONCE_FIELD = 'my_account_nonce';
+	private const NONCE_FIELD = 'weal_profile_admin_nonce';
 
 	/**
 	 * Settings manager.
@@ -124,11 +124,11 @@ class Admin_Settings {
 			'avatar',
 		);
 
-		if ( ! isset( $post_data['show_user_fields_checkbox'] ) || ! is_array( $post_data['show_user_fields_checkbox'] ) ) {
+		if ( ! isset( $post_data['weal_profile_fields'] ) || ! is_array( $post_data['weal_profile_fields'] ) ) {
 			throw new Exception( esc_html__( 'Invalid checkbox data', 'weal-profile' ) );
 		}
 
-		$fields = array_map( 'sanitize_text_field', $post_data['show_user_fields_checkbox'] );
+		$fields = array_map( 'sanitize_text_field', $post_data['weal_profile_fields'] );
 
 		foreach ( $fields as $field ) {
 			if ( ! in_array( $field, $expected_fields, true ) ) {
@@ -150,11 +150,11 @@ class Admin_Settings {
 	 * @throws Exception If URL is invalid.
 	 */
 	private function validate_url( $post_data ) {
-		if ( ! isset( $post_data['mya_url'] ) || ! is_string( $post_data['mya_url'] ) ) {
+		if ( ! isset( $post_data['weal_profile_page_url'] ) || ! is_string( $post_data['weal_profile_page_url'] ) ) {
 			return null;
 		}
 
-		$new_url = sanitize_title( wp_unslash( $post_data['mya_url'] ) );
+		$new_url = sanitize_title( wp_unslash( $post_data['weal_profile_page_url'] ) );
 
 		if ( $this->page_manager->slug_exists( $new_url ) ) {
 			return null;
@@ -182,7 +182,7 @@ class Admin_Settings {
 	 * @return bool
 	 */
 	private function validate_votes_setting( $post_data ) {
-		return ! empty( $post_data['comment_votes_enabled'] );
+		return ! empty( $post_data['weal_profile_comment_votes'] );
 	}
 
 	/**

@@ -112,6 +112,6 @@ class Weal_Profile_Public {
 	 * Enqueue user data form script.
 	 */
 	public function enqueue_class_user_data() {
-		wp_enqueue_script( 'user-data-form-class', plugin_dir_url( __FILE__ ) . 'js/user-data-form.js', array(), $this->version, false );
+		wp_enqueue_script( 'weal-profile-user-data-form', plugin_dir_url( __FILE__ ) . 'js/user-data-form.js', array(), $this->version, false );
 	}
 }
