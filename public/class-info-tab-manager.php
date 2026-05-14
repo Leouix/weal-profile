@@ -55,7 +55,6 @@ class Info_Tab_Manager {
      */
     public function save_user_info( $user_id, $user_fields ) {
 
-        // 1. СТРОГАЯ ПРОВЕРКА ПРАВ: Может ли текущий пользователь редактировать этот профиль?
         if ( ! current_user_can( 'edit_user', $user_id ) ) {
             throw new \Exception( esc_html__( 'You do not have permission to edit this user.', 'weal-profile' ), 403 );
         }
@@ -84,8 +83,6 @@ class Info_Tab_Manager {
                 array(
                     'display_name' => $user_fields['display_name'] ?? null,
                     'user_url'     => $user_fields['user_url'] ?? null,
-                    // user_email лучше обновлять через стандартный WP flow (send_confirmation_on_profile_email).
-                    // user_registered удалено полностью, так как юзер не должен менять дату регистрации.
                 ),
                 function ( $value ) {
                     return ! is_null( $value );
@@ -94,7 +91,6 @@ class Info_Tab_Manager {
         );
 
         try {
-            // wp_update_user вернет ID пользователя или WP_Error
             $result = wp_update_user( $user_data );
 
             if ( is_wp_error( $result ) ) {
@@ -120,7 +116,7 @@ class Info_Tab_Manager {
      * @throws \Exception On error.
      */
     public function update_user_meta( $user_id, $user_meta ) {
-        // Права проверяются в save_user_info, но можно добавить дополнительную защиту
+
         if ( ! current_user_can( 'edit_user', $user_id ) ) {
             return;
         }
@@ -155,7 +151,7 @@ class Info_Tab_Manager {
         $user_data      = get_userdata( $this->logged_user_id );
 
         if ( ! $user_data ) {
-            return ''; // Предотвращение Fatal Error, если пользователь не найден
+            return '';
         }
 
         $allowed_fields = $this->admin_settings['fields_allowed'] ?? array();
@@ -187,7 +183,6 @@ class Info_Tab_Manager {
      */
     public function handle_user_saving( $post_data ) {
 
-        // 2. ОБЯЗАТЕЛЬНАЯ ОЧИСТКА ДАННЫХ (Sanitization)
         $user_data = array();
 
         if ( isset( $post_data['display_name'] ) ) {
