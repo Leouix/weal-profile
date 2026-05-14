@@ -99,7 +99,7 @@ class Admin_Settings {
 	 * @throws Exception On verification failure.
 	 */
 	private function verify_nonce( $post_data ) {
-		$nonce = $post_data[ self::NONCE_FIELD ] ?? '';
+		$nonce = isset( $post_data[ self::NONCE_FIELD ] ) ? sanitize_text_field( wp_unslash( $post_data[ self::NONCE_FIELD ] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
 			throw new Exception( esc_html__( 'Security check failed', 'weal-profile' ) );
@@ -154,7 +154,7 @@ class Admin_Settings {
 			return null;
 		}
 
-		$new_url = sanitize_text_field( $post_data['mya_url'] );
+		$new_url = sanitize_title( wp_unslash( $post_data['mya_url'] ) );
 
 		if ( $this->page_manager->slug_exists( $new_url ) ) {
 			return null;

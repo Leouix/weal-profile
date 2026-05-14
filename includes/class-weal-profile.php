@@ -282,6 +282,10 @@ class Weal_Profile {
 			return;
 		}
 
+		if ( ! current_user_can( 'edit_user', get_current_user_id() ) ) {
+			return;
+		}
+
 		if ( ! isset( $_POST['weal_profile_avatar_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['weal_profile_avatar_nonce'] ) ), 'weal_profile_avatar_action' ) ) {
 			return;
 		}

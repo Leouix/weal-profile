@@ -39,4 +39,3 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/module-singleton-interface.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/comment-votes/class-comment-votes.php';

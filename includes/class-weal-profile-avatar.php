@@ -67,6 +67,10 @@ class Weal_Profile_Avatar {
 
 		$user_id = get_current_user_id();
 
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return new WP_Error( 'forbidden', __( 'You do not have permission to upload avatars.', 'weal-profile' ) );
+		}
+
 		if ( ! isset( $_FILES['profile_avatar'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return new WP_Error( 'no_file', __( 'No file uploaded.', 'weal-profile' ) );
 		}
@@ -74,11 +78,11 @@ class Weal_Profile_Avatar {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$file = isset( $_FILES['profile_avatar'] ) ? $_FILES['profile_avatar'] : null;
 
-		if ( ! is_array( $file ) || ! isset( $file['error'] ) || 0 !== $file['error'] ) {
+		if ( ! is_array( $file ) || ! isset( $file['error'] ) || 0 !== (int) $file['error'] ) {
 			return new WP_Error( 'upload_error', __( 'File upload error.', 'weal-profile' ) );
 		}
 
-		if ( ! isset( $file['size'] ) || $file['size'] > 2 * 1024 * 1024 ) {
+		if ( ! isset( $file['size'] ) || (int) $file['size'] > 2 * 1024 * 1024 ) {
 			return new WP_Error( 'file_too_large', __( 'File size exceeds 2MB limit.', 'weal-profile' ) );
 		}
 
@@ -110,6 +114,10 @@ class Weal_Profile_Avatar {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function remove_avatar( $user_id ) {
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return false;
+		}
+
 		$avatar_id = self::get_avatar_id( $user_id );
 
 		if ( $avatar_id > 0 ) {

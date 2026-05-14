@@ -50,6 +50,17 @@ class Routes implements ModuleSingletonInterface {
 			? true
 			: new \WP_Error( 'rest_not_logged_in', esc_html__( 'Login required', 'weal-profile' ), array( 'status' => 401 ) );
 	}
+
+	/**
+	 * Check admin permission.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function check_admin_permission() {
+		return current_user_can( 'manage_options' )
+			? true
+			: new \WP_Error( 'rest_forbidden', esc_html__( 'Access denied', 'weal-profile' ), array( 'status' => 403 ) );
+	}
 	/**
 	 * Admin settings.
 	 *
@@ -126,7 +137,7 @@ class Routes implements ModuleSingletonInterface {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'admin_save_page_settings' ),
-				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
+				'permission_callback' => array( __CLASS__, 'check_admin_permission' ),
 			)
 		);
 	}
