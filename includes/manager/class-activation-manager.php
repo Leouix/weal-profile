@@ -47,13 +47,11 @@ class Activation_Manager {
 
 		$this->initialize_settings();
 
-		// После инициализации настроек сбрасываем правила перезаписи URL.
 		flush_rewrite_rules();
 	}
 
 	/**
 	 * Initialize settings.
-	 * Теперь работает через Options API внутри Settings_Manager.
 	 *
 	 * @throws \Exception If settings initialization fails.
 	 */
