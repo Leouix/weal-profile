@@ -1,6 +1,6 @@
 # Weal Profile
 
-**Contributors:** Weal  
+**Contributors:** leouix, Weal  
 **Tags:** manage-user-page, user-profile, user-account, account-page  
 **Donate link:** https://weal.cloud/  
 **Requires at least:** 6.2  
