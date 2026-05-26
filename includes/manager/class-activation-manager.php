@@ -46,8 +46,17 @@ class Activation_Manager {
 	public function activate() {
 
 		$this->initialize_settings();
+		$this->create_comment_votes_table();
 
 		flush_rewrite_rules();
+	}
+
+	/**
+	 * Create comment votes table.
+	 */
+	private function create_comment_votes_table() {
+		require_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
+		\WealProfile\Includes\Comment_Votes\Comment_Votes::create_table();
 	}
 
 	/**

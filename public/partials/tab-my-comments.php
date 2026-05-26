@@ -5,43 +5,29 @@
  * @package weal-profile
  */
 
+use WealProfile\Includes\Comment_Votes\Profile_Votes_Page;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-
+<h2><?php echo esc_html__( 'My comments', 'weal-profile' ); ?></h2>
 
 <?php
 /**
  * User comments variable.
  *
  * @var $user_comments
+ * @var $total_likes
+ * @var $total_dislikes
+ * @var $top_comments
+ * @var $comment_votes_enabled
  */
 
 if ( ! empty( $user_comments ) ) {
 
-	?>
-	<div class="weal-comment-reactions">
-
-			<div class="weal-top-comments">
-				<h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
-				<ul>
-					<?php foreach ( $user_comments as $weal_profile_user_comment ) : ?>
-						<li>
-							<a href="<?php echo esc_url( get_permalink( $weal_profile_user_comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $weal_profile_user_comment->comment_ID ); ?>">
-								<?php echo esc_html( wp_trim_words( $weal_profile_user_comment->comment_content, 10, '...' ) ); ?>
-							</a>
-
-						</li>
-					<?php endforeach; ?>
-				</ul>
-			</div>
-	</div>
-
-	<?php
+	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id(), $total_likes, $total_dislikes, $top_comments, $comment_votes_enabled ) );
 
 } else {
 	echo esc_html__( 'No comments', 'weal-profile' );
 }
-
-?>

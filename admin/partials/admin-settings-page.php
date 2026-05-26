@@ -80,6 +80,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="adu-description"><?php esc_html_e( 'description', 'weal-profile' ); ?></label><br>
 		</div>
 
+		<div class="sub-title"><?php esc_html_e( 'Comment Votes (Likes/Dislikes)', 'weal-profile' ); ?></div>
+
+		<div class="label-area">
+			<input type="checkbox" id="comment-votes-enabled" name="weal_profile_comment_votes" value="1" <?php checked( $comment_votes_enabled ); ?>>
+			<label for="comment-votes-enabled"><?php esc_html_e( 'Enable likes and dislikes on comments', 'weal-profile' ); ?></label>
+		</div>
+
 		<div class="button-area">
 			<input id="save-create-button" type="submit" value="<?php esc_attr_e( 'Сохранить настройки', 'weal-profile' ); ?>">
 			<div id="success-notice"><?php esc_html_e( 'Success!', 'weal-profile' ); ?></div>
