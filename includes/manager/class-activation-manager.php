@@ -55,8 +55,10 @@ class Activation_Manager {
 	 * Create comment votes table.
 	 */
 	private function create_comment_votes_table() {
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		require_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
 		\WealProfile\Includes\Comment_Votes\Comment_Votes::create_table();
+		update_option( 'weal_profile_db_version', WEAL_PROFILE_DB_VERSION );
 	}
 
 	/**

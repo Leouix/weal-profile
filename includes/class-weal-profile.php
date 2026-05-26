@@ -110,6 +110,7 @@ class Weal_Profile {
 
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_update_hooks();
 	}
 
 	/**
@@ -360,6 +361,32 @@ class Weal_Profile {
 				'root'  => esc_url_raw( rest_url() ),
 			)
 		);
+	}
+
+	/**
+	 * Register hooks for plugin updates.
+	 */
+	private function define_update_hooks() {
+		$this->loader->add_action( 'plugins_loaded', $this, 'maybe_update_database' );
+	}
+
+	/**
+	 * Check and run database updates if needed.
+	 */
+	public function maybe_update_database() {
+		$current_db_version = get_option( 'weal_profile_db_version', '' );
+
+		if ( WEAL_PROFILE_DB_VERSION !== $current_db_version ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+			if ( ! class_exists( '\WealProfile\Includes\Comment_Votes\Comment_Votes' ) ) {
+				require_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
+			}
+
+			\WealProfile\Includes\Comment_Votes\Comment_Votes::create_table();
+
+			update_option( 'weal_profile_db_version', WEAL_PROFILE_DB_VERSION );
+		}
 	}
 
 	/**
