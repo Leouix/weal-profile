@@ -151,6 +151,39 @@ class Weal_Profile_Avatar {
 	}
 
 	/**
+	 * Filter the comment author URL to point to the user's profile page.
+	 *
+	 * @param string $url        The comment author's URL.
+	 * @param int    $comment_id The comment ID.
+	 * @return string Filtered author URL.
+	 */
+	public static function filter_comment_author_url( $url, $comment_id ) {
+
+		if ( ! is_user_logged_in() ) {
+			return $url;
+		}
+
+		$comment = get_comment( $comment_id );
+		if ( ! $comment ) {
+			return $url;
+		}
+
+		$current_user_id = get_current_user_id();
+		if ( $current_user_id !== (int) $comment->user_id ) {
+			return $url;
+		}
+
+		$settings     = new Settings_Manager();
+		$profile_slug = $settings->get_user_page_url();
+
+		if ( empty( $profile_slug ) ) {
+			return $url;
+		}
+
+        return home_url( '/' . ltrim( $profile_slug, '/' ) );
+	}
+
+	/**
 	 * Filter the standard WordPress avatar to use our custom one.
 	 *
 	 * @param string $avatar      HTML for the user's avatar.
