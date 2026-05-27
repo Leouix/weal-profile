@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @var array $fields_allowed_array
  * @var string $user_page_url
+ * @var bool $comment_votes_enabled
  */
 
 ?>
@@ -80,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="adu-description"><?php esc_html_e( 'description', 'weal-profile' ); ?></label><br>
 		</div>
 
-		<div class="sub-title"><?php esc_html_e( 'Comment Votes (Likes/Dislikes)', 'weal-profile' ); ?></div>
+		<div class="sub-title"><?php esc_html_e( 'Comment Likes/Dislikes', 'weal-profile' ); ?></div>
 
 		<div class="label-area">
 			<input type="checkbox" id="comment-votes-enabled" name="weal_profile_comment_votes" value="1" <?php checked( $comment_votes_enabled ); ?>>

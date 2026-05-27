@@ -71,12 +71,8 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	 * Initialize hooks for the class.
 	 */
 	private function init_hooks() {
-		$settings = ( new Settings_Manager() )->get_settings();
-
-		if ( ! empty( $settings['comment_votes_enabled'] ) ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-			add_filter( 'comment_text', array( $this, 'append_vote_buttons' ), 10, 2 );
-		}
+        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+        add_filter( 'comment_text', array( $this, 'append_vote_buttons' ), 10, 2 );
 	}
 
 	/**

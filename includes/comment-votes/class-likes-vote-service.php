@@ -61,28 +61,13 @@ class Likes_Vote_Service {
 			)
 		);
 
-		$commentmeta_table = $wpdb->prefix . 'commentmeta';
-
-		$top_comments = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				"SELECT c.comment_ID, c.comment_content, c.comment_post_ID,
-					COALESCE(m.meta_value, 0) as likes_count
-				FROM %i c
-				LEFT JOIN %i m ON c.comment_ID = m.comment_id AND m.meta_key = '_weal_likes_count'
-				WHERE c.comment_author_email = %s AND c.comment_approved = 1
-				ORDER BY COALESCE(m.meta_value, 0) DESC
-				LIMIT 3",
-				$comments_table,
-				$commentmeta_table,
-				$user_email
-			)
-		);
+		$commentm_service = new Comments_Service();
 
 		return array(
 			'user'           => $user,
 			'total_likes'    => $total_likes,
 			'total_dislikes' => $total_dislikes,
-			'top_comments'   => $top_comments,
+			'top_comments'   => $commentm_service->get_user_comments_data($user_id),
 		);
 	}
 
