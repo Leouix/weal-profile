@@ -179,7 +179,40 @@ class Weal_Profile {
 
 		$this->loader->add_action( 'admin_menu', $this, 'add_menu_page_weal_profile' );
 		$this->loader->add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__, 1 ) . '/weal-profile.php' ), $this, 'my_plugin_settings' );
+
+        $this->loader->add_filter( 'get_avatar', $this, 'wrap_avatar_in_link', 15, 5 );
 	}
+
+    /**
+     * Wrap comment author avatars in a link to the author's profile page.
+     */
+    public function wrap_avatar_in_link( $avatar, $id_or_email, $size, $default, $alt ) {
+        $user_id = 0;
+
+        if ( $id_or_email instanceof \WP_Comment ) {
+            $user_id = (int) $id_or_email->user_id;
+        } elseif ( is_numeric( $id_or_email ) ) {
+            $user_id = (int) $id_or_email;
+        } elseif ( is_object( $id_or_email ) && isset( $id_or_email->user_id ) ) {
+            $user_id = (int) $id_or_email->user_id;
+        }
+
+        if ( ! $user_id ) {
+            return $avatar;
+        }
+
+        $settings     = new Settings_Manager();
+        $profile_slug = $settings->get_user_page_url();
+
+        if ( empty( $profile_slug ) ) {
+            return $avatar;
+        }
+
+        $profile_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
+
+        return '<a href="' . esc_url( $profile_url ) . '" target="_blank" rel="noopener">' . $avatar . '</a>';
+    }
+
 
 	/**
 	 * Add plugin settings link.
