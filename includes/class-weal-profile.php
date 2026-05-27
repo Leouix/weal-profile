@@ -201,6 +201,10 @@ class Weal_Profile {
             return $avatar;
         }
 
+        if ( $user_id !== get_current_user_id() ) {
+            return $avatar;
+        }
+
         $settings     = new Settings_Manager();
         $profile_slug = $settings->get_user_page_url();
 
