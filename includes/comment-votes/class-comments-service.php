@@ -33,7 +33,6 @@ class Comments_Service {
 		$comments_table = $wpdb->prefix . 'comments';
 		$user_email     = $user->user_email;
 
-
 		$commentmeta_table = $wpdb->prefix . 'commentmeta';
 
 		$top_comments = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery

@@ -67,7 +67,7 @@ class Likes_Vote_Service {
 			'user'           => $user,
 			'total_likes'    => $total_likes,
 			'total_dislikes' => $total_dislikes,
-			'top_comments'   => $commentm_service->get_user_comments_data($user_id),
+			'top_comments'   => $commentm_service->get_user_comments_data( $user_id ),
 		);
 	}
 

@@ -309,8 +309,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			$likes_service = new Likes_Vote_Service();
 			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 		} else {
-            $commentm_service = new Comments_Service();
-			$vote_data = array(
+			$commentm_service = new Comments_Service();
+			$vote_data        = array(
 				'total_likes'    => 0,
 				'total_dislikes' => 0,
 				'top_comments'   => $commentm_service->get_user_comments_data( $this->current_user ),
