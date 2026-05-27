@@ -2,7 +2,7 @@
 
 **Contributors:** leouix, Weal  
 **Tags:** manage-user-page, user-profile, user-account, account-page  
-**Donate link:** https://weal.cloud/  
+**Donate link:** https://www.donationalerts.com/r/weal_plugin
 **Requires at least:** 6.2  
 **Tested up to:** 7.0
 **Requires PHP:** 7.4  
