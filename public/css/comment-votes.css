@@ -1,13 +1,11 @@
 .weal-vote-container {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 	gap: 8px;
-	margin-left: 12px;
-	vertical-align: middle;
 }
 
 .weal-vote-btn {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 	gap: 4px;
 	padding: 4px 10px;
@@ -144,4 +142,12 @@
 	gap: 4px;
 	color: #0073aa;
 	font-weight: 600;
+}
+
+.weal-vote-container .dashicons.dashicons-thumbs-up {
+	font-size: 20px;
+}
+
+.weal-vote-btn {
+	width: 62px;
 }
