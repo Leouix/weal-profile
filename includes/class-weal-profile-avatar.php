@@ -178,7 +178,7 @@ class Weal_Profile_Avatar {
 			}
 		}
 
-        $avatar_image = $avatar;
+		$avatar_image = $avatar;
 
 		// Если нашли пользователя, проверяем нашу мету.
 		if ( $user_id ) {
@@ -197,28 +197,28 @@ class Weal_Profile_Avatar {
 				);
 
 				if ( $custom_avatar ) {
-                    $avatar_image = $custom_avatar;
+					$avatar_image = $custom_avatar;
 				}
 			}
 		}
 
-        if ( ! $user_id ) {
-            return $avatar_image;
-        }
+		if ( ! $user_id ) {
+			return $avatar_image;
+		}
 
-        if ( get_current_user_id() !== $user_id ) {
-            return $avatar_image;
-        }
+		if ( get_current_user_id() !== $user_id ) {
+			return $avatar_image;
+		}
 
-        $settings     = new Settings_Manager();
-        $profile_slug = $settings->get_user_page_url();
+		$settings     = new Settings_Manager();
+		$profile_slug = $settings->get_user_page_url();
 
-        if ( empty( $profile_slug ) ) {
-            return $avatar_image;
-        }
+		if ( empty( $profile_slug ) ) {
+			return $avatar_image;
+		}
 
-        $profile_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
+		$profile_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
 
-        return '<a href="' . esc_url( $profile_url ) . '" target="_blank" rel="noopener">' . $avatar_image . '</a>';
+		return '<a href="' . esc_url( $profile_url ) . '" target="_blank" rel="noopener">' . $avatar_image . '</a>';
 	}
 }
