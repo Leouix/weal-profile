@@ -167,3 +167,8 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	display: flex;
 	justify-content: space-between;
 }
+
+.weal-button-delete {
+	height: 12px;
+	width: 25px;
+}

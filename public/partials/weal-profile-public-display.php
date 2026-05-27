@@ -79,7 +79,7 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 					<form method="post" action="" class="weal-profile-avatar-form">
 						<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
 						<input type="hidden" name="weal_profile_avatar_action" value="remove" />
-						<button type="submit" title="Delete" class="button"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
+						<button type="submit" title="Delete" class="button weal-button-delete"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
 					</form>
 				</div>
 			<?php endif; ?>
