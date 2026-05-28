@@ -171,7 +171,11 @@ class Weal_Profile_Avatar {
 			return $url;
 		}
 
-		return add_query_arg( 'u', Weal_Profile::encode_user_token( $comment->user_id ), home_url( '/' . ltrim( $profile_slug, '/' ) ) );
+		$profile_url = is_user_logged_in() && get_current_user_id() === (int) $comment->user_id
+			? home_url( '/' . ltrim( $profile_slug, '/' ) )
+			: add_query_arg( 'u', Weal_Profile::encode_user_token( $comment->user_id ), home_url( '/' . ltrim( $profile_slug, '/' ) ) );
+
+		return $profile_url;
 	}
 
 	/**
@@ -237,7 +241,9 @@ class Weal_Profile_Avatar {
 			return $avatar_image;
 		}
 
-		$profile_url = add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), home_url( '/' . ltrim( $profile_slug, '/' ) ) );
+		$profile_url = is_user_logged_in() && get_current_user_id() === (int) $user_id
+			? home_url( '/' . ltrim( $profile_slug, '/' ) )
+			: add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), home_url( '/' . ltrim( $profile_slug, '/' ) ) );
 
 		return '<a href="' . esc_url( $profile_url ) . '" target="_blank" rel="noopener">' . $avatar_image . '</a>';
 	}

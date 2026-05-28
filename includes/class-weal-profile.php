@@ -233,7 +233,7 @@ class Weal_Profile {
 		Comment_Votes::instance();
 		Weal_Profile_Rating::instance();
 
-        $profileAvatarService = new Weal_Profile_Avatar();
+		$profileAvatarService = new Weal_Profile_Avatar();
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
 		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
 		$this->loader->add_action( 'delete_user', $this, 'cleanup_user_avatar' );
@@ -326,6 +326,7 @@ class Weal_Profile {
 			}
 
 			$profile_user_id = $this->get_profile_user_id_from_url();
+			$had_u_param     = $profile_user_id > 0;
 
 			if ( $profile_user_id > 0 ) {
 				$user = get_user_by( 'ID', $profile_user_id );
@@ -340,6 +341,11 @@ class Weal_Profile {
 			}
 
 			$is_own_profile = get_current_user_id() === (int) $profile_user_id;
+
+			if ( $had_u_param && $is_own_profile ) {
+				wp_safe_redirect( remove_query_arg( 'u' ) );
+				exit;
+			}
 
 			global $weal_profile_user_id;
 			$weal_profile_user_id = $profile_user_id;
