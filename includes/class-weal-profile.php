@@ -233,12 +233,12 @@ class Weal_Profile {
 		Comment_Votes::instance();
 		Weal_Profile_Rating::instance();
 
-		$profileAvatarService = new Weal_Profile_Avatar();
+		$profile_avatar_service = new Weal_Profile_Avatar();
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
 		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
 		$this->loader->add_action( 'delete_user', $this, 'cleanup_user_avatar' );
-		$this->loader->add_filter( 'get_avatar', $profileAvatarService, 'filter_get_avatar', 10, 5 );
-		$this->loader->add_filter( 'get_comment_author_url', $profileAvatarService, 'filter_comment_author_url', 10, 2 );
+		$this->loader->add_filter( 'get_avatar', $profile_avatar_service, 'filter_get_avatar', 10, 5 );
+		$this->loader->add_filter( 'get_comment_author_url', $profile_avatar_service, 'filter_comment_author_url', 10, 2 );
 	}
 
 	/**

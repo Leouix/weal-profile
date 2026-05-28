@@ -237,11 +237,14 @@ function replaceUrlParam( paramValue ) {
 
 function switchOtherUserTab( el ) {
 	var tabs = document.querySelectorAll( '.other-user-tab' );
-	tabs.forEach( function( t ) { t.classList.remove( 'active' ); } );
+	tabs.forEach(
+		function ( t ) {
+			t.classList.remove( 'active' ); }
+	);
 	el.classList.add( 'active' );
 
 	var tab = el.getAttribute( 'data-tab' );
-	document.getElementById( 'other-user-posts' ).style.display =
+	document.getElementById( 'other-user-posts' ).style.display    =
 		( 'posts' === tab ) ? 'block' : 'none';
 	document.getElementById( 'other-user-comments' ).style.display =
 		( 'comments' === tab ) ? 'block' : 'none';
