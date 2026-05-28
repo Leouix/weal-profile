@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
+<?php if ( $comment_votes_enabled ) : ?>
 <div class="activity-buttons">
 	<div class="activity-button <?php echo 'posts' === $active_subtab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-my-tab">
 		<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
@@ -21,3 +22,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 <div id="my-account-subtab-content"></div>
+<?php endif; ?>

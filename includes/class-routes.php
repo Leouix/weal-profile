@@ -329,6 +329,9 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 
 		$active_subtab = isset( $_GET['b'] ) && 'c' === $_GET['b'] ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
+		$settings              = ( new Settings_Manager() )->get_settings();
+		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
+
 		ob_start();
 		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-activity.php';
 		return ob_get_clean();
