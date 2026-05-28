@@ -61,7 +61,7 @@
 					getPage( { clickId: target.id, page: 1 } );
 					TabsSwitcherHelper.switch( target.id );
 					break;
-				case 'switch-other-tab':
+				case 'switch-activity-button':
 					e.preventDefault();
 					switchOtherUserTab( target );
 					break;
@@ -220,7 +220,7 @@
 	window.toggleBtn = toggleBtn;
 
 	function switchOtherUserTab( el ) {
-		var tabs = document.querySelectorAll( '.other-user-tab' );
+		var tabs = document.querySelectorAll( '.activity-button' );
 		tabs.forEach(
 			function ( t ) {
 				t.classList.remove( 'active' );
@@ -249,7 +249,7 @@
 	}
 
 	function switchMyAccountTab( el ) {
-		var tabs = document.querySelectorAll( '.other-user-tab' );
+		var tabs = document.querySelectorAll( '.activity-button' );
 		tabs.forEach(
 			function ( t ) {
 				t.classList.remove( 'active' );
@@ -290,7 +290,7 @@
 	}
 
 	function initMyAccountSubtab() {
-		var tabs = document.querySelectorAll( '.other-user-tab' );
+		var tabs = document.querySelectorAll( '.activity-button' );
 		if ( 0 === tabs.length ) {
 			return;
 		}

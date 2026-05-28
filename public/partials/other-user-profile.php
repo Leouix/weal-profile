@@ -89,11 +89,11 @@ $user_id = $profile_user_id;
 </div>
 
 <?php if ( $is_author ) : ?>
-	<div class="other-user-tabs">
-		<div class="other-user-tab <?php echo 'posts' === $active_tab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-other-tab">
+	<div class="activity-buttons">
+		<div class="activity-button <?php echo 'posts' === $active_tab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-activity-button">
 			<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
 		</div>
-		<div class="other-user-tab <?php echo 'comments' === $active_tab ? 'active' : ''; ?>" data-tab="comments" data-wp-action="switch-other-tab">
+		<div class="activity-button <?php echo 'comments' === $active_tab ? 'active' : ''; ?>" data-tab="comments" data-wp-action="switch-activity-button">
 			<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 		</div>
 	</div>

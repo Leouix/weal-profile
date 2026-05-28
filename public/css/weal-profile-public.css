@@ -174,7 +174,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 }
 
 /* ── Other user profile: filter tabs ── */
-.other-user-tabs {
+.activity-buttons {
 	display: flex;
 	gap: 0;
 	margin-bottom: 30px;
@@ -182,7 +182,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	overflow: hidden;
 }
 
-.other-user-tab {
+.activity-button {
 	flex: 1;
 	padding: 16px 20px;
 	text-align: center;
@@ -194,7 +194,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	user-select: none;
 }
 
-.other-user-tab.active {
+.activity-button.active {
 	background: #c0c0c0;
 }
 
