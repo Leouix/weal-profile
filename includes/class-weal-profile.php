@@ -264,7 +264,7 @@ class Weal_Profile {
 	public static function encode_user_token( $user_id ) {
 		$uid_bin = pack( 'N', (int) $user_id );
 		$hmac    = substr( hash_hmac( 'sha256', $uid_bin, AUTH_KEY, true ), 0, 6 );
-		return rtrim( strtr( base64_encode( $uid_bin . $hmac ), '+/', '-_' ), '=' );
+		return rtrim( strtr( base64_encode( $uid_bin . $hmac ), '+/', '-_' ), '=' ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 	}
 
 	/**
@@ -274,7 +274,7 @@ class Weal_Profile {
 	 * @return int User ID or 0 on failure.
 	 */
 	private function decode_user_token( $token ) {
-		$decoded = base64_decode( strtr( $token, '-_', '+/' ), true );
+		$decoded = base64_decode( strtr( $token, '-_', '+/' ), true ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 		if ( strlen( $decoded ) !== 10 ) {
 			return 0;
 		}
@@ -377,7 +377,7 @@ class Weal_Profile {
 		}
 
 		$profile_user_id = $this->get_profile_user_id_from_url();
-		if ( $profile_user_id > 0 && $profile_user_id !== get_current_user_id() ) {
+		if ( $profile_user_id > 0 && get_current_user_id() !== $profile_user_id ) {
 			return;
 		}
 
@@ -433,7 +433,7 @@ class Weal_Profile {
 				'nonce'           => wp_create_nonce( 'wp_rest' ),
 				'root'            => esc_url_raw( rest_url() ),
 				'profile_user_id' => $profile_user_id,
-				'is_own_profile'  => (int) $profile_user_id === get_current_user_id(),
+				'is_own_profile'  => get_current_user_id() === (int) $profile_user_id,
 			)
 		);
 	}
