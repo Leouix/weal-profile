@@ -304,7 +304,7 @@ msgstr "Активность"
 
 #: public/partials/weal-profile-public-display.php:29
 msgid "My Info"
-msgstr "Мои данные"
+msgstr "Инфо"
 
 #: public/partials/weal-profile-public-display.php:50
 msgid "Are you sure you want to delete the image?"
