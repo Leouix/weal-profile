@@ -108,10 +108,6 @@ function getPage( clickData ) {
 			var json                   = JSON.parse( this.response );
 			containerResults.innerHTML = json.html;
 
-			if ( json.has_more ) {
-				attachLoadMoreHandler( json.page + 1 );
-			}
-
 			const check1 = TabsSwitcherHelper.getTabName( clickId );
 
 			replaceUrlParam( check1 );
@@ -119,40 +115,9 @@ function getPage( clickData ) {
 			if ( 'info' === TabsSwitcherHelper.getTabName( clickId ) ) {
 				triggerUserForm();
 			}
-		}
-		if ( 4 === this.readyState && ( 404 === this.status || 401 === this.status ) ) {
-			console.log( 'An error occurred.' );
-		}
-	};
-	xhr.send( formData );
-}
 
-function loadMoreComments( nextPage ) {
-	var formData = new FormData();
-	formData.append( 'tabName', 'activity' );
-	formData.append( 'page', nextPage );
-	formData.append( 'load_more', '1' );
-
-	var xhr = new XMLHttpRequest();
-	xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/switch-tab-ajax/', true );
-	xhr.setRequestHeader( 'X-WP-Nonce', wealProfilePageData.nonce );
-	xhr.onreadystatechange = function () {
-		if ( 4 === this.readyState && 200 === this.status ) {
-			var json    = JSON.parse( this.response );
-			var list    = document.getElementById( 'weal-comments-list' );
-			var wrapper = document.querySelector( '.weal-load-more-wrap' );
-
-			if ( list ) {
-				list.insertAdjacentHTML( 'beforeend', json.html );
-			}
-
-			if ( wrapper ) {
-				if ( json.has_more ) {
-					wrapper.querySelector( '.weal-load-more' ).dataset.page = nextPage;
-					attachLoadMoreHandler( nextPage + 1 );
-				} else {
-					wrapper.remove();
-				}
+			if ( 'activity' === TabsSwitcherHelper.getTabName( clickId ) ) {
+				initMyAccountSubtab();
 			}
 		}
 		if ( 4 === this.readyState && ( 404 === this.status || 401 === this.status ) ) {
@@ -160,21 +125,6 @@ function loadMoreComments( nextPage ) {
 		}
 	};
 	xhr.send( formData );
-}
-
-function attachLoadMoreHandler( nextPage ) {
-	var button = document.querySelector( '.weal-load-more' );
-	if ( button ) {
-		var newButton = button.cloneNode( true );
-		button.parentNode.replaceChild( newButton, button );
-		newButton.addEventListener(
-			'click',
-			function ( e ) {
-				e.preventDefault();
-				loadMoreComments( nextPage );
-			}
-		);
-	}
 }
 
 function successAjaxButtonEvent( statusClass ) {
@@ -314,4 +264,99 @@ function switchOtherUserTab( el ) {
 	}
 	var newUrl = queryParams.toString() ? '?' + queryParams.toString() : window.location.pathname;
 	history.replaceState( null, null, newUrl );
+}
+
+function switchMyAccountTab( el ) {
+	var tabs = document.querySelectorAll( '.other-user-tab' );
+	tabs.forEach(
+		function ( t ) {
+			t.classList.remove( 'active' ); }
+	);
+	el.classList.add( 'active' );
+
+	var tab = el.getAttribute( 'data-tab' );
+	loadMyAccountSubtab( tab, 1 );
+}
+
+function loadMyAccountSubtab( tab, page ) {
+	var endpoint = 'my-account/comments/';
+	if ( 'posts' === tab ) {
+		endpoint = 'my-account/posts/';
+	}
+
+	var formData = new FormData();
+	formData.append( 'page', page || 1 );
+
+	var xhr = new XMLHttpRequest();
+	xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/' + endpoint, true );
+	xhr.setRequestHeader( 'X-WP-Nonce', wealProfilePageData.nonce );
+	xhr.onreadystatechange = function () {
+		if ( 4 === this.readyState && 200 === this.status ) {
+			var json      = JSON.parse( this.response );
+			var container = document.getElementById( 'my-account-subtab-content' );
+			if ( container ) {
+				container.innerHTML = json.html;
+			}
+			attachMyAccountPagination( tab );
+			updateMyAccountSubtabUrl( tab, page );
+		}
+		if ( 4 === this.readyState && ( 404 === this.status || 401 === this.status ) ) {
+			console.log( 'An error occurred.' );
+		}
+	};
+	xhr.send( formData );
+}
+
+function initMyAccountSubtab() {
+	var params = getParameters( getNavUrl() );
+	var b      = params.b || 'c';
+	var tab    = 'c' === b ? 'comments' : 'posts';
+	var page   = parseInt( params.my_page, 10 ) || 1;
+
+	var tabs = document.querySelectorAll( '.other-user-tab' );
+	tabs.forEach(
+		function ( t ) {
+			t.classList.remove( 'active' );
+			if ( t.getAttribute( 'data-tab' ) === tab ) {
+				t.classList.add( 'active' );
+			}
+		}
+	);
+
+	loadMyAccountSubtab( tab, page );
+}
+
+function attachMyAccountPagination( tab ) {
+	var container = document.getElementById( 'my-account-subtab-content' );
+	if ( ! container ) {
+		return;
+	}
+
+	var links = container.querySelectorAll( '.weal-pagination a' );
+	links.forEach(
+		function ( link ) {
+			link.addEventListener(
+				'click',
+				function ( e ) {
+					e.preventDefault();
+					var url  = new URL( link.href );
+					var page = url.searchParams.get( 'my_page' );
+					if ( page ) {
+						loadMyAccountSubtab( tab, parseInt( page, 10 ) );
+					}
+				}
+			);
+		}
+	);
+}
+
+function updateMyAccountSubtabUrl( tab, page ) {
+	var queryParams = new URLSearchParams( window.location.search );
+	queryParams.set( 'b', 'comments' === tab ? 'c' : 'p' );
+	if ( page > 1 ) {
+		queryParams.set( 'my_page', page );
+	} else {
+		queryParams.delete( 'my_page' );
+	}
+	history.replaceState( null, null, '?' + queryParams.toString() );
 }

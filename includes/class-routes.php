@@ -144,6 +144,26 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 
 		register_rest_route(
 			'weal-profile/v1',
+			'/my-account/posts/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'my_account_posts' ),
+				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
+			)
+		);
+
+		register_rest_route(
+			'weal-profile/v1',
+			'/my-account/comments/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'my_account_comments' ),
+				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
+			)
+		);
+
+		register_rest_route(
+			'weal-profile/v1',
 			'/comment-vote',
 			array(
 				'methods'             => 'POST',
@@ -263,10 +283,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 				$html = $this->users_tab();
 				break;
 			case 'activity':
-                return new WP_REST_Response(
-                    $this->my_comments_tab( $page, $load_more )
-                );
-                break;
+				$html = $this->my_comments_tab();
+				break;
 			case 'info':
 				$html = $this->info_tab();
 				break;
@@ -296,34 +314,114 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	}
 
 	/**
-	 * My comments tab.
+	 * My comments tab — renders the activity container with subtabs.
 	 *
-	 * @param  int  $page      Current page number.
-	 * @param  bool $load_more Whether this is a "load more" request.
-	 * @return array
+	 * @return string
 	 */
-	private function my_comments_tab( $page = 1, $load_more = false ) {
+	private function my_comments_tab() {
+		$active_subtab = isset( $_GET['b'] ) && 'p' === $_GET['b'] ? 'posts' : 'comments'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		ob_start();
+		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-activity.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * My Account Posts — AJAX endpoint for posts subtab content.
+	 *
+	 * @param  WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 * @throws Exception On error.
+	 */
+	public function my_account_posts( $request ) {
+		$this->verify_nonce( $request );
+		$this->current_user = get_current_user_id();
+
+		if ( ! $this->current_user ) {
+			throw new Exception( esc_html__( 'User not logged in', 'weal-profile' ) );
+		}
+
+		$page     = isset( $request['page'] ) ? max( 1, intval( $request['page'] ) ) : 1;
+		$per_page = 10;
+
+		$posts_query = new \WP_Query(
+			array(
+				'author'         => $this->current_user,
+				'post_status'    => 'publish',
+				'posts_per_page' => $per_page,
+				'paged'          => $page,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+
+		$user_posts  = $posts_query->posts;
+		$total_pages = $posts_query->max_num_pages;
+
+		$pagination_html = '';
+		if ( $total_pages > 1 ) {
+			$pagination_html = paginate_links(
+				array(
+					'base'    => add_query_arg( 'my_page', '%#%' ),
+					'format'  => '',
+					'current' => $page,
+					'total'   => $total_pages,
+					'type'    => 'list',
+				)
+			);
+		}
+
+		ob_start();
+		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-posts.php';
+		$html = ob_get_clean();
+
+		return new WP_REST_Response(
+			array(
+				'html'        => $html,
+				'page'        => $page,
+				'total_pages' => $total_pages,
+				'has_more'    => $page < $total_pages,
+			)
+		);
+	}
+
+	/**
+	 * My Account Comments — AJAX endpoint for comments subtab content.
+	 *
+	 * @param  WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 * @throws Exception On error.
+	 */
+	public function my_account_comments( $request ) {
+		$this->verify_nonce( $request );
+		$this->current_user = get_current_user_id();
+
+		if ( ! $this->current_user ) {
+			throw new Exception( esc_html__( 'User not logged in', 'weal-profile' ) );
+		}
+
+		$page     = isset( $request['page'] ) ? max( 1, intval( $request['page'] ) ) : 1;
 		$per_page = 10;
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$args          = array(
-			'user_id' => $this->current_user,
-			'status'  => 'approve',
-			'number'  => $per_page,
-			'offset'  => $offset,
+		$user_comments = get_comments(
+			array(
+				'user_id' => $this->current_user,
+				'status'  => 'approve',
+				'number'  => $per_page,
+				'offset'  => $offset,
+			)
 		);
-		$user_comments = get_comments( $args );
 
-		$comment_query   = new \WP_Comment_Query();
-		$total_comments  = $comment_query->query(
+		$comment_query  = new \WP_Comment_Query();
+		$total_comments = $comment_query->query(
 			array(
 				'user_id' => $this->current_user,
 				'status'  => 'approve',
 				'count'   => true,
 			)
 		);
-		$total_pages     = (int) ceil( $total_comments / $per_page );
-		$has_more        = $page < $total_pages;
+		$total_pages    = (int) ceil( $total_comments / $per_page );
 
 		$settings              = ( new Settings_Manager() )->get_settings();
 		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
@@ -332,11 +430,11 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			$likes_service = new Likes_Vote_Service();
 			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 		} else {
-			$commentm_service = new Comments_Service();
+			$comments_service = new Comments_Service();
 			$vote_data        = array(
 				'total_likes'    => 0,
 				'total_dislikes' => 0,
-				'top_comments'   => $commentm_service->get_user_comments_data( $this->current_user ),
+				'top_comments'   => $comments_service->get_user_comments_data( $this->current_user ),
 			);
 		}
 
@@ -344,21 +442,32 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
 		$top_comments   = $vote_data['top_comments'] ?? array();
 
-		ob_start();
-
-		if ( $load_more ) {
-			require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/comment-items.php';
-		} else {
-			require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
+		$pagination_html = '';
+		if ( $total_pages > 1 ) {
+			$pagination_html = paginate_links(
+				array(
+					'base'    => add_query_arg( 'my_page', '%#%' ),
+					'format'  => '',
+					'current' => $page,
+					'total'   => $total_pages,
+					'type'    => 'list',
+				)
+			);
 		}
 
+		$user_id = $this->current_user;
+
+		ob_start();
+		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
 		$html = ob_get_clean();
 
-		return array(
-			'html'       => $html,
-			'page'       => $page,
-			'total_pages' => $total_pages,
-			'has_more'   => $has_more,
+		return new WP_REST_Response(
+			array(
+				'html'        => $html,
+				'page'        => $page,
+				'total_pages' => $total_pages,
+				'has_more'    => $page < $total_pages,
+			)
 		);
 	}
 
