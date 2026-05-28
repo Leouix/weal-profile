@@ -47,7 +47,7 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 			<input type="file" name="weal_profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
 		</form>
 
-		<form method="post" action="" class="weal-profile-avatar-form">
+		<form method="post" action="" class="weal-profile-avatar-form" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure you want to delete the image?', 'weal-profile' ) ); ?>')">
 			<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
 			<input type="hidden" name="weal_profile_avatar_action" value="remove" />
 			<button type="submit" title="Delete" class="button weal-button-delete"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
