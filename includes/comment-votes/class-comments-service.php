@@ -25,13 +25,7 @@ class Comments_Service {
 	public function get_user_comments_data( $user_id ) {
 		global $wpdb;
 
-		$user = get_user_by( 'id', $user_id );
-		if ( ! $user ) {
-			return null;
-		}
-
 		$comments_table = $wpdb->prefix . 'comments';
-		$user_email     = $user->user_email;
 
 		$commentmeta_table = $wpdb->prefix . 'commentmeta';
 
@@ -41,12 +35,12 @@ class Comments_Service {
 					COALESCE(m.meta_value, 0) as likes_count
 				FROM %i c
 				LEFT JOIN %i m ON c.comment_ID = m.comment_id AND m.meta_key = '_weal_likes_count'
-				WHERE c.comment_author_email = %s AND c.comment_approved = 1
+				WHERE c.user_id = %d AND c.comment_approved = 1
 				ORDER BY COALESCE(m.meta_value, 0) DESC
 				LIMIT 3",
 				$comments_table,
 				$commentmeta_table,
-				$user_email
+				$user_id
 			)
 		);
 

@@ -37,16 +37,15 @@ class Likes_Vote_Service {
 
 		$table_name     = $wpdb->prefix . Comment_Votes::TABLE_NAME;
 		$comments_table = $wpdb->prefix . 'comments';
-		$user_email     = $user->user_email;
 
 		$total_likes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				'SELECT COUNT(*) FROM %i v
 				INNER JOIN %i c ON v.comment_id = c.comment_ID
-				WHERE c.comment_author_email = %s AND v.is_liked = 1',
+				WHERE c.user_id = %d AND v.is_liked = 1',
 				$table_name,
 				$comments_table,
-				$user_email
+				$user_id
 			)
 		);
 
@@ -54,10 +53,10 @@ class Likes_Vote_Service {
 			$wpdb->prepare(
 				'SELECT COUNT(*) FROM %i v
 				INNER JOIN %i c ON v.comment_id = c.comment_ID
-				WHERE c.comment_author_email = %s AND v.is_liked = 0',
+				WHERE c.user_id = %d AND v.is_liked = 0',
 				$table_name,
 				$comments_table,
-				$user_email
+				$user_id
 			)
 		);
 
