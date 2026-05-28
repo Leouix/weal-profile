@@ -18,9 +18,9 @@ use WealProfile\Includes\Comment_Votes\Comments_Service;
 use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Includes\Manager\Settings_Manager;
 
-$is_author  = count_user_posts( $profile_user_id ) > 0;
+$is_author = count_user_posts( $profile_user_id ) > 0;
 
-$per_page = 10;
+$items_per_page = 10;
 
 // Posts pagination.
 $posts_paged    = isset( $_GET['posts_page'] ) ? max( 1, intval( $_GET['posts_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -28,7 +28,7 @@ $posts_query    = new WP_Query(
 	array(
 		'author'         => $profile_user_id,
 		'post_status'    => 'publish',
-		'posts_per_page' => $per_page,
+		'posts_per_page' => $items_per_page,
 		'paged'          => $posts_paged,
 		'orderby'        => 'date',
 		'order'          => 'DESC',
@@ -49,17 +49,17 @@ $comments_service = new Comments_Service();
 $top_comments     = $comments_service->get_user_comments_data( $profile_user_id );
 
 // Comments pagination.
-$comments_page     = isset( $_GET['comments_page'] ) ? max( 1, intval( $_GET['comments_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$comments_offset   = ( $comments_page - 1 ) * $per_page;
-$user_comments     = get_comments(
+$comments_page       = isset( $_GET['comments_page'] ) ? max( 1, intval( $_GET['comments_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$comments_offset     = ( $comments_page - 1 ) * $items_per_page;
+$user_comments       = get_comments(
 	array(
 		'user_id' => $profile_user_id,
 		'status'  => 'approve',
-		'number'  => $per_page,
+		'number'  => $items_per_page,
 		'offset'  => $comments_offset,
 	)
 );
-$comment_query     = new WP_Comment_Query();
+$comment_query       = new WP_Comment_Query();
 $total_user_comments = $comment_query->query(
 	array(
 		'user_id' => $profile_user_id,
@@ -67,10 +67,10 @@ $total_user_comments = $comment_query->query(
 		'count'   => true,
 	)
 );
-$comments_max_page = (int) ceil( $total_user_comments / $per_page );
+$comments_max_page   = (int) ceil( $total_user_comments / $items_per_page );
 
-$active_tab  = isset( $_GET['comments_page'] ) ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$posts_style = 'comments' === $active_tab ? 'display:none;' : '';
+$active_tab     = isset( $_GET['comments_page'] ) ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$posts_style    = 'comments' === $active_tab ? 'display:none;' : '';
 $comments_style = 'posts' === $active_tab ? 'display:none;' : '';
 
 $user_id = $profile_user_id;

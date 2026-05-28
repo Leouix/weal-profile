@@ -12,15 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-foreach ( $user_comments as $comment ) :
+foreach ( $user_comments as $comment_item ) :
 	?>
 	<li>
-		<a href="<?php echo esc_url( get_permalink( $comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
-			<?php echo esc_html( wp_trim_words( $comment->comment_content, 10, '...' ) ); ?>
+		<a href="<?php echo esc_url( get_permalink( $comment_item->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $comment_item->comment_ID ); ?>">
+			<?php echo esc_html( wp_trim_words( $comment_item->comment_content, 10, '...' ) ); ?>
 		</a>
 		<span class="weal-comment-likes">
 			<span class="dashicons dashicons-thumbs-up"></span>
-			<?php echo esc_html( $comment->likes_count ?? 0 ); ?>
+			<?php echo esc_html( $comment_item->likes_count ?? 0 ); ?>
 		</span>
 	</li>
 <?php endforeach; ?>
