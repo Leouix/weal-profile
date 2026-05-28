@@ -90,10 +90,10 @@ $user_id = $profile_user_id;
 
 <?php if ( $is_author ) : ?>
 	<div class="other-user-tabs">
-		<div class="other-user-tab <?php echo 'posts' === $active_tab ? 'active' : ''; ?>" data-tab="posts" onclick="switchOtherUserTab(this)">
+		<div class="other-user-tab <?php echo 'posts' === $active_tab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-other-tab">
 			<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
 		</div>
-		<div class="other-user-tab <?php echo 'comments' === $active_tab ? 'active' : ''; ?>" data-tab="comments" onclick="switchOtherUserTab(this)">
+		<div class="other-user-tab <?php echo 'comments' === $active_tab ? 'active' : ''; ?>" data-tab="comments" data-wp-action="switch-other-tab">
 			<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 		</div>
 	</div>

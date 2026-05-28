@@ -20,12 +20,12 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 	<div id="main-tabs">
 		<div id="tab-button-1"
 			class="main-tabs-item active"
-			onclick="switchTab(this)">
+			data-wp-action="switch-tab">
 			<div class="text"><?php echo esc_html__( 'Activity', 'weal-profile' ); ?></div>
 		</div>
 		<div id="tab-button-3"
 			class="main-tabs-item"
-			onclick="switchTab(this)">
+			data-wp-action="switch-tab">
 			<div class="text"><?php echo esc_html__( 'My Info', 'weal-profile' ); ?></div>
 		</div>
 	</div>

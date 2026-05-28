@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="other-user-tabs">
-	<div class="other-user-tab <?php echo 'posts' === $active_subtab ? 'active' : ''; ?>" data-tab="posts" onclick="switchMyAccountTab(this)">
+	<div class="other-user-tab <?php echo 'posts' === $active_subtab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-my-tab">
 		<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
 	</div>
-	<div class="other-user-tab <?php echo 'comments' === $active_subtab && 'posts' !== $active_subtab ? 'active' : ''; ?>" data-tab="comments" onclick="switchMyAccountTab(this)">
+	<div class="other-user-tab <?php echo 'comments' === $active_subtab && 'posts' !== $active_subtab ? 'active' : ''; ?>" data-tab="comments" data-wp-action="switch-my-tab">
 		<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 	</div>
 </div>

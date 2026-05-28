@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input
 					id="display-name"
 					name="display_name"
-					oninput="editingUserData(this)"
+					data-wp-action="edit-user-data"
 					data-orig="<?php echo esc_html( $user_data_obj->display_name ); ?>"
 					value="<?php echo esc_html( $user_data_obj->display_name ); ?>"
 			>
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input
 					id="nickname"
 					name="nickname"
-					oninput="editingUserData(this)"
+					data-wp-action="edit-user-data"
 					data-orig="<?php echo esc_html( $user_data_obj->nickname ); ?>"
 					value="<?php echo esc_html( $user_data_obj->nickname ); ?>"
 			>
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input
 					id="first-name"
 					name="first_name"
-					oninput="editingUserData(this)"
+					data-wp-action="edit-user-data"
 					data-orig="<?php echo esc_html( $user_data_obj->first_name ); ?>"
 					value="<?php echo esc_html( $user_data_obj->first_name ); ?>"
 			>
@@ -67,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input
 					id="last-name"
 					name="last_name"
-					oninput="editingUserData(this)"
+					data-wp-action="edit-user-data"
 					data-orig="<?php echo esc_html( $user_data_obj->last_name ); ?>"
 					value="<?php echo esc_html( $user_data_obj->last_name ); ?>"
 			>
@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input
 					id="user-url"
 					name="user_url"
-					oninput="editingUserData(this)"
+					data-wp-action="edit-user-data"
 					data-orig="<?php echo esc_html( $user_data_obj->user_url ); ?>"
 					value="<?php echo esc_html( $user_data_obj->user_url ); ?>"
 			>
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input
 					id="description"
 					name="description"
-					oninput="editingUserData(this)"
+					data-wp-action="edit-user-data"
 					data-orig="<?php echo esc_html( $user_data_obj->description ); ?>"
 					value="<?php echo esc_html( $user_data_obj->description ); ?>"
 			>
