@@ -93,7 +93,7 @@
 			return this.tabs[ buttonId ];
 		}
 
-		static switch( activeTabId ) {
+		static switch ( activeTabId ) {
 
 			tabButton1.classList.remove( 'active' );
 			tabButton3.classList.remove( 'active' );
@@ -353,12 +353,12 @@
 
 	function getParameters( url ) {
 		var params = {};
-		url = url.toLowerCase();
-		url = url.split( '&' );
+		url        = url.toLowerCase();
+		url        = url.split( '&' );
 
-		for ( var i = 0; i < url.length; i++ ) {
-			var prop = url[ i ].slice( 0, url[ i ].search( '=' ) );
-			var value = url[ i ].slice( url[ i ].search( '=' ) ).replace( '=', '' );
+		for ( var i = 0, urlLength = url.length; i < urlLength; i++ ) {
+			var prop       = url[ i ].slice( 0, url[ i ].search( '=' ) );
+			var value      = url[ i ].slice( url[ i ].search( '=' ) ).replace( '=', '' );
 			params[ prop ] = value;
 		}
 		return params;

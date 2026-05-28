@@ -337,15 +337,15 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	/**
 	 * Render comments HTML for a given page.
 	 *
-	 * @param  int   $page        Page number.
-	 * @param  int   $total_pages Optional. Pre-computed total pages to avoid duplicate count query.
+	 * @param  int $page        Page number.
+	 * @param  int $total_pages Optional. Pre-computed total pages to avoid duplicate count query.
 	 * @return string
 	 */
 	private function get_comments_html( $page = 1, $total_pages = null ) {
 		$per_page = 10;
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$comment_query  = new \WP_Comment_Query();
+		$comment_query = new \WP_Comment_Query();
 		$user_comments = $comment_query->query(
 			array(
 				'user_id' => $this->current_user,
@@ -472,8 +472,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			throw new Exception( esc_html__( 'User not logged in', 'weal-profile' ) );
 		}
 
-		$page        = isset( $request['page'] ) ? max( 1, intval( $request['page'] ) ) : 1;
-		$per_page    = 10;
+		$page     = isset( $request['page'] ) ? max( 1, intval( $request['page'] ) ) : 1;
+		$per_page = 10;
 
 		$comment_query  = new \WP_Comment_Query();
 		$total_comments = $comment_query->query(
@@ -483,7 +483,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 				'count'   => true,
 			)
 		);
-		$total_pages = (int) ceil( $total_comments / $per_page );
+		$total_pages    = (int) ceil( $total_comments / $per_page );
 
 		$html = $this->get_comments_html( $page, $total_pages );
 
