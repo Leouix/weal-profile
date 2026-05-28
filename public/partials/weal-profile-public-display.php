@@ -54,7 +54,7 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
                     <div id="main-tabs">
                         <div id="tab-button-1"
                             class="main-tabs-item active"
-                            onclick="switchTab(this)"
+                            onclick="switchTab(this)">
                         <div class="text"><?php echo esc_html__( 'Activity', 'weal-profile' ); ?></div>
                         </div>
                         <div id="tab-button-3"
