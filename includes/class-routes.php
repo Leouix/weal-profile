@@ -263,7 +263,9 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 				$html = $this->users_tab();
 				break;
 			case 'activity':
-                $html = $this->my_comments_tab( $page, $load_more );
+                return new WP_REST_Response(
+                    $this->my_comments_tab( $page, $load_more )
+                );
                 break;
 			case 'info':
 				$html = $this->info_tab();
