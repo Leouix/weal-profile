@@ -76,7 +76,7 @@ $comments_style = 'posts' === $active_tab ? 'display:none;' : '';
 $user_id = $profile_user_id;
 ?>
 
-<div class="weal-profile-top-area">
+<div class="weal-profile-top-area weal-other-top-area">
 	<div></div>
 
 	<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>

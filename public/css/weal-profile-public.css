@@ -205,6 +205,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	margin-bottom: 24px;
 	padding-bottom: 24px;
 	border-bottom: 1px solid #eee;
+	align-items: end;
 }
 
 .other-user-post-item .post-thumbnail img {
@@ -297,4 +298,8 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 .weal-pagination ul li .page-numbers.next,
 .weal-pagination ul li .page-numbers.prev {
 	font-size: 13px;
+}
+
+.weal-other-top-area {
+	margin-bottom: 35px;
 }
