@@ -159,17 +159,8 @@ class Weal_Profile_Avatar {
 	 */
 	public static function filter_comment_author_url( $url, $comment_id ) {
 
-		if ( ! is_user_logged_in() ) {
-			return $url;
-		}
-
 		$comment = get_comment( $comment_id );
-		if ( ! $comment ) {
-			return $url;
-		}
-
-		$current_user_id = get_current_user_id();
-		if ( $current_user_id !== (int) $comment->user_id ) {
+		if ( ! $comment || empty( $comment->user_id ) ) {
 			return $url;
 		}
 
@@ -180,7 +171,7 @@ class Weal_Profile_Avatar {
 			return $url;
 		}
 
-        return home_url( '/' . ltrim( $profile_slug, '/' ) );
+		return add_query_arg( 'u', $comment->user_id, home_url( '/' . ltrim( $profile_slug, '/' ) ) );
 	}
 
 	/**
@@ -239,10 +230,6 @@ class Weal_Profile_Avatar {
 			return $avatar_image;
 		}
 
-		if ( get_current_user_id() !== $user_id ) {
-			return $avatar_image;
-		}
-
 		$settings     = new Settings_Manager();
 		$profile_slug = $settings->get_user_page_url();
 
@@ -250,7 +237,7 @@ class Weal_Profile_Avatar {
 			return $avatar_image;
 		}
 
-		$profile_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
+		$profile_url = add_query_arg( 'u', $user_id, home_url( '/' . ltrim( $profile_slug, '/' ) ) );
 
 		return '<a href="' . esc_url( $profile_url ) . '" target="_blank" rel="noopener">' . $avatar_image . '</a>';
 	}

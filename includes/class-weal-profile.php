@@ -250,7 +250,20 @@ class Weal_Profile {
 		$path        = trim( wp_parse_url( $current_url, PHP_URL_PATH ), '/' );
 		$page_url    = $this->get_public_page_url();
 
-		return $page_url === $path;
+		return ! empty( $page_url ) && $page_url === $path;
+	}
+
+	/**
+	 * Extract profile user ID from URL query param.
+	 *
+	 * @return int 0 if own profile, positive int if viewing another user.
+	 */
+	private function get_profile_user_id_from_url() {
+		if ( ! isset( $_GET['u'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return 0;
+		}
+		$user_id = intval( $_GET['u'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		return $user_id > 0 ? $user_id : 0;
 	}
 
 	/**
@@ -278,6 +291,24 @@ class Weal_Profile {
 			if ( ! is_user_logged_in() ) {
 				auth_redirect();
 			}
+
+			$profile_user_id = $this->get_profile_user_id_from_url();
+
+			if ( $profile_user_id > 0 ) {
+				$user = get_user_by( 'ID', $profile_user_id );
+				if ( ! $user ) {
+					global $wp_query;
+					$wp_query->set_404();
+					status_header( 404 );
+					return get_404_template();
+				}
+			} else {
+				$profile_user_id = get_current_user_id();
+			}
+
+			global $weal_profile_user_id;
+			$weal_profile_user_id = $profile_user_id;
+
 			load_template( WEAL_PROFILE_PLUGIN_DIR . 'public/partials/weal-profile-public-display.php', false );
 			return null;
 		}
@@ -297,6 +328,11 @@ class Weal_Profile {
 		}
 
 		if ( ! current_user_can( 'edit_user', get_current_user_id() ) ) {
+			return;
+		}
+
+		$profile_user_id = $this->get_profile_user_id_from_url();
+		if ( $profile_user_id > 0 && $profile_user_id !== get_current_user_id() ) {
 			return;
 		}
 
@@ -332,19 +368,27 @@ class Weal_Profile {
 	 */
 	public function my_custom_add_user_id_to_query_vars() {
 		global $wp_query;
-		$wp_query->set( 'weal_profile_current_user_id', get_current_user_id() );
+		$user_id = $this->get_profile_user_id_from_url();
+		$wp_query->set( 'weal_profile_current_user_id', $user_id > 0 ? $user_id : get_current_user_id() );
 	}
 
 	/**
 	 * Localize script data.
 	 */
 	public function localize_script_data() {
+		$profile_user_id = $this->get_profile_user_id_from_url();
+		if ( ! $profile_user_id ) {
+			$profile_user_id = get_current_user_id();
+		}
+
 		wp_localize_script(
 			$this->plugin_name,
 			'wealProfilePageData',
 			array(
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'root'  => esc_url_raw( rest_url() ),
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'root'            => esc_url_raw( rest_url() ),
+				'profile_user_id' => $profile_user_id,
+				'is_own_profile'  => (int) $profile_user_id === get_current_user_id(),
 			)
 		);
 	}

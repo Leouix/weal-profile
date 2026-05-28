@@ -205,6 +205,10 @@ function getParameters( url ) {
 
 function checkTabGetParamsLoading() {
 
+	if ( ! wealProfilePageData.is_own_profile ) {
+		return;
+	}
+
 	var params = getParameters( getNavUrl() );
 
 	if ( 'info' === ( typeof params !== 'undefined' && params !== null ? params.tab : undefined ) ) {
