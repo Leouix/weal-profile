@@ -1,6 +1,6 @@
 <?php
 /**
- * Likes Vote Service
+ * Comments Service
  *
  * @package weal-profile
  */
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class Likes_Vote_Service
+ * Class Comments_Service
  */
 class Comments_Service {
 

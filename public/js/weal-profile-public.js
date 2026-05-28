@@ -7,7 +7,6 @@
 let containerResults;
 let userFormClassObject;
 let tabButton1;
-let tabButton2;
 let tabButton3;
 
 
@@ -157,7 +156,6 @@ function toggleBtn( isFormChanged ) {
 class TabsSwitcherHelper {
 	static tabs = {
 		'tab-button-1': 'activity',
-		'tab-button-2': 'users',
 		'tab-button-3': 'info',
 	};
 
@@ -168,15 +166,11 @@ class TabsSwitcherHelper {
 	static switch ( activeTabId ) {
 
 		tabButton1.classList.remove( 'active' );
-		// tabButton2.classList.remove( 'active' ).
 		tabButton3.classList.remove( 'active' );
 
 		switch ( activeTabId ) {
 			case 'tab-button-1':
 				tabButton1.classList.add( 'active' );
-				break;
-			case 'tab-button-2':
-				// tabButton2.classList.add( 'active' ).
 				break;
 			case 'tab-button-3':
 				tabButton3.classList.add( 'active' );
