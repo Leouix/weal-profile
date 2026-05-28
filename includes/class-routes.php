@@ -255,13 +255,16 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			throw new Exception( esc_html__( 'Tab Name is required.', 'weal-profile' ) );
 		}
 
+		$page      = isset( $post_data['page'] ) ? max( 1, intval( $post_data['page'] ) ) : 1;
+		$load_more = ! empty( $post_data['load_more'] );
+
 		switch ( $post_data['tabName'] ) {
 			case 'users':
 				$html = $this->users_tab();
 				break;
 			case 'activity':
-				$html = $this->my_comments_tab();
-				break;
+                $html = $this->my_comments_tab( $page, $load_more );
+                break;
 			case 'info':
 				$html = $this->info_tab();
 				break;
@@ -293,14 +296,32 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	/**
 	 * My comments tab.
 	 *
-	 * @return string
+	 * @param  int  $page      Current page number.
+	 * @param  bool $load_more Whether this is a "load more" request.
+	 * @return array
 	 */
-	private function my_comments_tab() {
+	private function my_comments_tab( $page = 1, $load_more = false ) {
+		$per_page = 10;
+		$offset   = ( $page - 1 ) * $per_page;
+
 		$args          = array(
 			'user_id' => $this->current_user,
 			'status'  => 'approve',
+			'number'  => $per_page,
+			'offset'  => $offset,
 		);
 		$user_comments = get_comments( $args );
+
+		$comment_query   = new \WP_Comment_Query();
+		$total_comments  = $comment_query->query(
+			array(
+				'user_id' => $this->current_user,
+				'status'  => 'approve',
+				'count'   => true,
+			)
+		);
+		$total_pages     = (int) ceil( $total_comments / $per_page );
+		$has_more        = $page < $total_pages;
 
 		$settings              = ( new Settings_Manager() )->get_settings();
 		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
@@ -322,8 +343,21 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		$top_comments   = $vote_data['top_comments'] ?? array();
 
 		ob_start();
-		include WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
-		return ob_get_clean();
+
+		if ( $load_more ) {
+			require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/comment-items.php';
+		} else {
+			require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
+		}
+
+		$html = ob_get_clean();
+
+		return array(
+			'html'       => $html,
+			'page'       => $page,
+			'total_pages' => $total_pages,
+			'has_more'   => $has_more,
+		);
 	}
 
 	/**

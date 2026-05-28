@@ -227,3 +227,74 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 .other-user-post-item .post-content h3 a:hover {
 	color: #3F97FF;
 }
+
+/* ── Pagination: Load More ── */
+.weal-load-more-wrap {
+	text-align: center;
+	margin: 20px 0;
+}
+
+.weal-load-more.button {
+	cursor: pointer;
+	padding: 10px 30px;
+	font-size: 15px;
+	border: 1px solid #4e84ff;
+	background: #4e84ff;
+	color: #fff;
+	border-radius: 4px;
+	transition: background 0.2s;
+}
+
+.weal-load-more.button:hover {
+	background: #356acf;
+}
+
+/* ── Pagination: numbered links ── */
+.weal-pagination {
+	margin: 30px 0;
+	text-align: center;
+}
+
+.weal-pagination ul {
+	display: inline-flex;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	gap: 4px;
+}
+
+.weal-pagination ul li {
+	margin: 0;
+}
+
+.weal-pagination ul li .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	height: 36px;
+	padding: 0 8px;
+	font-size: 15px;
+	background: #f0f0f0;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	text-decoration: none;
+	color: #333;
+	transition: background 0.2s;
+}
+
+.weal-pagination ul li .page-numbers:hover {
+	background: #e0e0e0;
+}
+
+.weal-pagination ul li .page-numbers.current {
+	background: #4e84ff;
+	border-color: #4e84ff;
+	color: #fff;
+	font-weight: 600;
+}
+
+.weal-pagination ul li .page-numbers.next,
+.weal-pagination ul li .page-numbers.prev {
+	font-size: 13px;
+}

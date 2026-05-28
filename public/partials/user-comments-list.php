@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( ! empty( $top_comments ) ) : ?>
 				<div class="weal-top-comments">
 					<h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
-					<ul>
+					<ul id="weal-comments-list">
 						<?php foreach ( $user_comments as $top_comment ) : ?>
 							<li>
 								<a href="<?php echo esc_url( get_permalink( $top_comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $top_comment->comment_ID ); ?>">

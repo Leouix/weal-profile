@@ -86,6 +86,7 @@ function switchTab( el ) {
 	getPage(
 		{
 			clickId: el.id,
+			page:    1,
 		}
 	);
 	TabsSwitcherHelper.switch( el.id );
@@ -93,9 +94,11 @@ function switchTab( el ) {
 
 function getPage( clickData ) {
 	var clickId = clickData.clickId;
+	var page    = clickData.page || 1;
 
 	var formData = new FormData();
 	formData.append( 'tabName', TabsSwitcherHelper.getTabName( clickId ) );
+	formData.append( 'page', page );
 
 	var xhr = new XMLHttpRequest();
 	xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/switch-tab-ajax/', true );
@@ -104,6 +107,10 @@ function getPage( clickData ) {
 		if ( 4 === this.readyState && 200 === this.status ) {
 			var json                   = JSON.parse( this.response );
 			containerResults.innerHTML = json.html;
+
+			if ( json.has_more ) {
+				attachLoadMoreHandler( json.page + 1 );
+			}
 
 			const check1 = TabsSwitcherHelper.getTabName( clickId );
 
@@ -118,6 +125,56 @@ function getPage( clickData ) {
 		}
 	};
 	xhr.send( formData );
+}
+
+function loadMoreComments( nextPage ) {
+	var formData = new FormData();
+	formData.append( 'tabName', 'activity' );
+	formData.append( 'page', nextPage );
+	formData.append( 'load_more', '1' );
+
+	var xhr = new XMLHttpRequest();
+	xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/switch-tab-ajax/', true );
+	xhr.setRequestHeader( 'X-WP-Nonce', wealProfilePageData.nonce );
+	xhr.onreadystatechange = function () {
+		if ( 4 === this.readyState && 200 === this.status ) {
+			var json    = JSON.parse( this.response );
+			var list    = document.getElementById( 'weal-comments-list' );
+			var wrapper = document.querySelector( '.weal-load-more-wrap' );
+
+			if ( list ) {
+				list.insertAdjacentHTML( 'beforeend', json.html );
+			}
+
+			if ( wrapper ) {
+				if ( json.has_more ) {
+					wrapper.querySelector( '.weal-load-more' ).dataset.page = nextPage;
+					attachLoadMoreHandler( nextPage + 1 );
+				} else {
+					wrapper.remove();
+				}
+			}
+		}
+		if ( 4 === this.readyState && ( 404 === this.status || 401 === this.status ) ) {
+			console.log( 'An error occurred.' );
+		}
+	};
+	xhr.send( formData );
+}
+
+function attachLoadMoreHandler( nextPage ) {
+	var button = document.querySelector( '.weal-load-more' );
+	if ( button ) {
+		var newButton = button.cloneNode( true );
+		button.parentNode.replaceChild( newButton, button );
+		newButton.addEventListener(
+			'click',
+			function ( e ) {
+				e.preventDefault();
+				loadMoreComments( nextPage );
+			}
+		);
+	}
 }
 
 function successAjaxButtonEvent( statusClass ) {
@@ -248,4 +305,13 @@ function switchOtherUserTab( el ) {
 		( 'posts' === tab ) ? 'block' : 'none';
 	document.getElementById( 'other-user-comments' ).style.display =
 		( 'comments' === tab ) ? 'block' : 'none';
+
+	var queryParams = new URLSearchParams( window.location.search );
+	if ( 'posts' === tab ) {
+		queryParams.delete( 'comments_page' );
+	} else {
+		queryParams.delete( 'posts_page' );
+	}
+	var newUrl = queryParams.toString() ? '?' + queryParams.toString() : window.location.pathname;
+	history.replaceState( null, null, newUrl );
 }

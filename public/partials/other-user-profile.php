@@ -19,19 +19,23 @@ use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Includes\Manager\Settings_Manager;
 
 $is_author  = count_user_posts( $profile_user_id ) > 0;
-$user_posts = array();
 
-if ( $is_author ) {
-	$user_posts = get_posts(
-		array(
-			'author'         => $profile_user_id,
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'orderby'        => 'date',
-			'order'          => 'DESC',
-		)
-	);
-}
+$per_page = 10;
+
+// Posts pagination.
+$posts_paged    = isset( $_GET['posts_page'] ) ? max( 1, intval( $_GET['posts_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$posts_query    = new WP_Query(
+	array(
+		'author'         => $profile_user_id,
+		'post_status'    => 'publish',
+		'posts_per_page' => $per_page,
+		'paged'          => $posts_paged,
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	)
+);
+$user_posts     = $posts_query->posts;
+$posts_max_page = $posts_query->max_num_pages;
 
 $settings              = ( new Settings_Manager() )->get_settings();
 $comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
@@ -44,12 +48,30 @@ $total_dislikes = $vote_data['total_dislikes'] ?? 0;
 $comments_service = new Comments_Service();
 $top_comments     = $comments_service->get_user_comments_data( $profile_user_id );
 
-$user_comments = get_comments(
+// Comments pagination.
+$comments_page     = isset( $_GET['comments_page'] ) ? max( 1, intval( $_GET['comments_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$comments_offset   = ( $comments_page - 1 ) * $per_page;
+$user_comments     = get_comments(
 	array(
 		'user_id' => $profile_user_id,
 		'status'  => 'approve',
+		'number'  => $per_page,
+		'offset'  => $comments_offset,
 	)
 );
+$comment_query     = new WP_Comment_Query();
+$total_user_comments = $comment_query->query(
+	array(
+		'user_id' => $profile_user_id,
+		'status'  => 'approve',
+		'count'   => true,
+	)
+);
+$comments_max_page = (int) ceil( $total_user_comments / $per_page );
+
+$active_tab  = isset( $_GET['comments_page'] ) ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$posts_style = 'comments' === $active_tab ? 'display:none;' : '';
+$comments_style = 'posts' === $active_tab ? 'display:none;' : '';
 
 $user_id = $profile_user_id;
 ?>
@@ -68,15 +90,15 @@ $user_id = $profile_user_id;
 
 <?php if ( $is_author ) : ?>
 	<div class="other-user-tabs">
-		<div class="other-user-tab active" data-tab="posts" onclick="switchOtherUserTab(this)">
+		<div class="other-user-tab <?php echo 'posts' === $active_tab ? 'active' : ''; ?>" data-tab="posts" onclick="switchOtherUserTab(this)">
 			<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
 		</div>
-		<div class="other-user-tab" data-tab="comments" onclick="switchOtherUserTab(this)">
+		<div class="other-user-tab <?php echo 'comments' === $active_tab ? 'active' : ''; ?>" data-tab="comments" onclick="switchOtherUserTab(this)">
 			<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 		</div>
 	</div>
 
-	<div id="other-user-posts" class="other-user-posts">
+	<div id="other-user-posts" class="other-user-posts" style="<?php echo esc_attr( $posts_style ); ?>">
 		<?php if ( ! empty( $user_posts ) ) : ?>
 			<?php foreach ( $user_posts as $post_item ) : ?>
 				<?php setup_postdata( $post_item ); ?>
@@ -96,15 +118,51 @@ $user_id = $profile_user_id;
 				</div>
 			<?php endforeach; ?>
 			<?php wp_reset_postdata(); ?>
+
+			<?php if ( $posts_max_page > 1 ) : ?>
+				<div class="weal-pagination">
+					<?php
+					echo wp_kses_post(
+						paginate_links(
+							array(
+								'base'    => add_query_arg( 'posts_page', '%#%' ),
+								'format'  => '',
+								'current' => $posts_paged,
+								'total'   => $posts_max_page,
+								'type'    => 'list',
+							)
+						)
+					);
+					?>
+				</div>
+			<?php endif; ?>
 		<?php endif; ?>
 	</div>
 
-	<div id="other-user-comments" class="other-user-comments" style="display:none;">
+	<div id="other-user-comments" class="other-user-comments" style="<?php echo esc_attr( $comments_style ); ?>">
 <?php else : ?>
 	<div id="other-user-comments" class="other-user-comments">
 <?php endif; ?>
 
 	<?php require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/user-comments-list.php'; ?>
+
+	<?php if ( $comments_max_page > 1 ) : ?>
+		<div class="weal-pagination">
+			<?php
+			echo wp_kses_post(
+				paginate_links(
+					array(
+						'base'    => add_query_arg( 'comments_page', '%#%' ),
+						'format'  => '',
+						'current' => $comments_page,
+						'total'   => $comments_max_page,
+						'type'    => 'list',
+					)
+				)
+			);
+			?>
+		</div>
+	<?php endif; ?>
 
 </div>
 
