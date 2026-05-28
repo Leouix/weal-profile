@@ -308,12 +308,16 @@ function loadMyAccountSubtab( tab, page ) {
 }
 
 function initMyAccountSubtab() {
+	var tabs = document.querySelectorAll( '.other-user-tab' );
+	if ( 0 === tabs.length ) {
+		return;
+	}
+
 	var params = getParameters( getNavUrl() );
-	var b      = params.b || 'c';
+	var b      = params.b || 'p';
 	var tab    = 'c' === b ? 'comments' : 'posts';
 	var page   = parseInt( params.my_page, 10 ) || 1;
 
-	var tabs = document.querySelectorAll( '.other-user-tab' );
 	tabs.forEach(
 		function ( t ) {
 			t.classList.remove( 'active' );

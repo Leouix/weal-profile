@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="other-user-tab <?php echo 'posts' === $active_subtab ? 'active' : ''; ?>" data-tab="posts" onclick="switchMyAccountTab(this)">
 		<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
 	</div>
-	<div class="other-user-tab <?php echo 'comments' === $active_subtab ? 'active' : ''; ?>" data-tab="comments" onclick="switchMyAccountTab(this)">
+	<div class="other-user-tab <?php echo 'comments' === $active_subtab && 'posts' !== $active_subtab ? 'active' : ''; ?>" data-tab="comments" onclick="switchMyAccountTab(this)">
 		<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 	</div>
 </div>

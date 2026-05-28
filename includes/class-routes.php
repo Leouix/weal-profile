@@ -314,15 +314,91 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	}
 
 	/**
-	 * My comments tab — renders the activity container with subtabs.
+	 * My comments tab — renders the activity container with subtabs,
+	 * or directly shows comments if the user has no posts.
 	 *
 	 * @return string
 	 */
 	private function my_comments_tab() {
-		$active_subtab = isset( $_GET['b'] ) && 'p' === $_GET['b'] ? 'posts' : 'comments'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$current_user_id = $this->current_user ? (int) $this->current_user : get_current_user_id();
+		$has_posts       = count_user_posts( $current_user_id ) > 0;
+
+		if ( ! $has_posts ) {
+			return $this->get_comments_html( 1 );
+		}
+
+		$active_subtab = isset( $_GET['b'] ) && 'c' === $_GET['b'] ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		ob_start();
 		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-activity.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * Render comments HTML for a given page.
+	 *
+	 * @param  int $page Page number.
+	 * @return string
+	 */
+	private function get_comments_html( $page = 1 ) {
+		$per_page = 10;
+		$offset   = ( $page - 1 ) * $per_page;
+
+		$user_comments = get_comments(
+			array(
+				'user_id' => $this->current_user,
+				'status'  => 'approve',
+				'number'  => $per_page,
+				'offset'  => $offset,
+			)
+		);
+
+		$comment_query  = new \WP_Comment_Query();
+		$total_comments = $comment_query->query(
+			array(
+				'user_id' => $this->current_user,
+				'status'  => 'approve',
+				'count'   => true,
+			)
+		);
+		$total_pages    = (int) ceil( $total_comments / $per_page );
+
+		$settings              = ( new Settings_Manager() )->get_settings();
+		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
+
+		if ( $comment_votes_enabled ) {
+			$likes_service = new Likes_Vote_Service();
+			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
+		} else {
+			$comments_service = new Comments_Service();
+			$vote_data        = array(
+				'total_likes'    => 0,
+				'total_dislikes' => 0,
+				'top_comments'   => $comments_service->get_user_comments_data( $this->current_user ),
+			);
+		}
+
+		$total_likes    = $vote_data['total_likes'] ?? 0;
+		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
+		$top_comments   = $vote_data['top_comments'] ?? array();
+
+		$pagination_html = '';
+		if ( $total_pages > 1 ) {
+			$pagination_html = paginate_links(
+				array(
+					'base'    => add_query_arg( 'my_page', '%#%' ),
+					'format'  => '',
+					'current' => $page,
+					'total'   => $total_pages,
+					'type'    => 'list',
+				)
+			);
+		}
+
+		$user_id = $this->current_user;
+
+		ob_start();
+		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
 		return ob_get_clean();
 	}
 
@@ -400,19 +476,10 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			throw new Exception( esc_html__( 'User not logged in', 'weal-profile' ) );
 		}
 
-		$page     = isset( $request['page'] ) ? max( 1, intval( $request['page'] ) ) : 1;
-		$per_page = 10;
-		$offset   = ( $page - 1 ) * $per_page;
+		$page = isset( $request['page'] ) ? max( 1, intval( $request['page'] ) ) : 1;
+		$html = $this->get_comments_html( $page );
 
-		$user_comments = get_comments(
-			array(
-				'user_id' => $this->current_user,
-				'status'  => 'approve',
-				'number'  => $per_page,
-				'offset'  => $offset,
-			)
-		);
-
+		$per_page       = 10;
 		$comment_query  = new \WP_Comment_Query();
 		$total_comments = $comment_query->query(
 			array(
@@ -422,44 +489,6 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			)
 		);
 		$total_pages    = (int) ceil( $total_comments / $per_page );
-
-		$settings              = ( new Settings_Manager() )->get_settings();
-		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
-
-		if ( $comment_votes_enabled ) {
-			$likes_service = new Likes_Vote_Service();
-			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
-		} else {
-			$comments_service = new Comments_Service();
-			$vote_data        = array(
-				'total_likes'    => 0,
-				'total_dislikes' => 0,
-				'top_comments'   => $comments_service->get_user_comments_data( $this->current_user ),
-			);
-		}
-
-		$total_likes    = $vote_data['total_likes'] ?? 0;
-		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
-		$top_comments   = $vote_data['top_comments'] ?? array();
-
-		$pagination_html = '';
-		if ( $total_pages > 1 ) {
-			$pagination_html = paginate_links(
-				array(
-					'base'    => add_query_arg( 'my_page', '%#%' ),
-					'format'  => '',
-					'current' => $page,
-					'total'   => $total_pages,
-					'type'    => 'list',
-				)
-			);
-		}
-
-		$user_id = $this->current_user;
-
-		ob_start();
-		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
-		$html = ob_get_clean();
 
 		return new WP_REST_Response(
 			array(
