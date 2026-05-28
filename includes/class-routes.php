@@ -345,7 +345,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		$per_page = 10;
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$user_comments = get_comments(
+		$comment_query  = new \WP_Comment_Query();
+		$user_comments = $comment_query->query(
 			array(
 				'user_id' => $this->current_user,
 				'status'  => 'approve',
@@ -355,15 +356,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		);
 
 		if ( null === $total_pages ) {
-			$comment_query  = new \WP_Comment_Query();
-			$total_comments = $comment_query->query(
-				array(
-					'user_id' => $this->current_user,
-					'status'  => 'approve',
-					'count'   => true,
-				)
-			);
-			$total_pages    = (int) ceil( $total_comments / $per_page );
+			$total_pages = (int) ceil( $comment_query->found_comments / $per_page );
 		}
 
 		$settings              = ( new Settings_Manager() )->get_settings();
