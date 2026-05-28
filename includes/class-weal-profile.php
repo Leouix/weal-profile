@@ -155,7 +155,6 @@ class Weal_Profile {
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'admin/class-admin-settings.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'public/class-info-tab-manager.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
-		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-profile-votes-page.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comments-service.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-likes-vote-service.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/ratings/class-weal-profile-rating.php';
