@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php if ( ! empty( $user_posts ) ) : ?>
 	<?php foreach ( $user_posts as $post_item ) : ?>
 		<?php setup_postdata( $post_item ); ?>
-        <a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
+		<a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
 		<div class="weal-user-post-item">
 			<?php if ( has_post_thumbnail( $post_item->ID ) ) : ?>
 				<div class="post-thumbnail">
@@ -26,13 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php endif; ?>
 			<div class="post-content">
 				<h3>
-
-						<?php echo esc_html( get_the_title( $post_item->ID ) ); ?>
-
+					<?php echo esc_html( get_the_title( $post_item->ID ) ); ?>
 				</h3>
 			</div>
 		</div>
-        </a>
+		</a>
 	<?php endforeach; ?>
 	<?php wp_reset_postdata(); ?>
 

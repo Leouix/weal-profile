@@ -103,7 +103,7 @@ $user_id = $profile_user_id;
 			<?php foreach ( $user_posts as $post_item ) : ?>
 				<?php setup_postdata( $post_item ); ?>
 
-            <a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
+			<a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
 
 				<div class="weal-user-post-item">
 					<?php if ( has_post_thumbnail( $post_item->ID ) ) : ?>
@@ -120,7 +120,7 @@ $user_id = $profile_user_id;
 					</div>
 				</div>
 
-            </a>
+			</a>
 			<?php endforeach; ?>
 			<?php wp_reset_postdata(); ?>
 
