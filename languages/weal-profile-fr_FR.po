@@ -2,103 +2,313 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: My Account Page 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/my-account-page\n"
+"Project-Id-Version: Weal Profile 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/weal-profile\n"
+"POT-Creation-Date: 2026-05-28T17:47:15+00:00\n"
+"PO-Revision-Date: 2026-05-28T20:00:00+00:00\n"
 "Last-Translator: leouix <nsht22sola@gmail.com>\n"
 "Language-Team: French\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-20T16:13:34+00:00\n"
-"PO-Revision-Date: 2026-04-20T16:13:34+00:00\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: my-account-page\n"
+"X-Domain: weal-profile\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr_FR\n"
 
 #. Plugin Name of the plugin
-#: my-account-page.php
-msgid "My Account Page"
-msgstr "Ma Page de Compte"
+#: weal-profile.php includes/class-weal-profile.php:202
+#: includes/class-weal-profile.php:203
+msgid "Weal Profile"
+msgstr "Weal Profile"
+
+#. Plugin URI of the plugin
+#: weal-profile.php
+msgid "https://weal.cloud"
+msgstr "https://weal.cloud"
 
 #. Description of the plugin
-#: my-account-page.php
-msgid "Public page personal account of the user"
-msgstr "Page publique de compte personnel de l'utilisateur"
+#: weal-profile.php
+msgid ""
+"Creates a personal account page where logged-in users can manage their "
+"profile information and review their site activity."
+msgstr ""
+"Crée une page de compte personnel où les utilisateurs connectés peuvent "
+"gérer leurs informations de profil et consulter leur activité sur le site."
 
-#: admin/partials/admin-settings-page.php:14
+#. Author of the plugin
+#: weal-profile.php
+msgid "leouix"
+msgstr "leouix"
+
+#. Author URI of the plugin
+#: weal-profile.php
+msgid "https://github.com/Leouix/"
+msgstr "https://github.com/Leouix/"
+
+#: admin/class-admin-settings.php:105
+msgid "Security check failed"
+msgstr "La vérification de sécurité a échoué"
+
+#: admin/class-admin-settings.php:128
+msgid "Invalid checkbox data"
+msgstr "Données de case à cocher invalides"
+
+#. translators: %s: The invalid checkbox field name.
+#: admin/class-admin-settings.php:137
+#, php-format
+msgid "Invalid checkbox field: %s"
+msgstr "Champ de case à cocher invalide : %s"
+
+#: admin/partials/admin-settings-page.php:26
 msgid "Plugin settings page"
 msgstr "Page des paramètres du plugin"
 
-#: admin/partials/admin-settings-page.php:17
+#: admin/partials/admin-settings-page.php:29
 msgid "URL user page:"
-msgstr "URL de la page utilisateur:"
+msgstr "URL de la page utilisateur :"
 
-#: admin/partials/admin-settings-page.php:35
+#: admin/partials/admin-settings-page.php:47
 msgid "Which fields should be shown in the user account?"
-msgstr "Quels champs devez-vous afficher dans le compte utilisateur?"
+msgstr "Quels champs doivent être affichés dans le compte utilisateur ?"
 
-#: admin/partials/admin-settings-page.php:39
+#: admin/partials/admin-settings-page.php:51
+msgid "avatar"
+msgstr "Avatar"
+
+#: admin/partials/admin-settings-page.php:56
 msgid "display_name"
 msgstr "Nom d'affichage"
 
-#: admin/partials/admin-settings-page.php:44
-msgid "user_url"
-msgstr "URL du site"
-
-#: admin/partials/admin-settings-page.php:49
+#: admin/partials/admin-settings-page.php:61
 msgid "nickname"
 msgstr "Surnom"
 
-#: admin/partials/admin-settings-page.php:54
+#: admin/partials/admin-settings-page.php:66
 msgid "first_name"
 msgstr "Prénom"
 
-#: admin/partials/admin-settings-page.php:59
+#: admin/partials/admin-settings-page.php:71
 msgid "last_name"
 msgstr "Nom"
 
-#: admin/partials/admin-settings-page.php:64
+#: admin/partials/admin-settings-page.php:76
+msgid "user_url"
+msgstr "URL du site"
+
+#: admin/partials/admin-settings-page.php:81
 msgid "description"
 msgstr "Description"
 
-#: admin/partials/admin-settings-page.php:68
+#: admin/partials/admin-settings-page.php:84
+msgid "Comment Likes/Dislikes"
+msgstr "J'aime/Je n'aime pas les commentaires"
+
+#: admin/partials/admin-settings-page.php:88
+msgid "Enable likes and dislikes on comments"
+msgstr "Activer les j'aime et je n'aime pas sur les commentaires"
+
+#: admin/partials/admin-settings-page.php:92
 msgid "Сохранить настройки"
 msgstr "Enregistrer les paramètres"
 
-#: admin/partials/admin-settings-page.php:69
+#: admin/partials/admin-settings-page.php:93
 msgid "Success!"
-msgstr "Succès!"
+msgstr "Succès !"
 
-#: includes/class-public-page-manager.php:34
-msgid "Unable to find available slug for public page after 100 attempts"
-msgstr "Impossible de trouver un slug disponible après 100 tentatives"
-
-#: includes/class-routes.php:25
+#: includes/class-routes.php:52
 msgid "Login required"
 msgstr "Connexion requise"
 
-#: includes/class-routes.php:109
+#: includes/class-routes.php:63 includes/class-routes.php:197
 msgid "Access denied"
 msgstr "Accès refusé"
 
-#: includes/class-routes.php:115
+#: includes/class-routes.php:203
 msgid "Login User ID is required."
 msgstr "L'ID utilisateur est requis."
 
-#: includes/class-routes.php:142
-#: includes/class-routes.php:184
+#: includes/class-routes.php:229 includes/class-routes.php:269
+#: includes/class-routes.php:417 includes/class-routes.php:476
 msgid "User not logged in"
 msgstr "Utilisateur non connecté"
 
-#: includes/class-routes.php:167
+#: includes/class-routes.php:253
+#: includes/comment-votes/class-likes-vote-service.php:96
 msgid "Invalid nonce"
 msgstr "Nonce invalide"
 
-#: includes/class-routes.php:190
+#: includes/class-routes.php:275
 msgid "Tab Name is required."
 msgstr "Le nom de l'onglet est requis."
 
-#: includes/class-routes.php:205
+#: includes/class-routes.php:293
 msgid "Invalid tab"
 msgstr "Onglet invalide"
+
+#: includes/class-weal-profile-avatar.php:50
+#: includes/class-weal-profile-avatar.php:223
+msgid "Profile picture"
+msgstr "Image de profil"
+
+#: includes/class-weal-profile-avatar.php:65
+msgid "You must be logged in."
+msgstr "Vous devez être connecté."
+
+#: includes/class-weal-profile-avatar.php:71
+msgid "You do not have permission to upload avatars."
+msgstr "Vous n'avez pas la permission de télécharger des avatars."
+
+#: includes/class-weal-profile-avatar.php:75
+msgid "No file uploaded."
+msgstr "Aucun fichier téléchargé."
+
+#: includes/class-weal-profile-avatar.php:82
+msgid "File upload error."
+msgstr "Erreur de téléchargement du fichier."
+
+#: includes/class-weal-profile-avatar.php:86
+msgid "File size exceeds 2MB limit."
+msgstr "La taille du fichier dépasse la limite de 2 Mo."
+
+#: includes/class-weal-profile.php:192
+msgid "Settings"
+msgstr "Paramètres"
+
+#: includes/comment-votes/class-comment-votes.php:184
+msgid "Like this comment"
+msgstr "J'aime ce commentaire"
+
+#: includes/comment-votes/class-comment-votes.php:189
+msgid "Dislike this comment"
+msgstr "Je n'aime pas ce commentaire"
+
+#: includes/comment-votes/class-comment-votes.php:195
+msgid "Login to vote"
+msgstr "Connectez-vous pour voter"
+
+#: includes/comment-votes/class-likes-vote-service.php:87
+msgid "Comment votes are disabled"
+msgstr "Le vote sur les commentaires est désactivé"
+
+#: includes/comment-votes/class-likes-vote-service.php:108
+msgid "User not found"
+msgstr "Utilisateur non trouvé"
+
+#: includes/comment-votes/class-likes-vote-service.php:117
+msgid "Comment not found"
+msgstr "Commentaire non trouvé"
+
+#: includes/comment-votes/class-profile-votes-page.php:47
+#: public/partials/user-comments-list.php:24
+msgid "Comment Reactions"
+msgstr "Réactions aux commentaires"
+
+#: includes/comment-votes/class-profile-votes-page.php:52
+#: public/partials/user-comments-list.php:29
+msgid "Likes Received"
+msgstr "J'aime reçus"
+
+#: includes/comment-votes/class-profile-votes-page.php:57
+#: public/partials/user-comments-list.php:34
+msgid "Dislikes Received"
+msgstr "Je n'aime pas reçus"
+
+#: includes/comment-votes/class-profile-votes-page.php:64
+#: public/partials/user-comments-list.php:40
+msgid "Top Comments"
+msgstr "Meilleurs commentaires"
+
+#: includes/manager/class-public-page-manager.php:50
+msgid "Unable to find available slug for public page after 100 attempts"
+msgstr "Impossible de trouver un slug disponible après 100 tentatives"
+
+#: includes/ratings/class-weal-profile-rating.php:122
+msgid "Rate this article:"
+msgstr "Notez cet article :"
+
+#: includes/ratings/class-weal-profile-rating.php:143
+msgid "votes"
+msgstr "votes"
+
+#: includes/ratings/class-weal-profile-rating.php:181
+msgid "Invalid data."
+msgstr "Données invalides."
+
+#: includes/ratings/class-weal-profile-rating.php:192
+msgid "You have already voted."
+msgstr "Vous avez déjà voté."
+
+#: public/class-info-tab-manager.php:59
+msgid "You do not have permission to edit this user."
+msgstr "Vous n'avez pas la permission de modifier cet utilisateur."
+
+#: public/partials/other-user-profile.php:94
+#: public/partials/tab-my-activity.php:17
+msgid "Posts"
+msgstr "Articles"
+
+#: public/partials/other-user-profile.php:97
+#: public/partials/tab-my-activity.php:20
+msgid "Comments"
+msgstr "Commentaires"
+
+#: public/partials/tab-info.php:18
+msgid "User Info"
+msgstr "Informations utilisateur"
+
+#: public/partials/tab-info.php:25
+msgid "Display Name:"
+msgstr "Nom d'affichage :"
+
+#: public/partials/tab-info.php:40
+msgid "Nickname:"
+msgstr "Surnom :"
+
+#: public/partials/tab-info.php:53
+msgid "First Name:"
+msgstr "Prénom :"
+
+#: public/partials/tab-info.php:66
+msgid "Last Name:"
+msgstr "Nom :"
+
+#: public/partials/tab-info.php:79
+msgid "Web-Site:"
+msgstr "Site web :"
+
+#: public/partials/tab-info.php:92
+msgid "Description:"
+msgstr "Description :"
+
+#: public/partials/tab-info.php:103
+msgid "Save"
+msgstr "Enregistrer"
+
+#: public/partials/tab-my-posts.php:43
+msgid "No posts found."
+msgstr "Aucun article trouvé."
+
+#: public/partials/user-comments-list.php:60
+msgid "No comments"
+msgstr "Aucun commentaire"
+
+#: public/partials/weal-profile-public-display.php:17
+msgid "My Account"
+msgstr "Mon compte"
+
+#: public/partials/weal-profile-public-display.php:24
+msgid "Activity"
+msgstr "Activité"
+
+#: public/partials/weal-profile-public-display.php:29
+msgid "My Info"
+msgstr "Mes informations"
+
+#: public/partials/weal-profile-public-display.php:50
+msgid "Are you sure you want to delete the image?"
+msgstr "Êtes-vous sûr de vouloir supprimer l'image ?"
+
+#: public/partials/weal-profile-public-display.php:53
+msgid "Del"
+msgstr "Supprimer"
