@@ -102,7 +102,10 @@ $user_id = $profile_user_id;
 		<?php if ( ! empty( $user_posts ) ) : ?>
 			<?php foreach ( $user_posts as $post_item ) : ?>
 				<?php setup_postdata( $post_item ); ?>
-				<div class="other-user-post-item">
+
+            <a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
+
+				<div class="weal-user-post-item">
 					<?php if ( has_post_thumbnail( $post_item->ID ) ) : ?>
 						<div class="post-thumbnail">
 							<?php echo get_the_post_thumbnail( $post_item->ID, 'thumbnail' ); ?>
@@ -110,12 +113,14 @@ $user_id = $profile_user_id;
 					<?php endif; ?>
 					<div class="post-content">
 						<h3>
-							<a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
+
 								<?php echo esc_html( get_the_title( $post_item->ID ) ); ?>
-							</a>
+
 						</h3>
 					</div>
 				</div>
+
+            </a>
 			<?php endforeach; ?>
 			<?php wp_reset_postdata(); ?>
 

@@ -199,7 +199,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 }
 
 /* ── Other user profile: posts list ── */
-.other-user-post-item {
+.weal-user-post-item {
 	display: flex;
 	gap: 16px;
 	margin-bottom: 24px;
@@ -208,24 +208,24 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	align-items: end;
 }
 
-.other-user-post-item .post-thumbnail img {
+.weal-user-post-item .post-thumbnail img {
 	width: 100px;
 	height: 100px;
 	object-fit: cover;
 	border-radius: 6px;
 }
 
-.other-user-post-item .post-content h3 {
+.weal-user-post-item .post-content h3 {
 	margin: 0 0 6px;
 	font-size: 18px;
 }
 
-.other-user-post-item .post-content h3 a {
+.weal-user-post-item .post-content h3 a {
 	text-decoration: none;
 	color: inherit;
 }
 
-.other-user-post-item .post-content h3 a:hover {
+.weal-user-post-item .post-content h3 a:hover {
 	color: #3F97FF;
 }
 
