@@ -254,16 +254,49 @@ class Weal_Profile {
 	}
 
 	/**
+	 * Encode user ID into a compact URL-safe token (14-16 chars).
+	 *
+	 * Format: 4 bytes user_id (big-endian) + 6 bytes HMAC-SHA256.
+	 *
+	 * @param int $user_id User ID.
+	 * @return string URL-safe token.
+	 */
+	public static function encode_user_token( $user_id ) {
+		$uid_bin = pack( 'N', (int) $user_id );
+		$hmac    = substr( hash_hmac( 'sha256', $uid_bin, AUTH_KEY, true ), 0, 6 );
+		return rtrim( strtr( base64_encode( $uid_bin . $hmac ), '+/', '-_' ), '=' );
+	}
+
+	/**
+	 * Decode a compact URL-safe token and extract user ID.
+	 *
+	 * @param string $token Encoded token.
+	 * @return int User ID or 0 on failure.
+	 */
+	private function decode_user_token( $token ) {
+		$decoded = base64_decode( strtr( $token, '-_', '+/' ), true );
+		if ( strlen( $decoded ) !== 10 ) {
+			return 0;
+		}
+		$uid      = (int) unpack( 'N', substr( $decoded, 0, 4 ) )[1];
+		$hmac     = substr( $decoded, 4, 6 );
+		$expected = substr( hash_hmac( 'sha256', pack( 'N', $uid ), AUTH_KEY, true ), 0, 6 );
+		if ( ! hash_equals( $hmac, $expected ) ) {
+			return 0;
+		}
+		return $uid > 0 ? $uid : 0;
+	}
+
+	/**
 	 * Extract profile user ID from URL query param.
 	 *
 	 * @return int 0 if own profile, positive int if viewing another user.
 	 */
 	private function get_profile_user_id_from_url() {
-		if ( ! isset( $_GET['u'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['u'] ) || ! is_string( $_GET['u'] ) || '' === $_GET['u'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return 0;
 		}
-		$user_id = intval( $_GET['u'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		return $user_id > 0 ? $user_id : 0;
+		return $this->decode_user_token( sanitize_text_field( wp_unslash( $_GET['u'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
