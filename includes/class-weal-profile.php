@@ -339,10 +339,16 @@ class Weal_Profile {
 				$profile_user_id = get_current_user_id();
 			}
 
+			$is_own_profile = get_current_user_id() === (int) $profile_user_id;
+
 			global $weal_profile_user_id;
 			$weal_profile_user_id = $profile_user_id;
 
-			load_template( WEAL_PROFILE_PLUGIN_DIR . 'public/partials/weal-profile-public-display.php', false );
+			$template_path = $is_own_profile
+				? WEAL_PROFILE_PLUGIN_DIR . 'public/partials/weal-profile-public-display.php'
+				: WEAL_PROFILE_PLUGIN_DIR . 'public/partials/other-user-profile.php';
+
+			load_template( $template_path, false );
 			return null;
 		}
 		return $template;

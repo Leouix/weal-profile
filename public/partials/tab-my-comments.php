@@ -1,11 +1,16 @@
 <?php
 /**
- * Contains the relevant methods and functions for the plugin
+ * Template for the My Comments (Activity) tab.
  *
  * @package weal-profile
+ *
+ * Expected variables:
+ *   $user_comments        array
+ *   $total_likes          int
+ *   $total_dislikes       int
+ *   $top_comments         array
+ *   $comment_votes_enabled bool
  */
-
-use WealProfile\Includes\Comment_Votes\Profile_Votes_Page;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -14,20 +19,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 <h2><?php echo esc_html__( 'My comments', 'weal-profile' ); ?></h2>
 
 <?php
-/**
- * User comments variable.
- *
- * @var $user_comments
- * @var $total_likes
- * @var $total_dislikes
- * @var $top_comments
- * @var $comment_votes_enabled
- */
-
-if ( ! empty( $user_comments ) ) {
-
-	echo wp_kses_post( Profile_Votes_Page::render( get_current_user_id(), $total_likes, $total_dislikes, $top_comments, $comment_votes_enabled ) );
-
-} else {
-	echo esc_html__( 'No comments', 'weal-profile' );
-}
+$user_id = get_current_user_id();
+require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/user-comments-list.php';

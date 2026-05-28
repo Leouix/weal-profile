@@ -172,3 +172,58 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	height: 12px;
 	width: 25px;
 }
+
+/* ── Other user profile: filter tabs ── */
+.other-user-tabs {
+	display: flex;
+	gap: 0;
+	margin-bottom: 30px;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.other-user-tab {
+	flex: 1;
+	padding: 16px 20px;
+	text-align: center;
+	font-size: 17px;
+	font-weight: 500;
+	cursor: pointer;
+	background: #e8e8e8;
+	transition: background 0.2s;
+	user-select: none;
+}
+
+.other-user-tab.active {
+	background: #c0c0c0;
+}
+
+/* ── Other user profile: posts list ── */
+.other-user-post-item {
+	display: flex;
+	gap: 16px;
+	margin-bottom: 24px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid #eee;
+}
+
+.other-user-post-item .post-thumbnail img {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border-radius: 6px;
+}
+
+.other-user-post-item .post-content h3 {
+	margin: 0 0 6px;
+	font-size: 18px;
+}
+
+.other-user-post-item .post-content h3 a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.other-user-post-item .post-content h3 a:hover {
+	color: #3F97FF;
+}
