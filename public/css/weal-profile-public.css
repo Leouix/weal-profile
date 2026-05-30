@@ -39,6 +39,9 @@
 	padding: 25px 0;
 	min-height: 100vh;
 	transition: 0.35s ease-in;
+	width: 100%;
+	max-width: 920px;
+	margin: 0 auto;
 }
 
 .au-container #container-results form input {
@@ -157,6 +160,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	background: #ff6161;
 	border: none;
 	border-radius: 3px;
+	padding: 0;
 }
 
 .weal-profile-avatar-form .button {
