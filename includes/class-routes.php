@@ -394,7 +394,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			);
 		}
 
-		$weal_profile_user_id = $this->current_user;
+		$weal_profile_user_id  = $this->current_user;
+		$weal_profile_total_pages = $total_pages;
 
 		ob_start();
 		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
@@ -445,6 +446,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 				)
 			);
 		}
+
+		$weal_profile_total_pages = $total_pages;
 
 		ob_start();
 		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-posts.php';

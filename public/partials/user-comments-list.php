@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<?php if ( ! empty( $weal_profile_top_comments ) ) : ?>
 				<div class="weal-top-comments">
-					<h4><?php esc_html_e( 'Top Comments', 'weal-profile' ); ?></h4>
+					<h4><?php esc_html_e( 'Comments', 'weal-profile' ); ?></h4>
 					<ul id="weal-comments-list">
 						<?php foreach ( $weal_profile_user_comments as $weal_profile_top_comment ) : ?>
 							<li>
