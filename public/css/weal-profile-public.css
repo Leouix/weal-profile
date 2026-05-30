@@ -136,6 +136,7 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 
 .weal-profile-avatar-wrapper img {
 	width: 150px;
+	max-width: 150px;
 	height: 150px;
 	border-radius: 50%;
 	object-fit: cover;
