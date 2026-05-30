@@ -32,4 +32,4 @@ if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 }
 ?>
 	<div class="container au-container">
-		<div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+		<div class="entry-content wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
