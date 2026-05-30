@@ -6,7 +6,7 @@
 **Requires at least:** 6.2  
 **Tested up to:** 7.0
 **Requires PHP:** 7.4  
-**Stable tag:** 1.2.0  
+**Stable tag:** 1.2.1  
 **License:** GPL-2.0-or-later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -104,3 +104,8 @@ Each vote sets a cookie (`weal_voted_post_{post_id}`) valid for 1 year. Both the
 ### Can I disable the comment likes feature?
 
 Yes. Go to **WordPress Admin → Weal Profile** and uncheck "Enable likes and dislikes on comments".
+
+## Changelog
+
+### 1.2.1
+- Added display of records on the user page
