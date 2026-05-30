@@ -4,20 +4,20 @@
  *
  * @package weal-profile
  *
- * Expected variables:
- *   $active_subtab    string  'posts' or 'comments'
+ * Expected variables (prefixed):
+ *   $weal_profile_active_subtab    string  'posts' or 'comments'
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<?php if ( $comment_votes_enabled ) : ?>
+<?php if ( $weal_profile_comment_votes_enabled ) : ?>
 <div class="activity-buttons">
-	<div class="activity-button <?php echo 'posts' === $active_subtab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-my-tab">
+	<div class="activity-button <?php echo 'posts' === $weal_profile_active_subtab ? 'active' : ''; ?>" data-tab="posts" data-wp-action="switch-my-tab">
 		<?php esc_html_e( 'Posts', 'weal-profile' ); ?>
 	</div>
-	<div class="activity-button <?php echo 'comments' === $active_subtab && 'posts' !== $active_subtab ? 'active' : ''; ?>" data-tab="comments" data-wp-action="switch-my-tab">
+	<div class="activity-button <?php echo 'comments' === $weal_profile_active_subtab && 'posts' !== $weal_profile_active_subtab ? 'active' : ''; ?>" data-tab="comments" data-wp-action="switch-my-tab">
 		<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 	</div>
 </div>

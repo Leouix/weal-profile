@@ -4,29 +4,29 @@
  *
  * @package weal-profile
  *
- * Expected variables:
- *   $user_posts       array|WP_Post[]
- *   $pagination_html  string
- *   $total_pages      int
+ * Expected variables (prefixed):
+ *   $weal_profile_user_posts       array|WP_Post[]
+ *   $weal_profile_pagination_html  string
+ *   $weal_profile_total_pages      int
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<?php if ( ! empty( $user_posts ) ) : ?>
-	<?php foreach ( $user_posts as $post_item ) : ?>
-		<?php setup_postdata( $post_item ); ?>
-		<a href="<?php echo esc_url( get_permalink( $post_item->ID ) ); ?>">
+<?php if ( ! empty( $weal_profile_user_posts ) ) : ?>
+	<?php foreach ( $weal_profile_user_posts as $weal_profile_post_item ) : ?>
+		<?php setup_postdata( $weal_profile_post_item ); ?>
+		<a href="<?php echo esc_url( get_permalink( $weal_profile_post_item->ID ) ); ?>">
 		<div class="weal-user-post-item">
-			<?php if ( has_post_thumbnail( $post_item->ID ) ) : ?>
+			<?php if ( has_post_thumbnail( $weal_profile_post_item->ID ) ) : ?>
 				<div class="post-thumbnail">
-					<?php echo get_the_post_thumbnail( $post_item->ID, 'thumbnail' ); ?>
+					<?php echo get_the_post_thumbnail( $weal_profile_post_item->ID, 'thumbnail' ); ?>
 				</div>
 			<?php endif; ?>
 			<div class="post-content">
 				<h3>
-					<?php echo esc_html( get_the_title( $post_item->ID ) ); ?>
+					<?php echo esc_html( get_the_title( $weal_profile_post_item->ID ) ); ?>
 				</h3>
 			</div>
 		</div>
@@ -34,9 +34,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php endforeach; ?>
 	<?php wp_reset_postdata(); ?>
 
-	<?php if ( $total_pages > 1 ) : ?>
+	<?php if ( $weal_profile_total_pages > 1 ) : ?>
 		<div class="weal-pagination" data-subtab="posts">
-			<?php echo wp_kses_post( $pagination_html ); ?>
+			<?php echo wp_kses_post( $weal_profile_pagination_html ); ?>
 		</div>
 	<?php endif; ?>
 <?php else : ?>

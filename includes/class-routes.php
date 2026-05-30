@@ -327,10 +327,10 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			return $this->get_comments_html( 1 );
 		}
 
-		$active_subtab = isset( $_GET['b'] ) && 'c' === $_GET['b'] ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$weal_profile_active_subtab = isset( $_GET['b'] ) && 'c' === $_GET['b'] ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		$settings              = ( new Settings_Manager() )->get_settings();
-		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
+		$weal_profile_settings              = ( new Settings_Manager() )->get_settings();
+		$weal_profile_comment_votes_enabled = $weal_profile_settings['comment_votes_enabled'] ?? true;
 
 		ob_start();
 		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-activity.php';
@@ -348,8 +348,8 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		$per_page = 10;
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$comment_query = new \WP_Comment_Query();
-		$user_comments = $comment_query->query(
+		$comment_query              = new \WP_Comment_Query();
+		$weal_profile_user_comments = $comment_query->query(
 			array(
 				'user_id' => $this->current_user,
 				'status'  => 'approve',
@@ -362,10 +362,10 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			$total_pages = (int) ceil( $comment_query->found_comments / $per_page );
 		}
 
-		$settings              = ( new Settings_Manager() )->get_settings();
-		$comment_votes_enabled = $settings['comment_votes_enabled'] ?? true;
+		$weal_profile_settings              = ( new Settings_Manager() )->get_settings();
+		$weal_profile_comment_votes_enabled = $weal_profile_settings['comment_votes_enabled'] ?? true;
 
-		if ( $comment_votes_enabled ) {
+		if ( $weal_profile_comment_votes_enabled ) {
 			$likes_service = new Likes_Vote_Service();
 			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 		} else {
@@ -377,13 +377,13 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			);
 		}
 
-		$total_likes    = $vote_data['total_likes'] ?? 0;
-		$total_dislikes = $vote_data['total_dislikes'] ?? 0;
-		$top_comments   = $vote_data['top_comments'] ?? array();
+		$weal_profile_total_likes    = $vote_data['total_likes'] ?? 0;
+		$weal_profile_total_dislikes = $vote_data['total_dislikes'] ?? 0;
+		$weal_profile_top_comments   = $vote_data['top_comments'] ?? array();
 
-		$pagination_html = '';
+		$weal_profile_pagination_html = '';
 		if ( $total_pages > 1 ) {
-			$pagination_html = paginate_links(
+			$weal_profile_pagination_html = paginate_links(
 				array(
 					'base'    => add_query_arg( 'my_page', '%#%' ),
 					'format'  => '',
@@ -394,7 +394,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			);
 		}
 
-		$user_id = $this->current_user;
+		$weal_profile_user_id = $this->current_user;
 
 		ob_start();
 		require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/tab-my-comments.php';
@@ -430,12 +430,12 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			)
 		);
 
-		$user_posts  = $posts_query->posts;
-		$total_pages = $posts_query->max_num_pages;
+		$weal_profile_user_posts = $posts_query->posts;
+		$total_pages             = $posts_query->max_num_pages;
 
-		$pagination_html = '';
+		$weal_profile_pagination_html = '';
 		if ( $total_pages > 1 ) {
-			$pagination_html = paginate_links(
+			$weal_profile_pagination_html = paginate_links(
 				array(
 					'base'    => add_query_arg( 'my_page', '%#%' ),
 					'format'  => '',

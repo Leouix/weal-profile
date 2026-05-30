@@ -14,9 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $weal_profile_user_id;
 
-$profile_user_id                      = $weal_profile_user_id;
-$is_own_profile                       = get_current_user_id() === (int) $profile_user_id;
-$weal_profile_avatar_html             = Weal_Profile_Avatar::get_avatar_html( $profile_user_id );
+$weal_profile_is_own_profile          = get_current_user_id() === (int) $weal_profile_user_id;
+$weal_profile_avatar_html             = Weal_Profile_Avatar::get_avatar_html( $weal_profile_user_id );
 $weal_profile_is_avatar_field_allowed = Weal_Profile_Avatar::get_is_avatar_field_allowed();
 
 if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
