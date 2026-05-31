@@ -21,6 +21,42 @@ use WealProfile\Includes\Manager\Settings_Manager;
 class Weal_Profile_Avatar {
 
 	/**
+	 * Check whether current get_avatar call is for a comment context.
+	 *
+	 * WordPress themes can call get_avatar() with:
+	 * - WP_Comment object (most common in comment templates)
+	 * - user_id / email while global $comment is set
+	 *
+	 * @param mixed $id_or_email Value passed to get_avatar().
+	 * @param int   $user_id     Resolved user ID.
+	 * @return bool
+	 */
+	private static function is_comment_avatar_context( $id_or_email, $user_id ) {
+		if ( $id_or_email instanceof WP_Comment ) {
+			return true;
+		}
+
+		if ( is_object( $id_or_email ) && isset( $id_or_email->comment_ID ) ) {
+			return true;
+		}
+
+		// When get_avatar() is called with user_id/email inside comments template,
+		// WP sets the current comment into a global.
+		global $comment;
+		if ( $comment instanceof WP_Comment ) {
+			if ( ! empty( $comment->user_id ) && (int) $comment->user_id === (int) $user_id ) {
+				return true;
+			}
+
+			if ( is_string( $id_or_email ) && is_email( $id_or_email ) && ! empty( $comment->comment_author_email ) ) {
+				return strtolower( $comment->comment_author_email ) === strtolower( $id_or_email );
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get the avatar attachment ID for a user.
 	 *
 	 * @param int $user_id User ID.
@@ -231,6 +267,16 @@ class Weal_Profile_Avatar {
 		}
 
 		if ( ! $user_id ) {
+			return $avatar_image;
+		}
+
+		// Wrap avatar into profile link only in comments context.
+		if ( ! self::is_comment_avatar_context( $id_or_email, $user_id ) ) {
+			return $avatar_image;
+		}
+
+		// Avoid nested links if another plugin/theme already wrapped the avatar.
+		if ( false !== strpos( $avatar_image, '<a' ) ) {
 			return $avatar_image;
 		}
 
