@@ -68,11 +68,20 @@
 					break;
 				case 'switch-my-tab':
 					e.preventDefault();
+					setEmptyButtonTemplate();
 					switchMyAccountTab( target );
 					break;
 			}
 		}
 	);
+
+	function setEmptyButtonTemplate() {
+		const formUserButton = document.getElementById( 'my-account-subtab-content' );
+		if ( ! formUserButton ) {
+			return;
+		}
+		formUserButton.classList.add( 'fade-out' );
+	}
 
 	document.addEventListener(
 		'input',
@@ -308,8 +317,19 @@
 			if ( 4 === this.readyState && ( 404 === this.status || 401 === this.status ) ) {
 				console.log( 'An error occurred.' );
 			}
+
+			delButtonSubcontent()
+
 		};
 		xhr.send( formData );
+	}
+
+	function delButtonSubcontent() {
+		const containerResults = document.getElementById( 'my-account-subtab-content' );
+		if ( ! containerResults ) {
+			return;
+		}
+		containerResults.classList.remove( 'fade-out' );
 	}
 
 	function initMyAccountSubtab() {
