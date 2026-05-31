@@ -109,8 +109,6 @@ Yes. Go to **WordPress Admin → Weal Profile** and uncheck "Enable likes and di
 
 ### 1.3.0
 - Added client-side caching
-
-### 1.2.3
 - Improved user interaction with the interface
 
 ### 1.2.2

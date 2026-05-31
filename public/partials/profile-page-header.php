@@ -27,7 +27,7 @@ $weal_profile_userdata         = get_userdata( $weal_profile_user_id );
 if ( in_array( 'display_name', $weal_profile_allowed_fields, true ) && ! empty( $weal_profile_userdata->display_name ) ) {
 	$weal_profile_display_name = $weal_profile_userdata->display_name;
 } elseif ( in_array( 'nickname', $weal_profile_allowed_fields, true ) ) {
-	$weal_profile_nickname = get_user_meta( $weal_profile_user_id, 'nickname', true );
+	$weal_profile_nickname     = get_user_meta( $weal_profile_user_id, 'nickname', true );
 	$weal_profile_display_name = ! empty( $weal_profile_nickname ) ? $weal_profile_nickname : '';
 } else {
 	$weal_profile_display_name = '';
