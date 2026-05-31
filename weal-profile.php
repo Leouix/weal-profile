@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Name:       Weal Profile
  * Plugin URI:        https://weal.cloud
  * Description:       Creates a personal account page where logged-in users can manage their profile information and review their site activity.
- * Version:           1.2.2
+ * Version:           1.2.3
  * Author:            leouix
  * Author URI:        https://github.com/Leouix/
  * License:           GPL-2.0-or-later
@@ -40,7 +40,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WEAL_PROFILE_VERSION', '1.2.2' );
+define( 'WEAL_PROFILE_VERSION', '1.2.3' );
 define( 'WEAL_PROFILE_DB_VERSION', '1.2.0' );
 define( 'WEAL_PROFILE_PLUGIN_FILE', __FILE__ );
 define( 'WEAL_PROFILE_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
