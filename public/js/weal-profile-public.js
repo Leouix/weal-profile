@@ -12,6 +12,19 @@
 	let tabButton1;
 	let tabButton3;
 
+	// In-memory cache for tab/subtab HTML responses.
+	// Purpose: avoid repeating expensive requests within the same page session.
+	// Cache is cleared automatically on full page reload.
+	const wealProfileHtmlCache = new Map();
+
+	function cacheGet( key ) {
+		return wealProfileHtmlCache.has( key ) ? wealProfileHtmlCache.get( key ) : null;
+	}
+
+	function cacheSet( key, value ) {
+		wealProfileHtmlCache.set( key, value );
+	}
+
 	window.addEventListener(
 		'load',
 		function () {
@@ -129,8 +142,28 @@
 		var clickId = clickData.clickId;
 		var page    = clickData.page || 1;
 
+		var tabName  = TabsSwitcherHelper.getTabName( clickId );
+		var cacheKey = 'main:' + tabName + ':page:' + page;
+		var cached   = cacheGet( cacheKey );
+		if ( cached ) {
+			containerResults.innerHTML = cached;
+
+			replaceUrlParam( tabName );
+
+			if ( 'info' === tabName ) {
+				triggerUserForm();
+			}
+
+			if ( 'activity' === tabName ) {
+				initMyAccountSubtab();
+			}
+
+			delFadeOut();
+			return;
+		}
+
 		var formData = new FormData();
-		formData.append( 'tabName', TabsSwitcherHelper.getTabName( clickId ) );
+		formData.append( 'tabName', tabName );
 		formData.append( 'page', page );
 
 		var xhr = new XMLHttpRequest();
@@ -141,13 +174,15 @@
 				var json                   = JSON.parse( this.response );
 				containerResults.innerHTML = json.html;
 
-				replaceUrlParam( TabsSwitcherHelper.getTabName( clickId ) );
+				cacheSet( cacheKey, json.html );
 
-				if ( 'info' === TabsSwitcherHelper.getTabName( clickId ) ) {
+				replaceUrlParam( tabName );
+
+				if ( 'info' === tabName ) {
 					triggerUserForm();
 				}
 
-				if ( 'activity' === TabsSwitcherHelper.getTabName( clickId ) ) {
+				if ( 'activity' === tabName ) {
 					initMyAccountSubtab();
 				}
 			}
@@ -298,6 +333,19 @@
 			endpoint = 'my-account/posts/';
 		}
 
+		var cacheKey = 'sub:' + tab + ':page:' + ( page || 1 );
+		var cached   = cacheGet( cacheKey );
+		if ( cached ) {
+			var container = document.getElementById( 'my-account-subtab-content' );
+			if ( container ) {
+				container.innerHTML = cached;
+			}
+			attachMyAccountPagination( tab );
+			updateMyAccountSubtabUrl( tab, page || 1 );
+			delButtonSubcontent();
+			return;
+		}
+
 		var formData = new FormData();
 		formData.append( 'page', page || 1 );
 
@@ -311,6 +359,7 @@
 				if ( container ) {
 					container.innerHTML = json.html;
 				}
+				cacheSet( cacheKey, json.html );
 				attachMyAccountPagination( tab );
 				updateMyAccountSubtabUrl( tab, page );
 			}
