@@ -39,21 +39,29 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 	<?php endif; ?>
 </div>
 
-<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
-	<div class="weal-profile-avatar-forms">
-		<form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
-			<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
-			<input type="hidden" name="weal_profile_avatar_action" value="upload" />
-			<input type="file" name="weal_profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
-		</form>
+<div class="avatar-bottom-area">
+    <?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
+        <div class="weal-profile-avatar-forms">
+            <form method="post" action="" enctype="multipart/form-data" class="weal-profile-avatar-form">
+                <?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+                <input type="hidden" name="weal_profile_avatar_action" value="upload" />
+                <input type="file" name="weal_profile_avatar" accept=".jpg,.jpeg,.png,.webp" />
+            </form>
 
-		<form method="post" action="" class="weal-profile-avatar-form" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure you want to delete the image?', 'weal-profile' ) ); ?>')">
-			<?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
-			<input type="hidden" name="weal_profile_avatar_action" value="remove" />
-			<button type="submit" title="Delete" class="button weal-button-delete"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
-		</form>
-	</div>
-<?php endif; ?>
+            <form method="post" action="" class="weal-profile-avatar-form" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure you want to delete the image?', 'weal-profile' ) ); ?>')">
+                <?php wp_nonce_field( 'weal_profile_avatar_action', 'weal_profile_avatar_nonce' ); ?>
+                <input type="hidden" name="weal_profile_avatar_action" value="remove" />
+                <button type="submit" title="Delete" class="button weal-button-delete"><?php esc_html_e( 'Del', 'weal-profile' ); ?></button>
+            </form>
+        </div>
+
+        <?php if ( ! empty( $weal_profile_display_name ) ) : ?>
+            <div class="weal-profile-display-name"><?php echo esc_html( $weal_profile_display_name ); ?></div>
+        <?php endif; ?>
+
+    <?php endif; ?>
+</div>
+
 
 <div id="container-results"></div>
 

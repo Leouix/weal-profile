@@ -308,3 +308,13 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 .weal-other-top-area {
 	margin-bottom: 35px;
 }
+
+.avatar-bottom-area {
+	display: flex;
+	flex-direction: column;
+	align-items: end;
+}
+
+.avatar-area {
+	text-align: center;
+}
