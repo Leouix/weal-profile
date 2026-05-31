@@ -318,3 +318,8 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 .avatar-area {
 	text-align: center;
 }
+
+.fade-out {
+	opacity: 0;
+	transition: opacity 0.15s ease-in-out;
+}

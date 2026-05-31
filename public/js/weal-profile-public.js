@@ -58,6 +58,7 @@
 			switch ( target.dataset.wpAction ) {
 				case 'switch-tab':
 					e.preventDefault();
+					setEmptyTemplate();
 					getPage( { clickId: target.id, page: 1 } );
 					TabsSwitcherHelper.switch( target.id );
 					break;
@@ -144,8 +145,30 @@
 			if ( 4 === this.readyState && ( 404 === this.status || 401 === this.status ) ) {
 				console.log( 'An error occurred.' );
 			}
+
+			delFadeOut();
 		};
 		xhr.send( formData );
+	}
+
+	function delFadeOut() {
+
+		const containerResults = document.getElementById( 'container-results' );
+
+		if ( ! containerResults ) {
+			return;
+		}
+		containerResults.classList.remove( 'fade-out' );
+	}
+
+	function setEmptyTemplate() {
+
+		const containerResults = document.getElementById( 'container-results' );
+
+		if ( ! containerResults ) {
+			return;
+		}
+		containerResults.classList.add( 'fade-out' );
 	}
 
 	function triggerUserForm() {
