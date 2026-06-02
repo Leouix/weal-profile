@@ -382,14 +382,14 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		} else {
 			$comments_service = new Comments_Service();
 			$vote_data        = array(
-				'total_likes'    => 0,
-				'total_dislikes' => 0,
+				'total_likes'    => null,
+				'total_dislikes' => null,
 				'top_comments'   => $comments_service->get_user_comments_data( $this->current_user ),
 			);
 		}
 
-		$weal_profile_total_likes    = $vote_data['total_likes'] ?? 0;
-		$weal_profile_total_dislikes = $vote_data['total_dislikes'] ?? 0;
+		$weal_profile_total_likes    = $vote_data['total_likes'] ?? null;
+		$weal_profile_total_dislikes = $vote_data['total_dislikes'] ?? null;
 		$weal_profile_top_comments   = $vote_data['top_comments'] ?? array();
 
 		$weal_profile_pagination_html = '';
