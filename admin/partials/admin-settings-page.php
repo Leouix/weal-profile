@@ -91,6 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="button-area">
 			<input id="save-create-button" type="submit" value="<?php esc_attr_e( 'Сохранить настройки', 'weal-profile' ); ?>">
 			<div id="success-notice"><?php esc_html_e( 'Success!', 'weal-profile' ); ?></div>
+			<div id="error-notice"></div>
 		</div>
 
 	</form>

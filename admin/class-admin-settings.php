@@ -130,6 +130,10 @@ class Admin_Settings {
 
 		$fields = array_map( 'sanitize_text_field', $post_data['weal_profile_fields'] );
 
+		if ( empty( $fields ) ) {
+			throw new Exception( esc_html__( 'At least one profile field must be selected.', 'weal-profile' ) );
+		}
+
 		foreach ( $fields as $field ) {
 			if ( ! in_array( $field, $expected_fields, true ) ) {
 				throw new Exception(

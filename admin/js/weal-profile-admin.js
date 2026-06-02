@@ -6,6 +6,7 @@
 
 let formUserButton
 let successNotice
+let errorNotice
 let lockUrlIcon
 let urlInput
 let dashiconsUnlock
@@ -16,6 +17,7 @@ window.addEventListener(
 
 		formUserButton  = document.getElementById( 'save-create-button' );
 		successNotice   = document.getElementById( 'success-notice' );
+		errorNotice     = document.getElementById( 'error-notice' );
 		lockUrlIcon     = document.getElementById( 'lock-url' );
 		urlInput        = document.getElementById( 'adu-form-input' );
 		dashiconsUnlock = document.getElementById( 'dashicons-unlock' );
@@ -48,13 +50,22 @@ window.addEventListener(
 			var xhr = new XMLHttpRequest();
 			xhr.open( 'POST', wealProfileAdminData.root + 'weal-profile/v1/admin-save-page-settings/', true );
 			xhr.setRequestHeader( 'X-WP-Nonce', wealProfileAdminData.nonce );
-			xhr.onreadystatechange = function (res) {
-				if (4 === this.readyState && 200 === this.status) {
+			xhr.onreadystatechange = function () {
+				if (4 !== this.readyState) {
+					return;
+				}
+
+				try {
+					var response = JSON.parse( this.responseText );
+				} catch ( e ) {
+					return;
+				}
+
+				if ( response.success ) {
 					successAjaxButtonEvent( 'success' );
 					lockLinkField();
-				}
-				if (4 === this.readyState && (404 === this.status || 401 === this.status)) {
-					console.log( 'An error occurred' );
+				} else if ( response.message ) {
+					showError( response.message );
 				}
 			};
 			xhr.send( formData );
@@ -69,6 +80,7 @@ window.addEventListener(
 		}
 
 		function successAjaxButtonEvent(statusClass) {
+			errorNotice.style.display = 'none';
 			formUserButton.classList.add( statusClass );
 			successNotice.style.display = 'block';
 			if ('success' === statusClass) {
@@ -80,6 +92,13 @@ window.addEventListener(
 					1000
 				);
 			}
+		}
+
+		function showError( message ) {
+			successNotice.style.display = 'none';
+			formUserButton.classList.remove( 'success' );
+			errorNotice.textContent = message;
+			errorNotice.style.display = 'block';
 		}
 
 		var form = document.getElementById( 'admin-user-account-form' );

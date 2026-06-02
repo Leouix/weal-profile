@@ -205,7 +205,18 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 
 		$post_data     = $request->get_params();
 		$admin_manager = new Admin_Settings();
-		$admin_manager->handle_saving( $post_data );
+
+		try {
+			$admin_manager->handle_saving( $post_data );
+		} catch ( Exception $e ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => $e->getMessage(),
+				),
+				400
+			);
+		}
 
 		return new WP_REST_Response(
 			array(
