@@ -151,3 +151,8 @@
 .weal-vote-btn {
 	width: 62px;
 }
+
+#comments .weal-vote-btn {
+	display: flex;
+	gap: 2px;
+}
