@@ -187,10 +187,11 @@ class Weal_Profile_Avatar {
 	}
 
 	/**
-	 * Подменяет ссылку автора комментария на ссылку его профиля
+	 * Подменяет ссылку автора комментария на ссылку его профиля.
 	 *
-	 * @param int        $id      ID комментария.
-	 * @param WP_Comment $comment Объект комментария.
+	 * @param string     $url      URL комментария.
+	 * @param int        $id       ID комментария.
+	 * @param WP_Comment $comment  Объект комментария.
 	 * @return string
 	 */
 	public static function filter_comment_author_url( $url, $id, $comment ) {
