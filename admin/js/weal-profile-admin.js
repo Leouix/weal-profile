@@ -97,7 +97,7 @@ window.addEventListener(
 		function showError( message ) {
 			successNotice.style.display = 'none';
 			formUserButton.classList.remove( 'success' );
-			errorNotice.textContent = message;
+			errorNotice.textContent   = message;
 			errorNotice.style.display = 'block';
 		}
 

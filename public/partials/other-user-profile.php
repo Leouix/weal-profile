@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 
-use WealProfile\Includes\Comment_Votes\Comments_Service;
 use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Includes\Manager\Settings_Manager;
 
@@ -44,9 +43,6 @@ $weal_profile_likes_service  = new Likes_Vote_Service();
 $weal_profile_vote_data      = $weal_profile_likes_service->get_user_vote_data( $weal_profile_user_id );
 $weal_profile_total_likes    = $weal_profile_vote_data['total_likes'] ?? 0;
 $weal_profile_total_dislikes = $weal_profile_vote_data['total_dislikes'] ?? 0;
-
-$weal_profile_comments_service = new Comments_Service();
-$weal_profile_top_comments     = $weal_profile_comments_service->get_user_comments_data( $weal_profile_user_id );
 
 // Comments pagination.
 $weal_profile_comments_page       = isset( $_GET['comments_page'] ) ? max( 1, intval( $_GET['comments_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended

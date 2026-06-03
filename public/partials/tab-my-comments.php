@@ -8,7 +8,6 @@
  *   $weal_profile_user_comments        array
  *   $weal_profile_total_likes          int
  *   $weal_profile_total_dislikes       int
- *   $weal_profile_top_comments         array
  *   $weal_profile_comment_votes_enabled bool
  *   $weal_profile_total_pages          int
  *   $weal_profile_pagination_html      string

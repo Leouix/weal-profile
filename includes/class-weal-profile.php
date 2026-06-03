@@ -155,7 +155,6 @@ class Weal_Profile {
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'admin/class-admin-settings.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'public/class-info-tab-manager.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
-		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comments-service.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-likes-vote-service.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/ratings/class-weal-profile-rating.php';
 
@@ -237,9 +236,8 @@ class Weal_Profile {
 		$this->loader->add_action( 'init', $this, 'handle_avatar_actions' );
 		$this->loader->add_action( 'delete_user', $this, 'cleanup_user_avatar' );
 
-        $this->loader->add_filter( 'get_avatar', $profile_avatar_service, 'filter_get_avatar', 10, 5 );
+		$this->loader->add_filter( 'get_avatar', $profile_avatar_service, 'filter_get_avatar', 10, 5 );
 		$this->loader->add_filter( 'get_comment_author_url', $profile_avatar_service, 'filter_comment_author_url', 75, 3 );
-
 	}
 
 	/**

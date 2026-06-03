@@ -60,13 +60,10 @@ class Likes_Vote_Service {
 			)
 		);
 
-		$commentm_service = new Comments_Service();
-
 		return array(
 			'user'           => $user,
 			'total_likes'    => $total_likes,
 			'total_dislikes' => $total_dislikes,
-			'top_comments'   => $commentm_service->get_user_comments_data( $user_id ),
 		);
 	}
 

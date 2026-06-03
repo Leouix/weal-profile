@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Exception;
 use WealProfile\Admin\Admin_Settings;
-use WealProfile\Includes\Comment_Votes\Comments_Service;
 use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Public\Info_Tab_Manager;
@@ -380,17 +379,14 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			$likes_service = new Likes_Vote_Service();
 			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
 		} else {
-			$comments_service = new Comments_Service();
-			$vote_data        = array(
+			$vote_data = array(
 				'total_likes'    => null,
 				'total_dislikes' => null,
-				'top_comments'   => $comments_service->get_user_comments_data( $this->current_user ),
 			);
 		}
 
 		$weal_profile_total_likes    = $vote_data['total_likes'] ?? null;
 		$weal_profile_total_dislikes = $vote_data['total_dislikes'] ?? null;
-		$weal_profile_top_comments   = $vote_data['top_comments'] ?? array();
 
 		$weal_profile_pagination_html = '';
 		if ( $total_pages > 1 ) {

@@ -31,30 +31,30 @@ class Weal_Profile_Avatar {
 	 * @param int   $user_id     Resolved user ID.
 	 * @return bool
 	 */
-    private static function is_comment_avatar_context( $id_or_email, $user_id ) {
+	private static function is_comment_avatar_context( $id_or_email, $user_id ) {
 
-        // 1. Идеальный сценарий (стандартное поведение WP)
-        // Функция wp_list_comments() передает сам объект WP_Comment
-        if ( $id_or_email instanceof WP_Comment || ( is_object( $id_or_email ) && isset( $id_or_email->comment_ID ) ) ) {
-            return true;
-        }
+		// 1. Идеальный сценарий (стандартное поведение WP)
+		// Функция wp_list_comments() передает сам объект WP_Comment
+		if ( $id_or_email instanceof WP_Comment || ( is_object( $id_or_email ) && isset( $id_or_email->comment_ID ) ) ) {
+			return true;
+		}
 
-        // 2. Сценарий кастомной темы: передали только ID или email.
-        // Использовать global $comment здесь нельзя из-за его непредсказуемости.
-        // Поэтому мы быстро проверяем стек вызовов, ограничив глубину (для производительности).
-        $trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 12 );
+		// 2. Сценарий кастомной темы: передали только ID или email.
+		// Использовать global $comment здесь нельзя из-за его непредсказуемости.
+		// Поэтому мы быстро проверяем стек вызовов, ограничив глубину (для производительности).
+		$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 12 );
 
-        foreach ( $trace as $call ) {
-            $func = $call['function'] ?? '';
+		foreach ( $trace as $call ) {
+			$func = $call['function'] ?? '';
 
-            // Если в стеке есть функции, отвечающие за рендер комментариев — мы в нужном контексте.
-            if ( in_array( $func, [ 'wp_list_comments', 'comments_template', 'Walker_Comment' ], true ) ) {
-                return true;
-            }
-        }
+			// Если в стеке есть функции, отвечающие за рендер комментариев — мы в нужном контексте.
+			if ( in_array( $func, array( 'wp_list_comments', 'comments_template', 'Walker_Comment' ), true ) ) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	/**
 	 * Get the avatar attachment ID for a user.
@@ -186,42 +186,43 @@ class Weal_Profile_Avatar {
 		return in_array( 'avatar', $fields_allowed, true );
 	}
 
-    /**
-     * Подменяет ссылку автора комментария на ссылку его профиля
-     * @param int        $id      ID комментария.
-     * @param WP_Comment $comment Объект комментария.
-     * @return string
-     */
-    public static function filter_comment_author_url( $url, $id, $comment ) {
+	/**
+	 * Подменяет ссылку автора комментария на ссылку его профиля
+	 *
+	 * @param int        $id      ID комментария.
+	 * @param WP_Comment $comment Объект комментария.
+	 * @return string
+	 */
+	public static function filter_comment_author_url( $url, $id, $comment ) {
 
-        // Если это не объект комментария или комментарий оставил гость (user_id == 0),
-        // просто возвращаем оригинальный URL.
-        if ( ! $comment instanceof WP_Comment || empty( $comment->user_id ) ) {
-            return $url;
-        }
+		// Если это не объект комментария или комментарий оставил гость (user_id == 0),
+		// просто возвращаем оригинальный URL.
+		if ( ! $comment instanceof WP_Comment || empty( $comment->user_id ) ) {
+			return $url;
+		}
 
-        $user_id = (int) $comment->user_id;
+		$user_id = (int) $comment->user_id;
 
-        $settings     = new Settings_Manager();
-        $profile_slug = $settings->get_user_page_url();
+		$settings     = new Settings_Manager();
+		$profile_slug = $settings->get_user_page_url();
 
-        // Если слаг профиля не настроен, ничего не меняем
-        if ( empty( $profile_slug ) ) {
-            return $url;
-        }
+		// Если слаг профиля не настроен, ничего не меняем
+		if ( empty( $profile_slug ) ) {
+			return $url;
+		}
 
-        $base_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
+		$base_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
 
-        // Формируем ссылку на профиль
-        if ( is_user_logged_in() && get_current_user_id() === $user_id ) {
-            $profile_url = $base_url;
-        } else {
-            $profile_url = add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), $base_url );
-        }
+		// Формируем ссылку на профиль
+		if ( is_user_logged_in() && get_current_user_id() === $user_id ) {
+			$profile_url = $base_url;
+		} else {
+			$profile_url = add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), $base_url );
+		}
 
-        // Обязательно экранируем URL перед возвратом
-        return esc_url( $profile_url );
-    }
+		// Обязательно экранируем URL перед возвратом
+		return esc_url( $profile_url );
+	}
 
 	/**
 	 * Filter the standard WordPress avatar to use our custom one.
