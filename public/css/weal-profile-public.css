@@ -197,10 +197,12 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	background: #e8e8e8;
 	transition: background 0.2s;
 	user-select: none;
+	text-transform: uppercase;
 }
 
 .activity-button.active {
-	background: #c0c0c0;
+	background: #d1d1d1;
+	text-decoration: underline;
 }
 
 /* ── Other user profile: posts list ── */
