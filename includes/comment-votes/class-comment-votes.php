@@ -264,20 +264,20 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 		);
 	}
 
-    /**
-     * Get vote data for a user's comments.
-     *
-     * @param WP_Comment[] $comments Paginated comment objects to enrich.
-     * @param int          $user_id  User ID.
-     * @return array{comments: WP_Comment[], total_likes: int, total_dislikes: int}
-     */
-    public static function get_vote_data_for_user( $comments, $user_id ) {
-        global $wpdb;
+	/**
+	 * Get vote data for a user's comments.
+	 *
+	 * @param WP_Comment[] $comments Paginated comment objects to enrich.
+	 * @param int          $user_id  User ID.
+	 * @return array{comments: WP_Comment[], total_likes: int, total_dislikes: int}
+	 */
+	public static function get_vote_data_for_user( $comments, $user_id ) {
+		global $wpdb;
 
-        // 1. Считаем общие суммы на стороне БД. SUM()
-        $totals = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT 
+		// 1. Считаем общие суммы на стороне БД. SUM()
+		$totals = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT 
                 COALESCE(SUM(l.meta_value + 0), 0) AS total_likes,
                 COALESCE(SUM(d.meta_value + 0), 0) AS total_dislikes
             FROM {$wpdb->comments} c
@@ -286,31 +286,31 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
             LEFT JOIN {$wpdb->commentmeta} d 
                 ON c.comment_ID = d.comment_id AND d.meta_key = '_weal_dislikes_count'
             WHERE c.user_id = %d AND c.comment_approved = '1'",
-                $user_id
-            )
-        );
+				$user_id
+			)
+		);
 
-        // 2. Предварительно загружаем метаданные для текущих комментов одним запросом (решает проблему N+1).
-        if ( ! empty( $comments ) ) {
-            $comment_ids = wp_list_pluck( $comments, 'comment_ID' );
-            update_meta_cache( 'comment', $comment_ids );
-        }
+		// 2. Предварительно загружаем метаданные для текущих комментов одним запросом (решает проблему N+1).
+		if ( ! empty( $comments ) ) {
+			$comment_ids = wp_list_pluck( $comments, 'comment_ID' );
+			update_meta_cache( 'comment', $comment_ids );
+		}
 
-        // Теперь get_comment_meta берет данные из кэша в оперативной памяти (без запросов к БД).
-        foreach ( $comments as $comment ) {
-            $likes    = (int) get_comment_meta( $comment->comment_ID, '_weal_likes_count', true );
-            $dislikes = (int) get_comment_meta( $comment->comment_ID, '_weal_dislikes_count', true );
+		// Теперь get_comment_meta берет данные из кэша в оперативной памяти (без запросов к БД).
+		foreach ( $comments as $comment ) {
+			$likes    = (int) get_comment_meta( $comment->comment_ID, '_weal_likes_count', true );
+			$dislikes = (int) get_comment_meta( $comment->comment_ID, '_weal_dislikes_count', true );
 
-            $comment->likes_count    = $likes;
-            $comment->dislikes_count = $dislikes;
-            $comment->has_likes      = $likes > 0;
-            $comment->has_dislikes   = $dislikes > 0;
-        }
+			$comment->likes_count    = $likes;
+			$comment->dislikes_count = $dislikes;
+			$comment->has_likes      = $likes > 0;
+			$comment->has_dislikes   = $dislikes > 0;
+		}
 
-        return array(
-            'comments'       => $comments,
-            'total_likes'    => (int) $totals->total_likes,
-            'total_dislikes' => (int) $totals->total_dislikes,
-        );
-    }
+		return array(
+			'comments'       => $comments,
+			'total_likes'    => (int) $totals->total_likes,
+			'total_dislikes' => (int) $totals->total_dislikes,
+		);
+	}
 }

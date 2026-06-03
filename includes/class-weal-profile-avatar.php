@@ -195,7 +195,6 @@ class Weal_Profile_Avatar {
 	 */
 	public static function filter_comment_author_url( $url, $id, $comment ) {
 
-
 		if ( ! $comment instanceof WP_Comment || empty( $comment->user_id ) ) {
 			return $url;
 		}
