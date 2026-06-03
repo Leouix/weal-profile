@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 
-use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
+use WealProfile\Includes\Comment_Votes\Comment_Votes;
 use WealProfile\Includes\Manager\Settings_Manager;
 
 $weal_profile_is_author = count_user_posts( $weal_profile_user_id ) > 0;
@@ -39,15 +39,11 @@ $weal_profile_posts_max_page = $weal_profile_posts_query->max_num_pages;
 $weal_profile_settings              = ( new Settings_Manager() )->get_settings();
 $weal_profile_comment_votes_enabled = $weal_profile_settings['comment_votes_enabled'] ?? true;
 
-$weal_profile_likes_service  = new Likes_Vote_Service();
-$weal_profile_vote_data      = $weal_profile_likes_service->get_user_vote_data( $weal_profile_user_id );
-$weal_profile_total_likes    = $weal_profile_vote_data['total_likes'] ?? 0;
-$weal_profile_total_dislikes = $weal_profile_vote_data['total_dislikes'] ?? 0;
-
 // Comments pagination.
-$weal_profile_comments_page       = isset( $_GET['comments_page'] ) ? max( 1, intval( $_GET['comments_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$weal_profile_comments_offset     = ( $weal_profile_comments_page - 1 ) * $weal_profile_items_per_page;
-$weal_profile_user_comments       = get_comments(
+$weal_profile_comments_page   = isset( $_GET['comments_page'] ) ? max( 1, intval( $_GET['comments_page'] ) ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$weal_profile_comments_offset = ( $weal_profile_comments_page - 1 ) * $weal_profile_items_per_page;
+
+$weal_profile_user_comments = get_comments(
 	array(
 		'user_id' => $weal_profile_user_id,
 		'status'  => 'approve',
@@ -55,6 +51,16 @@ $weal_profile_user_comments       = get_comments(
 		'offset'  => $weal_profile_comments_offset,
 	)
 );
+
+if ( $weal_profile_comment_votes_enabled ) {
+	$vote_data = Comment_Votes::get_vote_data_for_user( $weal_profile_user_comments, $weal_profile_user_id );
+
+	$weal_profile_user_comments = $vote_data['comments'];
+}
+
+$weal_profile_total_likes    = $vote_data['total_likes'] ?? 0;
+$weal_profile_total_dislikes = $vote_data['total_dislikes'] ?? 0;
+
 $weal_profile_comment_query       = new WP_Comment_Query();
 $weal_profile_total_user_comments = $weal_profile_comment_query->query(
 	array(
@@ -63,7 +69,8 @@ $weal_profile_total_user_comments = $weal_profile_comment_query->query(
 		'count'   => true,
 	)
 );
-$weal_profile_comments_max_page   = (int) ceil( $weal_profile_total_user_comments / $weal_profile_items_per_page );
+
+$weal_profile_comments_max_page = (int) ceil( $weal_profile_total_user_comments / $weal_profile_items_per_page );
 
 $weal_profile_active_tab     = isset( $_GET['comments_page'] ) ? 'comments' : 'posts'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $weal_profile_posts_style    = 'comments' === $weal_profile_active_tab ? 'display:none;' : '';

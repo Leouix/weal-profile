@@ -41,16 +41,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<ul id="weal-comments-list">
 				<?php
 				foreach ( $weal_profile_user_comments as $weal_profile_top_comment ) :
-
+					$weal_has_any_reaction = $weal_profile_comment_votes_enabled
+						&& ( $weal_profile_top_comment->has_likes || $weal_profile_top_comment->has_dislikes );
 					?>
 					<li>
 						<a href="<?php echo esc_url( get_permalink( $weal_profile_top_comment->comment_post_ID ) ); ?>#comment-<?php echo esc_attr( $weal_profile_top_comment->comment_ID ); ?>">
 							<?php echo esc_html( wp_trim_words( $weal_profile_top_comment->comment_content, 10, '...' ) ); ?>
 						</a>
-						<span class="weal-comment-likes">
-							<span class="dashicons dashicons-thumbs-up"></span>
-							<?php echo esc_html( $weal_profile_top_comment->likes_count ); ?>
+						<?php if ( $weal_has_any_reaction ) : ?>
+						<span class="weal-comment-reactions">
+							<?php if ( $weal_profile_top_comment->has_likes ) : ?>
+							<span class="weal-reaction-icon weal-icon-likes">
+								<span class="dashicons dashicons-thumbs-up"></span>
+							</span>
+							<?php endif; ?>
+							<?php if ( $weal_profile_top_comment->has_dislikes ) : ?>
+							<span class="weal-reaction-icon weal-icon-dislikes">
+								<span class="dashicons dashicons-thumbs-down"></span>
+							</span>
+							<?php endif; ?>
 						</span>
+						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>

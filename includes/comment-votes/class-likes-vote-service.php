@@ -22,52 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Likes_Vote_Service {
 
 	/**
-	 * Get all vote data for a user.
-	 *
-	 * @param int $user_id User ID.
-	 * @return array|null Null if user not found.
-	 */
-	public function get_user_vote_data( $user_id ) {
-		global $wpdb;
-
-		$user = get_user_by( 'id', $user_id );
-		if ( ! $user ) {
-			return null;
-		}
-
-		$table_name     = $wpdb->prefix . Comment_Votes::TABLE_NAME;
-		$comments_table = $wpdb->prefix . 'comments';
-
-		$total_likes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i v
-				INNER JOIN %i c ON v.comment_id = c.comment_ID
-				WHERE c.user_id = %d AND v.is_liked = 1',
-				$table_name,
-				$comments_table,
-				$user_id
-			)
-		);
-
-		$total_dislikes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i v
-				INNER JOIN %i c ON v.comment_id = c.comment_ID
-				WHERE c.user_id = %d AND v.is_liked = 0',
-				$table_name,
-				$comments_table,
-				$user_id
-			)
-		);
-
-		return array(
-			'user'           => $user,
-			'total_likes'    => $total_likes,
-			'total_dislikes' => $total_dislikes,
-		);
-	}
-
-	/**
 	 * Handle vote request.
 	 *
 	 * @param WP_REST_Request $request Request object.

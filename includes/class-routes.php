@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Exception;
 use WealProfile\Admin\Admin_Settings;
+use WealProfile\Includes\Comment_Votes\Comment_Votes;
 use WealProfile\Includes\Comment_Votes\Likes_Vote_Service;
 use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Public\Info_Tab_Manager;
@@ -376,8 +377,9 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 		$weal_profile_comment_votes_enabled = $weal_profile_settings['comment_votes_enabled'] ?? true;
 
 		if ( $weal_profile_comment_votes_enabled ) {
-			$likes_service = new Likes_Vote_Service();
-			$vote_data     = $likes_service->get_user_vote_data( $this->current_user );
+			$vote_data = Comment_Votes::get_vote_data_for_user( $weal_profile_user_comments, $this->current_user );
+
+			$weal_profile_user_comments = $vote_data['comments'];
 		} else {
 			$vote_data = array(
 				'total_likes'    => null,
