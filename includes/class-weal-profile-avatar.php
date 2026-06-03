@@ -195,8 +195,7 @@ class Weal_Profile_Avatar {
 	 */
 	public static function filter_comment_author_url( $url, $id, $comment ) {
 
-		// Если это не объект комментария или комментарий оставил гость (user_id == 0),
-		// просто возвращаем оригинальный URL.
+
 		if ( ! $comment instanceof WP_Comment || empty( $comment->user_id ) ) {
 			return $url;
 		}
@@ -206,21 +205,18 @@ class Weal_Profile_Avatar {
 		$settings     = new Settings_Manager();
 		$profile_slug = $settings->get_user_page_url();
 
-		// Если слаг профиля не настроен, ничего не меняем
 		if ( empty( $profile_slug ) ) {
 			return $url;
 		}
 
 		$base_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
 
-		// Формируем ссылку на профиль
 		if ( is_user_logged_in() && get_current_user_id() === $user_id ) {
 			$profile_url = $base_url;
 		} else {
 			$profile_url = add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), $base_url );
 		}
 
-		// Обязательно экранируем URL перед возвратом
 		return esc_url( $profile_url );
 	}
 
