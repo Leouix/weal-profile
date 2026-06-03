@@ -20,21 +20,21 @@ use WealProfile\Includes\Manager\Settings_Manager;
  */
 class Weal_Profile_Avatar {
 
-    /**
-     * Check whether current get_avatar call is for a comment context.
-     *
-     * @param mixed $id_or_email Value passed to get_avatar().
-     * @return bool
-     */
-    private static function is_comment_avatar_context( $id_or_email ): bool {
-        // 1. Проверяем переданный объект (сработает и для WP_Comment, и для stdClass)
-        $is_passed_comment = is_object( $id_or_email ) && ! empty( $id_or_email->comment_ID );
+	/**
+	 * Check whether current get_avatar call is for a comment context.
+	 *
+	 * @param mixed $id_or_email Value passed to get_avatar().
+	 * @return bool
+	 */
+	private static function is_comment_avatar_context( $id_or_email ): bool {
+		// 1. Проверяем переданный объект (сработает и для WP_Comment, и для stdClass)
+		$is_passed_comment = is_object( $id_or_email ) && ! empty( $id_or_email->comment_ID );
 
-        // 2. Проверяем глобальный контекст WP
-        $is_global_comment = isset( $GLOBALS['comment'] ) && $GLOBALS['comment'] instanceof WP_Comment;
+		// 2. Проверяем глобальный контекст WP
+		$is_global_comment = isset( $GLOBALS['comment'] ) && $GLOBALS['comment'] instanceof WP_Comment;
 
-        return $is_passed_comment || $is_global_comment;
-    }
+		return $is_passed_comment || $is_global_comment;
+	}
 
 	/**
 	 * Get the avatar attachment ID for a user.
