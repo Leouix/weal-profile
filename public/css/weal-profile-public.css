@@ -325,3 +325,9 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	opacity: 0;
 	transition: opacity 0.15s ease-in-out;
 }
+
+.avatar-area .weal-profile-display-name {
+	font-size: 18px;
+	font-weight: 600;
+	margin-top: 10px;
+}

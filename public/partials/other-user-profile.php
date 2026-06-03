@@ -53,13 +53,13 @@ $weal_profile_user_comments = get_comments(
 );
 
 if ( $weal_profile_comment_votes_enabled ) {
-	$vote_data = Comment_Votes::get_vote_data_for_user( $weal_profile_user_comments, $weal_profile_user_id );
+	$weal_profile_vote_data = Comment_Votes::get_vote_data_for_user( $weal_profile_user_comments, $weal_profile_user_id );
 
-	$weal_profile_user_comments = $vote_data['comments'];
+	$weal_profile_user_comments = $weal_profile_vote_data['comments'];
 }
 
-$weal_profile_total_likes    = $vote_data['total_likes'] ?? 0;
-$weal_profile_total_dislikes = $vote_data['total_dislikes'] ?? 0;
+$weal_profile_total_likes    = $weal_profile_vote_data['total_likes'] ?? 0;
+$weal_profile_total_dislikes = $weal_profile_vote_data['total_dislikes'] ?? 0;
 
 $weal_profile_comment_query       = new WP_Comment_Query();
 $weal_profile_total_user_comments = $weal_profile_comment_query->query(
