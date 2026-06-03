@@ -20,41 +20,21 @@ use WealProfile\Includes\Manager\Settings_Manager;
  */
 class Weal_Profile_Avatar {
 
-	/**
-	 * Check whether current get_avatar call is for a comment context.
-	 *
-	 * WordPress themes can call get_avatar() with:
-	 * - WP_Comment object (most common in comment templates)
-	 * - user_id / email while global $comment is set
-	 *
-	 * @param mixed $id_or_email Value passed to get_avatar().
-	 * @param int   $_unused     Resolved user ID (unused).
-	 * @return bool
-	 */
-	private static function is_comment_avatar_context( $id_or_email, $_unused ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+    /**
+     * Check whether current get_avatar call is for a comment context.
+     *
+     * @param mixed $id_or_email Value passed to get_avatar().
+     * @return bool
+     */
+    private static function is_comment_avatar_context( $id_or_email ): bool {
+        // 1. Проверяем переданный объект (сработает и для WP_Comment, и для stdClass)
+        $is_passed_comment = is_object( $id_or_email ) && ! empty( $id_or_email->comment_ID );
 
-		// 1. Идеальный сценарий (стандартное поведение WP)
-		// Функция wp_list_comments() передает сам объект WP_Comment
-		if ( $id_or_email instanceof WP_Comment || ( is_object( $id_or_email ) && isset( $id_or_email->comment_ID ) ) ) {
-			return true;
-		}
+        // 2. Проверяем глобальный контекст WP
+        $is_global_comment = isset( $GLOBALS['comment'] ) && $GLOBALS['comment'] instanceof WP_Comment;
 
-		// 2. Сценарий кастомной темы: передали только ID или email.
-		// Использовать global $comment здесь нельзя из-за его непредсказуемости.
-		// Поэтому мы быстро проверяем стек вызовов, ограничив глубину (для производительности).
-		$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 12 );
-
-		foreach ( $trace as $call ) {
-			$func = $call['function'] ?? '';
-
-			// Если в стеке есть функции, отвечающие за рендер комментариев — мы в нужном контексте.
-			if ( in_array( $func, array( 'wp_list_comments', 'comments_template', 'Walker_Comment' ), true ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+        return $is_passed_comment || $is_global_comment;
+    }
 
 	/**
 	 * Get the avatar attachment ID for a user.
