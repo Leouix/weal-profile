@@ -28,10 +28,10 @@ class Weal_Profile_Avatar {
 	 * - user_id / email while global $comment is set
 	 *
 	 * @param mixed $id_or_email Value passed to get_avatar().
-	 * @param int   $user_id     Resolved user ID.
+	 * @param int   $_unused     Resolved user ID (unused).
 	 * @return bool
 	 */
-	private static function is_comment_avatar_context( $id_or_email, $user_id ) {
+	private static function is_comment_avatar_context( $id_or_email, $_unused ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 		// 1. Идеальный сценарий (стандартное поведение WP)
 		// Функция wp_list_comments() передает сам объект WP_Comment
