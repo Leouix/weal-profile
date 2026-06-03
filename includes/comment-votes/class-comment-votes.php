@@ -274,10 +274,13 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	public static function get_vote_data_for_user( $comments, $user_id ) {
 		global $wpdb;
 
-		// 1. Считаем общие суммы на стороне БД. SUM()
-		$totals = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT 
+		$cache_key = 'weal_profile_user_vote_totals_' . $user_id;
+		$totals    = wp_cache_get( $cache_key, 'weal_profile' );
+
+		if ( false === $totals ) {
+			$totals = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->prepare(
+					"SELECT 
                 COALESCE(SUM(l.meta_value + 0), 0) AS total_likes,
                 COALESCE(SUM(d.meta_value + 0), 0) AS total_dislikes
             FROM {$wpdb->comments} c
@@ -286,9 +289,12 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
             LEFT JOIN {$wpdb->commentmeta} d 
                 ON c.comment_ID = d.comment_id AND d.meta_key = '_weal_dislikes_count'
             WHERE c.user_id = %d AND c.comment_approved = '1'",
-				$user_id
-			)
-		);
+					$user_id
+				)
+			);
+
+			wp_cache_set( $cache_key, $totals, 'weal_profile', 300 );
+		}
 
 		// 2. Предварительно загружаем метаданные для текущих комментов одним запросом (решает проблему N+1).
 		if ( ! empty( $comments ) ) {

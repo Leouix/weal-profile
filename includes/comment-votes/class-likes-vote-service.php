@@ -116,6 +116,8 @@ class Likes_Vote_Service {
 
 		$counts = Comment_Votes::update_vote_counts( $comment_id );
 
+		wp_cache_delete( 'weal_profile_user_vote_totals_' . $comment->user_id, 'weal_profile' );
+
 		return new WP_REST_Response(
 			array(
 				'success'     => true,
