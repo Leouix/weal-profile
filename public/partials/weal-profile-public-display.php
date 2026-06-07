@@ -14,8 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 ?>
 
-<h1 class="wp-block-post-title"><?php echo esc_html__( 'My Account', 'weal-profile' ); ?></h1>
-
 <div class="weal-profile-top-area">
 	<div id="main-tabs">
 		<div id="tab-button-1"
