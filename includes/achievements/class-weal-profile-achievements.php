@@ -33,6 +33,13 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	private static $instance = null;
 
 	/**
+	 * Settings manager instance.
+	 *
+	 * @var Settings_Manager
+	 */
+	private $settings_manager;
+
+	/**
 	 * Returns the main instance of the class.
 	 *
 	 * @return Weal_Profile_Achievements
@@ -48,6 +55,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * Private constructor.
 	 */
 	private function __construct() {
+		$this->settings_manager = new Settings_Manager();
 		$this->init_hooks();
 	}
 
@@ -92,13 +100,54 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Get achievement definitions with default values.
+	 *
+	 * @return array
+	 */
+	public static function get_achievement_definitions() {
+		return array(
+			'commenter' => array(
+				'label'  => __( 'Active Commentator', 'weal-profile' ),
+				'target' => 3,
+				'icon'   => '★',
+			),
+		);
+	}
+
+	/**
+	 * Get achievements settings merged with definitions.
+	 * Used by admin template and internal logic.
+	 *
+	 * @return array
+	 */
+	public static function get_admin_achievements_data() {
+		$instance = self::instance();
+		$saved    = $instance->settings_manager->get_achievements_settings();
+		$defs     = self::get_achievement_definitions();
+
+		$achievements = array();
+		foreach ( $defs as $id => $default ) {
+			$saved_item          = isset( $saved[ $id ] ) ? $saved[ $id ] : array();
+			$achievements[ $id ] = wp_parse_args( $saved_item, $default );
+		}
+		return $achievements;
+	}
+
+	/**
 	 * Check if user qualifies for commenter badge.
 	 *
 	 * @param int $user_id User ID.
-	 * @return bool True if user has more than 2 approved comments.
+	 * @return bool True if user meets the target.
 	 */
 	private function has_badge_commenter( $user_id ) {
-		return $this->get_user_comment_count( $user_id ) > 2;
+		$achievements = self::get_admin_achievements_data();
+		$settings     = isset( $achievements['commenter'] ) ? $achievements['commenter'] : array();
+
+		if ( empty( $settings['enabled'] ) ) {
+			return false;
+		}
+
+		return $this->get_user_comment_count( $user_id ) >= (int) $settings['target'];
 	}
 
 	/**
@@ -115,7 +164,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 
 		$instance = self::instance();
 		if ( $instance->has_badge_commenter( $user_id ) ) {
-			return '<div class="has-badge">' . $avatar_html . '<span class="has-badge-commenter dashicons dashicons-awards" title="Great Commenter"></span></div>';
+			$achievements = self::get_admin_achievements_data();
+			$settings     = isset( $achievements['commenter'] ) ? $achievements['commenter'] : array();
+			$title        = isset( $settings['label'] ) ? $settings['label'] : __( 'Great Commenter', 'weal-profile' );
+
+			return '<div class="has-badge">' . $avatar_html . '<span class="has-badge-commenter dashicons dashicons-awards" title="' . esc_attr( $title ) . '"></span></div>';
 		}
 		return $avatar_html;
 	}
@@ -164,17 +217,23 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * @return array Array of achievement items.
 	 */
 	public static function get_achievements_data( $user_id ) {
-		$instance      = self::instance();
-		$comment_count = $instance->get_user_comment_count( $user_id );
+		$instance     = self::instance();
+		$achievements = self::get_admin_achievements_data();
+		$result       = array();
 
-		return array(
-			array(
-				'id'     => 'commenter',
-				'label'  => __( 'Active Commentator', 'weal-profile' ),
-				'earned' => $comment_count > 2,
-				'icon'   => '★',
-			),
-		);
+		foreach ( $achievements as $id => $settings ) {
+			$count  = $instance->get_user_comment_count( $user_id );
+			$earned = ! empty( $settings['enabled'] ) && $count >= (int) $settings['target'];
+
+			$result[] = array(
+				'id'     => $id,
+				'label'  => $settings['label'],
+				'earned' => $earned,
+				'icon'   => $settings['icon'],
+			);
+		}
+
+		return $result;
 	}
 
 	/**
@@ -230,6 +289,26 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				400
 			);
 		}
+
+		$definitions = self::get_achievement_definitions();
+		$submitted   = isset( $post_data['achievements'] ) ? $post_data['achievements'] : array();
+		$sanitized   = array();
+
+		foreach ( $definitions as $id => $defaults ) {
+			if ( ! isset( $submitted[ $id ] ) ) {
+				continue;
+			}
+
+			$item = $submitted[ $id ];
+
+			$sanitized[ $id ] = array(
+				'enabled' => ! empty( $item['enabled'] ),
+				'target'  => isset( $item['target'] ) ? max( 1, (int) $item['target'] ) : $defaults['target'],
+				'label'   => isset( $item['label'] ) ? sanitize_text_field( wp_unslash( $item['label'] ) ) : $defaults['label'],
+			);
+		}
+
+		$this->settings_manager->save_achievements_settings( $sanitized );
 
 		return new WP_REST_Response(
 			array(
