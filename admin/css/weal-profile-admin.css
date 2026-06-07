@@ -107,7 +107,7 @@ h1 {
 }
 
 #achievements-success-notice {
-	display: block;
+	display: none;
 	padding: 0 15px;
 	font-size: 12px;
 	color: green;
