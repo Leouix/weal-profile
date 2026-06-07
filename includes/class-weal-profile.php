@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 	use WealProfile\Admin\Admin_Settings;
+	use WealProfile\Includes\Achievements\Weal_Profile_Achievements;
 	use WealProfile\Includes\Comment_Votes\Comment_Votes;
 	use WealProfile\Includes\Manager\Settings_Manager;
 	use WealProfile\Includes\Ratings\Weal_Profile_Rating;
@@ -157,6 +158,7 @@ class Weal_Profile {
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-comment-votes.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/comment-votes/class-likes-vote-service.php';
 		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/ratings/class-weal-profile-rating.php';
+		include_once WEAL_PROFILE_PLUGIN_DIR . 'includes/achievements/class-weal-profile-achievements.php';
 
 		$this->loader = Weal_Profile_Loader::get_instance();
 	}
@@ -230,6 +232,7 @@ class Weal_Profile {
 
 		Comment_Votes::instance();
 		Weal_Profile_Rating::instance();
+		Weal_Profile_Achievements::instance();
 
 		$profile_avatar_service = new Weal_Profile_Avatar();
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
@@ -425,15 +428,18 @@ class Weal_Profile {
 			$profile_user_id = get_current_user_id();
 		}
 
+		$data = array(
+			'nonce'           => wp_create_nonce( 'wp_rest' ),
+			'root'            => esc_url_raw( rest_url() ),
+			'profile_user_id' => $profile_user_id,
+			'is_own_profile'  => get_current_user_id() === (int) $profile_user_id,
+			'achievements'    => Weal_Profile_Achievements::get_achievements_data( $profile_user_id ),
+		);
+
 		wp_localize_script(
 			$this->plugin_name,
 			'wealProfilePageData',
-			array(
-				'nonce'           => wp_create_nonce( 'wp_rest' ),
-				'root'            => esc_url_raw( rest_url() ),
-				'profile_user_id' => $profile_user_id,
-				'is_own_profile'  => get_current_user_id() === (int) $profile_user_id,
-			)
+			$data
 		);
 	}
 
