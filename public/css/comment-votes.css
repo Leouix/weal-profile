@@ -163,27 +163,25 @@
 	color: #DC3232;
 }
 
-#weal-comments-list .dashicons-awards {
-	max-width: 20px;
-	max-height: 20px;
+#comments .dashicons-awards {
 	width: 20px;
 	height: 20px;
+	line-height: 20px;
+	font-size: 14px;
 }
 
 .weal-profile-avatar-wrapper .dashicons-awards {
-	max-width: 24px;
-	max-height: 24px;
-	width: 24px;
-	height: 24px;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	font-size: 18px;
 }
 
 .has-badge .dashicons-awards {
 	position: absolute;
 	bottom: -2px;
 	right: -2px;
-	line-height: 20px;
 	text-align: center;
-	font-size: 14px;
 	border-radius: 50%;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 	z-index: 1;

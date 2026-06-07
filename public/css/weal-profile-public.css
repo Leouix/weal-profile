@@ -162,6 +162,8 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 	border: none;
 	border-radius: 3px;
 	padding: 0;
+	width: 25px;
+	height: 12px;
 }
 
 .weal-profile-avatar-form .button {
