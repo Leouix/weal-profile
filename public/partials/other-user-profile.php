@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 
+use WealProfile\Includes\Achievements\Weal_Profile_Achievements;
 use WealProfile\Includes\Comment_Votes\Comment_Votes;
 use WealProfile\Includes\Manager\Settings_Manager;
 
@@ -91,6 +92,10 @@ $weal_profile_comments_style = 'posts' === $weal_profile_active_tab ? 'display:n
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
+</div>
+
+<div class="weal-profile-achievements-section">
+	<?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, false ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
 </div>
 
 <?php if ( $weal_profile_is_author ) : ?>

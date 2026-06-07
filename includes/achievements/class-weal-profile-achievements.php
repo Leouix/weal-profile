@@ -74,12 +74,18 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Meta key for storing user-hidden achievements.
+	 */
+	const USER_ACHIEVEMENTS_HIDDEN_META = 'weal_profile_achievements_hidden';
+
+	/**
 	 * Initialize hooks for the class.
 	 */
 	private function init_hooks() {
 		add_filter( 'get_avatar', array( $this, 'filter_get_avatar' ), 15, 5 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'rest_api_init', array( $this, 'register_admin_route' ) );
+		add_action( 'rest_api_init', array( $this, 'register_user_toggle_route' ) );
 	}
 
 	/**
@@ -151,7 +157,33 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
-	 * Wrap avatar HTML in badge container if user qualifies.
+	 * Get hidden achievement IDs for a user.
+	 *
+	 * @param int $user_id User ID.
+	 * @return array Array of hidden achievement IDs.
+	 */
+	public static function get_user_hidden_achievements( $user_id ) {
+		$hidden = get_user_meta( $user_id, self::USER_ACHIEVEMENTS_HIDDEN_META, true );
+		if ( ! is_array( $hidden ) ) {
+			return array();
+		}
+		return $hidden;
+	}
+
+	/**
+	 * Check if a user has hidden a specific achievement.
+	 *
+	 * @param int    $user_id        User ID.
+	 * @param string $achievement_id Achievement ID.
+	 * @return bool True if hidden.
+	 */
+	public static function is_achievement_hidden( $user_id, $achievement_id ) {
+		$hidden = self::get_user_hidden_achievements( $user_id );
+		return in_array( $achievement_id, $hidden, true );
+	}
+
+	/**
+	 * Wrap avatar HTML in badge container if user qualifies and hasn't hidden it.
 	 *
 	 * @param string $avatar_html The avatar HTML.
 	 * @param int    $user_id     User ID.
@@ -168,9 +200,75 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			$settings     = isset( $achievements['commenter'] ) ? $achievements['commenter'] : array();
 			$title        = isset( $settings['label'] ) ? $settings['label'] : __( 'Great Commenter', 'weal-profile' );
 
+			if ( self::is_achievement_hidden( $user_id, 'commenter' ) ) {
+				return $avatar_html;
+			}
+
 			return '<div class="has-badge">' . $avatar_html . '<span class="has-badge-commenter dashicons dashicons-awards" title="' . esc_attr( $title ) . '"></span></div>';
 		}
 		return $avatar_html;
+	}
+
+	/**
+	 * Render achievements block for a user profile.
+	 *
+	 * @param int  $user_id     User ID.
+	 * @param bool $show_toggle Whether to show toggle switches (own profile).
+	 * @return string HTML output.
+	 */
+	public static function render_user_achievements( $user_id, $show_toggle = false ) {
+		$achievements = self::get_achievements_data( $user_id );
+		$hidden       = self::get_user_hidden_achievements( $user_id );
+
+		if ( empty( $achievements ) ) {
+			return '';
+		}
+
+		$html  = '<div class="weal-profile-achievements-list">';
+		$html .= '<h3 class="weal-profile-achievements-title">' . esc_html__( 'Achievements', 'weal-profile' ) . '</h3>';
+
+		foreach ( $achievements as $achievement ) {
+			$is_hidden = in_array( $achievement['id'], $hidden, true );
+
+			if ( ! $show_toggle && $is_hidden ) {
+				continue;
+			}
+
+			$classes = array( 'weal-profile-achievement-item' );
+
+			if ( $achievement['earned'] ) {
+				$classes[] = 'earned';
+			} else {
+				$classes[] = 'not-earned';
+			}
+
+			if ( $is_hidden ) {
+				$classes[] = 'user-hidden';
+			}
+
+			$html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+			$html .= '<span class="achievement-icon">' . esc_html( $achievement['icon'] ) . '</span>';
+			$html .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
+
+			if ( $show_toggle && $achievement['earned'] ) {
+				$checked = $is_hidden ? '' : 'checked';
+				$html   .= '<label class="achievement-switch">';
+				$html   .= '<input type="checkbox" class="achievement-toggle-input" data-achievement-id="' . esc_attr( $achievement['id'] ) . '" ' . $checked . '>';
+				$html   .= '<span class="achievement-slider round"></span>';
+				$html   .= '</label>';
+				$html   .= '<span class="toggle-status-text">' . ( $is_hidden ? esc_html__( 'Hidden', 'weal-profile' ) : esc_html__( 'Shown', 'weal-profile' ) ) . '</span>';
+			} elseif ( $achievement['earned'] ) {
+				$html .= '<span class="achievement-status earned">' . esc_html__( 'Earned', 'weal-profile' ) . '</span>';
+			} else {
+				$html .= '<span class="achievement-status locked">' . esc_html__( 'Not earned', 'weal-profile' ) . '</span>';
+			}
+
+			$html .= '</div>';
+		}
+
+		$html .= '</div>';
+
+		return $html;
 	}
 
 	/**
@@ -234,6 +332,32 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Get allowed HTML tags and attributes for achievements rendering.
+	 *
+	 * @return array
+	 */
+	public static function get_allowed_achievements_html() {
+		return array(
+			'div'   => array(
+				'class' => array(),
+				'id'    => array(),
+			),
+			'h3'    => array( 'class' => array() ),
+			'span'  => array( 'class' => array() ),
+			'label' => array(
+				'class' => array(),
+				'for'   => array(),
+			),
+			'input' => array(
+				'type'                => array(),
+				'class'               => array(),
+				'checked'             => array(),
+				'data-achievement-id' => array(),
+			),
+		);
 	}
 
 	/**
@@ -309,6 +433,66 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		$this->settings_manager->save_achievements_settings( $sanitized );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+			)
+		);
+	}
+
+	/**
+	 * Register user REST route for toggling achievement visibility.
+	 *
+	 * @return void
+	 */
+	public function register_user_toggle_route() {
+		register_rest_route(
+			'weal-profile/v1',
+			'/toggle-achievement-visibility/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_toggle_visibility' ),
+				'permission_callback' => function () {
+					return is_user_logged_in();
+				},
+			)
+		);
+	}
+
+	/**
+	 * Handle toggling achievement visibility for a user.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function handle_toggle_visibility( WP_REST_Request $request ) {
+		$params = $request->get_params();
+
+		$achievement_id = isset( $params['achievement_id'] ) ? sanitize_text_field( wp_unslash( $params['achievement_id'] ) ) : '';
+		$hidden         = isset( $params['hidden'] ) ? rest_sanitize_boolean( $params['hidden'] ) : false;
+
+		if ( empty( $achievement_id ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Invalid achievement ID', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		$user_id             = get_current_user_id();
+		$hidden_achievements = self::get_user_hidden_achievements( $user_id );
+
+		if ( $hidden ) {
+			$hidden_achievements[] = $achievement_id;
+			$hidden_achievements   = array_unique( $hidden_achievements );
+		} else {
+			$hidden_achievements = array_values( array_diff( $hidden_achievements, array( $achievement_id ) ) );
+		}
+
+		update_user_meta( $user_id, self::USER_ACHIEVEMENTS_HIDDEN_META, $hidden_achievements );
 
 		return new WP_REST_Response(
 			array(

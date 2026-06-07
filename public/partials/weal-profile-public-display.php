@@ -7,6 +7,8 @@
  * @package weal-profile
  */
 
+use WealProfile\Includes\Achievements\Weal_Profile_Achievements;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -60,6 +62,10 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 	<?php endif; ?>
 </div>
 
+
+<div class="weal-profile-achievements-section">
+	<?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, true ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
+</div>
 
 <div id="container-results"></div>
 

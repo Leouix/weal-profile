@@ -7,3 +7,124 @@
 	color: #ffc107;
 	background: #fff;
 }
+
+.weal-profile-achievements-list {
+	margin: 20px 0;
+	padding: 15px;
+	background: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+}
+
+.weal-profile-achievements-title {
+	margin: 0 0 15px;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.weal-profile-achievement-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 12px;
+	margin-bottom: 8px;
+	background: #fff;
+	border: 1px solid #e8e8e8;
+	border-radius: 6px;
+	transition: opacity 0.2s;
+}
+
+.weal-profile-achievement-item:last-child {
+	margin-bottom: 0;
+}
+
+.weal-profile-achievement-item.not-earned {
+	opacity: 0.6;
+}
+
+.weal-profile-achievement-item .achievement-icon {
+	font-size: 24px;
+	line-height: 1;
+	min-width: 30px;
+	text-align: center;
+}
+
+.weal-profile-achievement-item .achievement-label {
+	flex: 1;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.weal-profile-achievement-item .achievement-status {
+	font-size: 12px;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-weight: 500;
+}
+
+.weal-profile-achievement-item .achievement-status.earned {
+	background: #e8f5e9;
+	color: #2e7d32;
+}
+
+.weal-profile-achievement-item .achievement-status.locked {
+	background: #f5f5f5;
+	color: #999;
+}
+
+.weal-profile-achievement-item .toggle-status-text {
+	font-size: 12px;
+	color: #666;
+	min-width: 45px;
+	text-align: right;
+}
+
+.achievement-switch {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+.achievement-switch .achievement-toggle-input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.achievement-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	transition: 0.3s;
+	border-radius: 24px;
+}
+
+.achievement-slider:before {
+	position: absolute;
+	content: '';
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	bottom: 3px;
+	background-color: #fff;
+	transition: 0.3s;
+	border-radius: 50%;
+}
+
+.achievement-toggle-input:checked + .achievement-slider {
+	background-color: #4caf50;
+}
+
+.achievement-toggle-input:checked + .achievement-slider:before {
+	transform: translateX(20px);
+}
+
+.weal-profile-achievement-item.user-hidden {
+	opacity: 0.5;
+}

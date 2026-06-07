@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WealProfile\Includes\Achievements\Weal_Profile_Achievements;
 use WealProfile\Includes\Manager\Settings_Manager;
 
 /**
@@ -58,7 +57,7 @@ class Weal_Profile_Avatar {
 		$avatar_id = self::get_avatar_id( $user_id );
 
 		if ( $avatar_id > 0 ) {
-			$avatar_html = wp_get_attachment_image(
+			return wp_get_attachment_image(
 				$avatar_id,
 				'thumbnail',
 				false,
@@ -67,8 +66,6 @@ class Weal_Profile_Avatar {
 					'alt'   => __( 'Profile picture', 'weal-profile' ),
 				)
 			);
-
-			return Weal_Profile_Achievements::wrap_avatar_with_badge( $avatar_html, $user_id );
 		}
 
 		return get_avatar( $user_id, 96 );

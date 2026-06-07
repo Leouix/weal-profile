@@ -106,6 +106,43 @@
 		}
 	);
 
+	document.addEventListener(
+		'change',
+		function ( e ) {
+			var target = e.target.closest( '.achievement-toggle-input' );
+			if ( ! target ) {
+				return;
+			}
+
+			var achievementId = target.dataset.achievementId;
+			var hidden        = ! target.checked;
+
+			var formData = new FormData();
+			formData.append( 'achievement_id', achievementId );
+			formData.append( 'hidden', hidden ? 'true' : 'false' );
+
+			var xhr = new XMLHttpRequest();
+			xhr.open( 'POST', wealProfilePageData.root + 'weal-profile/v1/toggle-achievement-visibility/', true );
+			xhr.setRequestHeader( 'X-WP-Nonce', wealProfilePageData.nonce );
+			xhr.onreadystatechange = function () {
+				if ( 4 === this.readyState && 200 === this.status ) {
+					var json = JSON.parse( this.response );
+					if ( json.success ) {
+						var item    = target.closest( '.weal-profile-achievement-item' );
+						var statusEl = item ? item.querySelector( '.toggle-status-text' ) : null;
+						if ( statusEl ) {
+							statusEl.textContent = hidden ? 'Hidden' : 'Shown';
+						}
+						if ( item ) {
+							item.classList.toggle( 'user-hidden', hidden );
+						}
+					}
+				}
+			};
+			xhr.send( formData );
+		}
+	);
+
 	class TabsSwitcherHelper {
 		static tabs = {
 			'tab-button-1': 'activity',
