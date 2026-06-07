@@ -177,6 +177,7 @@ class Weal_Profile {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'localize_admin_script_data' );
+		$this->loader->add_action( 'admin_enqueue_scripts', Weal_Profile_Achievements::instance(), 'enqueue_admin_scripts' );
 
 		$this->loader->add_action( 'admin_menu', $this, 'add_menu_page_weal_profile' );
 		$this->loader->add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__, 1 ) . '/weal-profile.php' ), $this, 'my_plugin_settings' );
@@ -194,10 +195,11 @@ class Weal_Profile {
 	}
 
 	/**
-	 * Add menu page.
+	 * Add admin menu and submenu pages.
 	 */
 	public function add_menu_page_weal_profile() {
 		$admin_settings = new Admin_Settings();
+
 		add_menu_page(
 			__( 'Weal Profile', 'weal-profile' ),
 			__( 'Weal Profile', 'weal-profile' ),
@@ -205,6 +207,24 @@ class Weal_Profile {
 			'weal-profile-admin',
 			array( $admin_settings, 'get_my_account_settings_page' ),
 			'dashicons-admin-users'
+		);
+
+		add_submenu_page(
+			'weal-profile-admin',
+			__( 'General', 'weal-profile' ),
+			__( 'General', 'weal-profile' ),
+			'manage_options',
+			'weal-profile-admin',
+			array( $admin_settings, 'get_my_account_settings_page' )
+		);
+
+		add_submenu_page(
+			'weal-profile-admin',
+			__( 'Achievements', 'weal-profile' ),
+			__( 'Achievements', 'weal-profile' ),
+			'manage_options',
+			'weal-profile-achievements',
+			array( $admin_settings, 'get_achievements_settings_page' )
 		);
 	}
 
@@ -309,11 +329,21 @@ class Weal_Profile {
 	}
 
 	/**
-	 * Check if current page is admin page URL.
+	 * Check if current page is an admin page of the plugin.
 	 */
 	public function is_current_admin_page_url() {
 		$screen = get_current_screen();
-		return $screen && 'toplevel_page_weal-profile-admin' === $screen->id;
+		if ( ! $screen ) {
+			return false;
+		}
+		return in_array(
+			$screen->id,
+			array(
+				'toplevel_page_weal-profile-admin',
+				'weal-profile_page_weal-profile-achievements',
+			),
+			true
+		);
 	}
 
 	/**

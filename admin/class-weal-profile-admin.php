@@ -65,13 +65,25 @@ class Weal_Profile_Admin {
 	}
 
 	/**
+	 * Get allowed admin screen IDs.
+	 *
+	 * @return array
+	 */
+	private function get_allowed_screen_ids() {
+		return array(
+			'toplevel_page_weal-profile-admin',
+			'weal-profile_page_weal-profile-achievements',
+		);
+	}
+
+	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since 1.0.0
 	 */
 	public function enqueue_styles() {
 		$screen = get_current_screen();
-		if ( ! $screen || 'toplevel_page_weal-profile-admin' !== $screen->id ) {
+		if ( ! $screen || ! in_array( $screen->id, $this->get_allowed_screen_ids(), true ) ) {
 			return;
 		}
 

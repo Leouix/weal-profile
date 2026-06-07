@@ -7,7 +7,10 @@
 
 namespace WealProfile\Includes\Achievements;
 
+use WealProfile\Includes\Manager\Settings_Manager;
 use WealProfile\Includes\Weal_Profile_Module_Singleton_Interface;
+use WP_REST_Request;
+use WP_REST_Response;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -68,6 +71,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	private function init_hooks() {
 		add_filter( 'get_avatar', array( $this, 'filter_get_avatar' ), 15, 5 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'rest_api_init', array( $this, 'register_admin_route' ) );
 	}
 
 	/**
@@ -182,6 +186,87 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			WEAL_PROFILE_PLUGIN_URL . 'public/css/achievements.css',
 			array( 'dashicons' ),
 			WEAL_PROFILE_VERSION
+		);
+	}
+
+	/**
+	 * Register admin REST route for saving achievements settings.
+	 *
+	 * @return void
+	 */
+	public function register_admin_route() {
+		register_rest_route(
+			'weal-profile/v1',
+			'/admin-save-achievements-settings/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'admin_save_achievements_settings' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * Handle saving achievements settings via REST.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function admin_save_achievements_settings( WP_REST_Request $request ) {
+		$post_data = $request->get_params();
+
+		$nonce = isset( $post_data['weal_profile_achievements_nonce'] )
+			? sanitize_text_field( wp_unslash( $post_data['weal_profile_achievements_nonce'] ) )
+			: '';
+
+		if ( ! wp_verify_nonce( $nonce, 'weal_profile_achievements_save' ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Security check failed', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+			)
+		);
+	}
+
+	/**
+	 * Enqueue admin scripts for the Achievements settings page.
+	 *
+	 * @return void
+	 */
+	public function enqueue_admin_scripts() {
+		$screen = get_current_screen();
+		if ( ! $screen || 'weal-profile_page_weal-profile-achievements' !== $screen->id ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'weal-profile-achievements-admin',
+			WEAL_PROFILE_PLUGIN_URL . 'includes/achievements/js/weal-profile-achievements-admin.js',
+			array(),
+			WEAL_PROFILE_VERSION,
+			true
+		);
+
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		wp_localize_script(
+			'weal-profile-achievements-admin',
+			'wealProfileAchievementsData',
+			array(
+				'nonce' => wp_create_nonce( 'wp_rest' ),
+				'root'  => esc_url_raw( rest_url() ),
+				'page'  => $page,
+			)
 		);
 	}
 }

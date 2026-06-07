@@ -23,8 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form id="admin-user-account-form">
 		<?php wp_nonce_field( 'weal_profile_admin_save', 'weal_profile_admin_nonce' ); ?>
 
-		<h1><?php esc_html_e( 'Plugin settings page', 'weal-profile' ); ?></h1>
-
 		<div class="url-label-area">
 			<label for="adu-form-input" class="sub-title"><?php esc_html_e( 'URL user page:', 'weal-profile' ); ?></label>
 			<div class="input-url-wrapper">

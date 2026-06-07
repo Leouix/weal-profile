@@ -16,7 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Settings_Manager {
 
-	private const OPTION_NAME = 'weal_profile_settings';
+	private const OPTION_NAME              = 'weal_profile_settings';
+	private const ACHIEVEMENTS_OPTION_NAME = 'weal_profile_achievements_settings';
 
 	/**
 	 * Default fields for the profile.
@@ -73,6 +74,25 @@ class Settings_Manager {
 		);
 
 		return update_option( self::OPTION_NAME, $data );
+	}
+
+	/**
+	 * Save achievements settings.
+	 *
+	 * @param array $data Achievements settings data.
+	 * @return bool
+	 */
+	public function save_achievements_settings( array $data ) {
+		return update_option( self::ACHIEVEMENTS_OPTION_NAME, $data );
+	}
+
+	/**
+	 * Get achievements settings.
+	 *
+	 * @return array
+	 */
+	public function get_achievements_settings() {
+		return get_option( self::ACHIEVEMENTS_OPTION_NAME, array() );
 	}
 
 	/**

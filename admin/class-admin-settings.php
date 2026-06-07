@@ -208,15 +208,52 @@ class Admin_Settings {
 	}
 
 	/**
-	 * Get admin settings page.
+	 * Render admin page with tab navigation.
 	 *
+	 * @param string $active_tab Active tab key: 'general' or 'achievements'.
 	 * @return void
 	 */
-	public function get_my_account_settings_page() {
+	private function render_admin_page( $active_tab ) {
 		$user_page_url         = $this->get_user_page_url();
 		$fields_allowed_array  = $this->get_fields_allowed();
 		$comment_votes_enabled = $this->current_settings['comment_votes_enabled'] ?? true;
 
-		include __DIR__ . '/partials/admin-settings-page.php';
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Weal Profile Settings', 'weal-profile' ); ?></h1>
+
+			<nav class="nav-tab-wrapper">
+				<a href="?page=weal-profile-admin" class="nav-tab <?php echo 'general' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'General', 'weal-profile' ); ?></a>
+				<a href="?page=weal-profile-achievements" class="nav-tab <?php echo 'achievements' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Achievements', 'weal-profile' ); ?></a>
+			</nav>
+
+			<?php
+			if ( 'general' === $active_tab ) {
+				include __DIR__ . '/partials/admin-settings-page.php';
+			} elseif ( 'achievements' === $active_tab ) {
+				$achievements_settings = $this->settings_manager->get_achievements_settings();
+				include WEAL_PROFILE_PLUGIN_DIR . 'includes/achievements/admin/partials/achievements-settings-page.php';
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render General settings tab.
+	 *
+	 * @return void
+	 */
+	public function get_my_account_settings_page() {
+		$this->render_admin_page( 'general' );
+	}
+
+	/**
+	 * Render Achievements settings tab.
+	 *
+	 * @return void
+	 */
+	public function get_achievements_settings_page() {
+		$this->render_admin_page( 'achievements' );
 	}
 }
