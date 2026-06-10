@@ -106,7 +106,7 @@ h1 {
 	margin-bottom: 25px;
 }
 
-#achievements-success-notice {
+.achievement-success-notice {
 	display: none;
 	padding: 0 15px;
 	font-size: 12px;
@@ -114,10 +114,27 @@ h1 {
 	transition: 0.25s ease-in;
 }
 
-#achievements-success-notice.active {
+.achievement-success-notice.active {
 	display: block;
 }
 
 .achievement-block .dashicons-awards {
 	color: #ffc107;
+}
+
+.achievement-container {
+	display: flex;
+}
+
+.achievement-container .label-area {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	gap: 5px;
+	margin-bottom: 15px;
+}
+
+.achievement-container .achievement-form {
+	max-width: 250px;
+	margin-right: 35px;
 }

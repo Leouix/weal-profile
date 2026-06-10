@@ -13,7 +13,7 @@ use WealProfile\Includes\Achievements\Weal_Profile_Achievements;
 
 $achievements_data = Weal_Profile_Achievements::get_admin_achievements_data();
 ?>
-<div class="au-container">
+<div class="au-container achievement-container">
 	<?php foreach ( $achievements_data as $achievement_id => $settings ) : ?>
 		<form class="achievement-form">
 			<?php wp_nonce_field( 'weal_profile_achievements_save', 'weal_profile_achievements_nonce' ); ?>
