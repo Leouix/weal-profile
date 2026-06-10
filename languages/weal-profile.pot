@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Weal Profile 1.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/weal-profile\n"
-"POT-Creation-Date: 2026-06-11 00:47+0700\n"
+"POT-Creation-Date: 2026-06-11 00:49+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,6 +104,10 @@ msgstr ""
 
 #: public/class-info-tab-manager.php:59
 msgid "You do not have permission to edit this user."
+msgstr ""
+
+#: public/partials/weal-profile-public-display.php:24
+msgid "Activity"
 msgstr ""
 
 #: public/partials/weal-profile-public-display.php:55

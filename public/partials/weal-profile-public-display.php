@@ -26,7 +26,7 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 		<div id="tab-button-3"
 			class="main-tabs-item"
 			data-wp-action="switch-tab">
-			<div class="text"><?php echo esc_html__( 'My Info', 'weal-profile' ); ?></div>
+			<div class="text">My Info</div>
 		</div>
 	</div>
 

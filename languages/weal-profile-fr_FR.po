@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Weal Profile 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/weal-profile\n"
-"POT-Creation-Date: 2026-06-11 00:47+0700\n"
+"POT-Creation-Date: 2026-06-11 00:49+0700\n"
 "PO-Revision-Date: 2026-05-28T20:00:00+00:00\n"
 "Last-Translator: leouix <nsht22sola@gmail.com>\n"
 "Language-Team: French\n"
@@ -104,6 +104,10 @@ msgstr "Succès !"
 #: public/class-info-tab-manager.php:59
 msgid "You do not have permission to edit this user."
 msgstr "Vous n'avez pas la permission de modifier cet utilisateur."
+
+#: public/partials/weal-profile-public-display.php:24
+msgid "Activity"
+msgstr "Activité"
 
 #: public/partials/weal-profile-public-display.php:55
 msgid "Are you sure you want to delete the image?"
@@ -316,9 +320,6 @@ msgstr "Non obtenu"
 #: includes/achievements/class-weal-profile-achievements.php:632
 msgid "Invalid achievement ID"
 msgstr "ID de récompense invalide"
-
-#~ msgid "Activity"
-#~ msgstr "Activité"
 
 #~ msgid "My Info"
 #~ msgstr "Mes informations"
