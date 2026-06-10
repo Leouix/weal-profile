@@ -129,6 +129,29 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Get total dislikes received on a user's approved comments.
+	 *
+	 * @param int $user_id User ID.
+	 * @return int Total dislikes.
+	 */
+	private function get_user_total_comment_dislikes( $user_id ) {
+		global $wpdb;
+
+		$total = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				"SELECT COALESCE(SUM(d.meta_value + 0), 0)
+				FROM {$wpdb->comments} c
+				LEFT JOIN {$wpdb->commentmeta} d
+					ON c.comment_ID = d.comment_id AND d.meta_key = '_weal_dislikes_count'
+				WHERE c.user_id = %d AND c.comment_approved = '1'",
+				$user_id
+			)
+		);
+
+		return (int) $total;
+	}
+
+	/**
 	 * Get achievement definitions with default values.
 	 *
 	 * @return array
@@ -144,6 +167,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'label'  => __( 'Cutie', 'weal-profile' ),
 				'target' => 3,
 				'icon'   => '&#x1f970;',
+			),
+			'angry'     => array(
+				'label'  => __( 'Angry', 'weal-profile' ),
+				'target' => 3,
+				'icon'   => '&#x1f47f;',
 			),
 		);
 	}
@@ -199,6 +227,23 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		return $this->get_user_total_comment_likes( $user_id ) >= (int) $settings['target'];
+	}
+
+	/**
+	 * Check if user qualifies for angry badge.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True if user meets the target.
+	 */
+	private function has_badge_angry( $user_id ) {
+		$achievements = self::get_admin_achievements_data();
+		$settings     = isset( $achievements['angry'] ) ? $achievements['angry'] : array();
+
+		if ( empty( $settings['enabled'] ) ) {
+			return false;
+		}
+
+		return $this->get_user_total_comment_dislikes( $user_id ) >= (int) $settings['target'];
 	}
 
 	/**
@@ -275,6 +320,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				$qualifies = $instance->has_badge_commenter( $user_id );
 			} elseif ( 'cutie' === $id ) {
 				$qualifies = $instance->has_badge_cutie( $user_id );
+			} elseif ( 'angry' === $id ) {
+				$qualifies = $instance->has_badge_angry( $user_id );
 			}
 
 			if ( ! $qualifies ) {
@@ -412,6 +459,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 
 			if ( 'cutie' === $id ) {
 				$count = $instance->get_user_total_comment_likes( $user_id );
+			} elseif ( 'angry' === $id ) {
+				$count = $instance->get_user_total_comment_dislikes( $user_id );
 			} else {
 				$count = $instance->get_user_comment_count( $user_id );
 			}
