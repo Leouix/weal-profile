@@ -150,3 +150,7 @@
 	display: flex;
 	gap: 2px;
 }
+
+.weal-profile-badges-icons span {
+	cursor: pointer;
+}
