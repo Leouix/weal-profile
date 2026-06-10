@@ -306,8 +306,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 *
 	 * @param string $icon     Icon value (dashicons-* class or emoji).
 	 * @param string $css_class Additional classes for the span.
-	 * @param string $title    Title attribute.
-	 * @return string HTML for the icon.
+ * @param string $title    Title attribute.
+ * @param string $description Description.
+ * @return string HTML for the icon.
 	 */
 	public static function render_achievement_icon( $icon, $css_class = '', $title = '', $description = '' ) {
 		$title_attr = $title ? 'title="' . esc_attr( $title ) . '"' : '';
@@ -408,10 +409,10 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				$classes[] = 'user-hidden';
 			}
 
-			$html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
+			$html       .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
 			$description = self::get_achievement_description( $achievement['id'], $achievement['target'] );
-			$html .= self::render_achievement_icon( $achievement['icon'], 'achievement-icon', '', $description );
-			$html .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
+			$html       .= self::render_achievement_icon( $achievement['icon'], 'achievement-icon', '', $description );
+			$html       .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
 
 			if ( $show_toggle && $achievement['earned'] ) {
 				$checked = $is_hidden ? '' : 'checked';
@@ -522,8 +523,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			),
 			'h3'    => array( 'class' => array() ),
 			'span'  => array(
-				'class'             => array(),
-				'data-description'  => array(),
+				'class'            => array(),
+				'data-description' => array(),
 			),
 			'label' => array(
 				'class' => array(),

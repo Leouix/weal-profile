@@ -537,17 +537,17 @@
 				existing.remove();
 			}
 
-			var tooltip = document.createElement( 'span' );
-			tooltip.className = 'achievement-tooltip';
+			var tooltip         = document.createElement( 'span' );
+			tooltip.className   = 'achievement-tooltip';
 			tooltip.textContent = description;
 
-			var rect = icon.getBoundingClientRect();
+			var rect           = icon.getBoundingClientRect();
 			tooltip.style.left = ( rect.left + rect.width / 2 ) + 'px';
-			tooltip.style.top = rect.top + 'px';
+			tooltip.style.top  = rect.top + 'px';
 
 			document.body.appendChild( tooltip );
 
-			var tooltipRect = tooltip.getBoundingClientRect();
+			var tooltipRect    = tooltip.getBoundingClientRect();
 			tooltip.style.left = ( rect.left + rect.width / 2 - tooltipRect.width / 2 ) + 'px';
 
 			setTimeout(
