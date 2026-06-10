@@ -162,17 +162,17 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$descriptions = array(
 			'commenter' => sprintf(
 				/* translators: %d: target comment count */
-				__( 'Awarded for %d comments left', 'weal-profile' ),
+				__( 'Award for %d comments left', 'weal-profile' ),
 				(int) $target
 			),
 			'cutie'     => sprintf(
 				/* translators: %d: target comment likes count */
-				__( 'Awarded for %d comment likes', 'weal-profile' ),
+				__( 'Award for %d comment likes', 'weal-profile' ),
 				(int) $target
 			),
 			'angry'     => sprintf(
 				/* translators: %d: target comment dislikes count */
-				__( 'Awarded for %d comment dislikes', 'weal-profile' ),
+				__( 'Award for %d comment dislikes', 'weal-profile' ),
 				(int) $target
 			),
 		);
