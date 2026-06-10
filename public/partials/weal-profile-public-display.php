@@ -30,14 +30,18 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 		</div>
 	</div>
 
-	<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
-		<div class="avatar-area">
-			<div class="weal-profile-avatar-wrapper">
-				<?php echo wp_kses_post( $weal_profile_avatar_html ); ?>
+			<div class="avatar-area">
+				<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
+					<div class="weal-profile-avatar-wrapper">
+						<?php echo wp_kses_post( $weal_profile_avatar_html ); ?>
+					</div>
+				<?php endif; ?>
+
+				<div class="weal-profile-achievements-section">
+					<?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, true ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
+				</div>
 			</div>
 		</div>
-	<?php endif; ?>
-</div>
 
 <div class="avatar-bottom-area">
 	<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
@@ -62,12 +66,7 @@ require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-header.php';
 	<?php endif; ?>
 </div>
 
-
-<div class="weal-profile-achievements-section">
-	<?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, true ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
-</div>
-
-<div id="container-results"></div>
+	<div id="container-results"></div>
 
 <?php
 require WEAL_PROFILE_PLUGIN_DIR . 'public/partials/profile-page-footer.php';
