@@ -306,9 +306,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 *
 	 * @param string $icon     Icon value (dashicons-* class or emoji).
 	 * @param string $css_class Additional classes for the span.
- * @param string $title    Title attribute.
- * @param string $description Description.
- * @return string HTML for the icon.
+	 * @param string $title    Title attribute.
+	 * @param string $description Description.
+	 * @return string HTML for the icon.
 	 */
 	public static function render_achievement_icon( $icon, $css_class = '', $title = '', $description = '' ) {
 		$title_attr = $title ? 'title="' . esc_attr( $title ) . '"' : '';
