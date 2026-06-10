@@ -178,11 +178,6 @@
 }
 
 .has-badge .dashicons-awards {
-	position: absolute;
-	bottom: -2px;
-	right: -2px;
-	text-align: center;
 	border-radius: 50%;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-	z-index: 1;
 }

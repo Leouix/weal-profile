@@ -140,3 +140,13 @@
 .weal-profile-achievement-item.user-hidden {
 	opacity: 0.5;
 }
+
+.weal-profile-badges-icons {
+	position: absolute;
+	bottom: -15px;
+	right: -2px;
+	text-align: center;
+	z-index: 10;
+	display: flex;
+	gap: 2px;
+}

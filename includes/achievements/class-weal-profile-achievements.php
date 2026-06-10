@@ -292,7 +292,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			return $avatar_html;
 		}
 
-		return '<div class="has-badge">' . $avatar_html . $badges_html . '</div>';
+		return '<div class="has-badge">' . $avatar_html . '<div class="weal-profile-badges-icons">' . $badges_html . '</div></div>';
 	}
 
 	/**
