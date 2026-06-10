@@ -6,7 +6,7 @@
 **Requires at least:** 6.2  
 **Tested up to:** 7.0
 **Requires PHP:** 7.4  
- **Stable tag:** 1.3.1  
+ **Stable tag:** 1.4.0  
 **License:** GPL-2.0-or-later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -69,6 +69,17 @@ Logged-in users can like or dislike comments on posts. Features:
 - Dedicated database table (`weal_comment_votes`) for efficient vote storage
 - Unique constraint prevents duplicate votes per user per comment
 
+### Achievements System
+
+A motivational achievements and badges system that rewards users based on their comment activity. Features:
+
+- **Active User** badge — awarded when a user reaches a configurable threshold of approved comments
+- **Nice User** badge — awarded when a user receives a configurable number of likes on comments
+- **Angry User** badge — awarded when a user receives a configurable number of dislikes on comments
+- Badges are displayed on user avatars in the comments section
+- Configurable comment count targets for each achievement via the admin panel
+- REST API endpoints for managing achievement settings
+
 ### Activity Center
 
 The plugin provides a convenient centralized space where users can track their comment history and quickly return to conversations they participated in.
@@ -106,6 +117,12 @@ Each vote sets a cookie (`weal_voted_post_{post_id}`) valid for 1 year. Both the
 Yes. Go to **WordPress Admin → Weal Profile** and uncheck "Enable likes and dislikes on comments".
 
 ## Changelog
+
+### 1.4.0
+- Added achievements system: Active User, Nice User, and Angry User badges based on comment activity
+- Configurable comment count targets for each achievement in admin settings
+- Badge display on user avatars in comments
+- REST API endpoints for achievements management in admin panel
 
 ### 1.3.1
 - Added comment reactions display on user profile page
