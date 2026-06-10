@@ -152,6 +152,35 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Get achievement description for a given type and target.
+	 *
+	 * @param string $achievement_id Achievement ID (commenter, cutie, angry).
+	 * @param int    $target         Target threshold.
+	 * @return string
+	 */
+	public static function get_achievement_description( $achievement_id, $target ) {
+		$descriptions = array(
+			'commenter' => sprintf(
+				/* translators: %d: target comment count */
+				__( 'Awarded for %d comments left', 'weal-profile' ),
+				(int) $target
+			),
+			'cutie'     => sprintf(
+				/* translators: %d: target comment likes count */
+				__( 'Awarded for %d comment likes', 'weal-profile' ),
+				(int) $target
+			),
+			'angry'     => sprintf(
+				/* translators: %d: target comment dislikes count */
+				__( 'Awarded for %d comment dislikes', 'weal-profile' ),
+				(int) $target
+			),
+		);
+
+		return isset( $descriptions[ $achievement_id ] ) ? $descriptions[ $achievement_id ] : '';
+	}
+
+	/**
 	 * Get achievement definitions with default values.
 	 *
 	 * @return array
@@ -280,14 +309,15 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * @param string $title    Title attribute.
 	 * @return string HTML for the icon.
 	 */
-	public static function render_achievement_icon( $icon, $css_class = '', $title = '' ) {
+	public static function render_achievement_icon( $icon, $css_class = '', $title = '', $description = '' ) {
 		$title_attr = $title ? 'title="' . esc_attr( $title ) . '"' : '';
+		$desc_attr  = $description ? 'data-description="' . esc_attr( $description ) . '"' : '';
 
 		if ( str_starts_with( $icon, 'dashicons-' ) ) {
-			return '<span class="dashicons ' . esc_attr( $icon ) . ' ' . esc_attr( $css_class ) . '" ' . $title_attr . '></span>';
+			return '<span class="dashicons ' . esc_attr( $icon ) . ' ' . esc_attr( $css_class ) . '" ' . $title_attr . ' ' . $desc_attr . '></span>';
 		}
 
-		return '<span class="' . esc_attr( $css_class ) . '" ' . $title_attr . '>' . wp_kses_post( $icon ) . '</span>';
+		return '<span class="' . esc_attr( $css_class ) . '" ' . $title_attr . ' ' . $desc_attr . '>' . wp_kses_post( $icon ) . '</span>';
 	}
 
 	/**
@@ -328,11 +358,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			$title = isset( $settings['label'] ) ? $settings['label'] : '';
-			$icon  = isset( $settings['icon'] ) ? $settings['icon'] : '';
+			$description = self::get_achievement_description( $id, $settings['target'] );
+			$icon        = isset( $settings['icon'] ) ? $settings['icon'] : '';
 
 			$badge_class  = 'has-badge-' . $id;
-			$badges_html .= self::render_achievement_icon( $icon, $badge_class, $title );
+			$badges_html .= self::render_achievement_icon( $icon, $badge_class, $description );
 		}
 
 		if ( '' === $badges_html ) {
@@ -379,7 +409,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			}
 
 			$html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-			$html .= self::render_achievement_icon( $achievement['icon'], 'achievement-icon' );
+			$description = self::get_achievement_description( $achievement['id'], $achievement['target'] );
+			$html .= self::render_achievement_icon( $achievement['icon'], 'achievement-icon', '', $description );
 			$html .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
 
 			if ( $show_toggle && $achievement['earned'] ) {
@@ -469,6 +500,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			$result[] = array(
 				'id'     => $id,
 				'label'  => $settings['label'],
+				'target' => $settings['target'],
 				'earned' => $earned,
 				'icon'   => $settings['icon'],
 			);
@@ -489,7 +521,10 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'id'    => array(),
 			),
 			'h3'    => array( 'class' => array() ),
-			'span'  => array( 'class' => array() ),
+			'span'  => array(
+				'class'             => array(),
+				'data-description'  => array(),
+			),
 			'label' => array(
 				'class' => array(),
 				'for'   => array(),

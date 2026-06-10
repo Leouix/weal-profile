@@ -43,6 +43,9 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 						name="achievements[<?php echo esc_attr( $weal_profile_achievement_id ); ?>][target]"
 						value="<?php echo esc_attr( $weal_profile_settings['target'] ); ?>"
 						min="1">
+					<p class="description">
+						<?php echo esc_html( Weal_Profile_Achievements::get_achievement_description( $weal_profile_achievement_id, $weal_profile_settings['target'] ) ); ?>
+					</p>
 				</div>
 
 				<div class="label-area">
