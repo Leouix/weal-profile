@@ -117,3 +117,7 @@ h1 {
 #achievements-success-notice.active {
 	display: block;
 }
+
+.achievement-block .dashicons-awards {
+	color: #ffc107;
+}
