@@ -311,7 +311,6 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		$html  = '<div class="weal-profile-achievements-list">';
-		$html .= '<h3 class="weal-profile-achievements-title">' . esc_html__( 'Achievements', 'weal-profile' ) . '</h3>';
 
 		foreach ( $achievements as $achievement ) {
 			$is_hidden = in_array( $achievement['id'], $hidden, true );

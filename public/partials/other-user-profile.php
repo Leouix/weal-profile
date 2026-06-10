@@ -82,18 +82,21 @@ $weal_profile_comments_style = 'posts' === $weal_profile_active_tab ? 'display:n
 			<div></div>
 		
 			<div class="avatar-area">
-			<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
-				<div class="weal-profile-avatar-wrapper">
-					<?php echo wp_kses_post( $weal_profile_avatar_html ); ?>
-				</div>
-				<?php if ( ! empty( $weal_profile_display_name ) ) : ?>
-					<div class="weal-profile-display-name"><?php echo esc_html( $weal_profile_display_name ); ?></div>
-				<?php endif; ?>
-			<?php endif; ?>
+                <div class="weal-profile-achievements-section">
+                    <?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, false ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
+                </div>
 
-			<div class="weal-profile-achievements-section">
-				<?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, false ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
-			</div>
+                <?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
+                <div>
+                    <div class="weal-profile-avatar-wrapper">
+                        <?php echo wp_kses_post( $weal_profile_avatar_html ); ?>
+                    </div>
+                    <?php if ( ! empty( $weal_profile_display_name ) ) : ?>
+                        <div class="weal-profile-display-name"><?php echo esc_html( $weal_profile_display_name ); ?></div>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+
 		</div>
 	</div>
 

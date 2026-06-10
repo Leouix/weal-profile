@@ -320,7 +320,9 @@ html[data-darkreader-scheme="dark"] #main-tabs .main-tabs-item.active {
 }
 
 .avatar-area {
-	text-align: center;
+	display: flex;
+	align-items: start;
+	gap: 25px;
 }
 
 .fade-out {
