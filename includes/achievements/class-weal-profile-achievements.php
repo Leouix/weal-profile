@@ -115,7 +115,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'commenter' => array(
 				'label'  => __( 'Active Commentator', 'weal-profile' ),
 				'target' => 3,
-				'icon'   => '★',
+				'icon'   => 'dashicons-awards',
 			),
 		);
 	}
@@ -204,7 +204,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				return $avatar_html;
 			}
 
-			return '<div class="has-badge">' . $avatar_html . '<span class="has-badge-commenter dashicons dashicons-awards" title="' . esc_attr( $title ) . '"></span></div>';
+			$icon = isset( $settings['icon'] ) ? $settings['icon'] : 'dashicons-awards';
+			return '<div class="has-badge">' . $avatar_html . '<span class="has-badge-commenter dashicons ' . esc_attr( $icon ) . '" title="' . esc_attr( $title ) . '"></span></div>';
 		}
 		return $avatar_html;
 	}
@@ -247,7 +248,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			}
 
 			$html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-			$html .= '<span class="achievement-icon">' . esc_html( $achievement['icon'] ) . '</span>';
+			$html .= '<span class="achievement-icon dashicons ' . esc_attr( $achievement['icon'] ) . '"></span>';
 			$html .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
 
 			if ( $show_toggle && $achievement['earned'] ) {
