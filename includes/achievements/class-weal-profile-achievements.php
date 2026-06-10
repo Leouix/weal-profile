@@ -505,25 +505,35 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			);
 		}
 
+		$achievement_id = isset( $post_data['achievement_id'] )
+			? sanitize_text_field( wp_unslash( $post_data['achievement_id'] ) )
+			: '';
+
 		$definitions = self::get_achievement_definitions();
-		$submitted   = isset( $post_data['achievements'] ) ? $post_data['achievements'] : array();
-		$sanitized   = array();
 
-		foreach ( $definitions as $id => $defaults ) {
-			if ( ! isset( $submitted[ $id ] ) ) {
-				continue;
-			}
-
-			$item = $submitted[ $id ];
-
-			$sanitized[ $id ] = array(
-				'enabled' => ! empty( $item['enabled'] ),
-				'target'  => isset( $item['target'] ) ? max( 1, (int) $item['target'] ) : $defaults['target'],
-				'label'   => isset( $item['label'] ) ? sanitize_text_field( wp_unslash( $item['label'] ) ) : $defaults['label'],
+		if ( ! isset( $definitions[ $achievement_id ] ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Invalid achievement ID', 'weal-profile' ),
+				),
+				400
 			);
 		}
 
-		$this->settings_manager->save_achievements_settings( $sanitized );
+		$defaults  = $definitions[ $achievement_id ];
+		$submitted = isset( $post_data['achievements'][ $achievement_id ] ) ? $post_data['achievements'][ $achievement_id ] : array();
+
+		$sanitized = array(
+			'enabled' => ! empty( $submitted['enabled'] ),
+			'target'  => isset( $submitted['target'] ) ? max( 1, (int) $submitted['target'] ) : $defaults['target'],
+			'label'   => isset( $submitted['label'] ) ? sanitize_text_field( wp_unslash( $submitted['label'] ) ) : $defaults['label'],
+		);
+
+		$all_settings                 = $this->settings_manager->get_achievements_settings();
+		$all_settings[ $achievement_id ] = $sanitized;
+
+		$this->settings_manager->save_achievements_settings( $all_settings );
 
 		return new WP_REST_Response(
 			array(

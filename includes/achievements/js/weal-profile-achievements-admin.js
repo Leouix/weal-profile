@@ -1,36 +1,26 @@
-/**
- * Admin JS for the Achievements settings tab.
- *
- * @package weal-profile
- */
-
 (function () {
-	var form
-	var submitButton
-	var successNotice
-	var errorNotice
-
 	function init() {
-		form = document.getElementById( 'achievements-settings-form' );
-		if ( ! form ) {
+		var forms = document.querySelectorAll( '.achievement-form' );
+		if ( ! forms.length ) {
 			return;
 		}
 
-		submitButton = document.getElementById( 'save-achievements-button' );
-		successNotice = document.getElementById( 'achievements-success-notice' );
-		errorNotice   = document.getElementById( 'achievements-error-notice' );
-
-		form.addEventListener(
-			'submit',
-			function ( event ) {
-				event.preventDefault();
-				saveForm( event.target );
-			}
-		);
+		forms.forEach( function ( form ) {
+			form.addEventListener(
+				'submit',
+				function ( event ) {
+					event.preventDefault();
+					saveForm( event.target );
+				}
+			);
+		} );
 	}
 
 	function saveForm( elForm ) {
-		var formData = new FormData( elForm );
+		var formData     = new FormData( elForm );
+		var buttonArea   = elForm.querySelector( '.button-area' );
+		var successNotice = buttonArea.querySelector( '.achievement-success-notice' );
+		var errorNotice   = buttonArea.querySelector( '.achievement-error-notice' );
 
 		var xhr = new XMLHttpRequest();
 		xhr.open( 'POST', wealProfileAchievementsData.root + 'weal-profile/v1/admin-save-achievements-settings/', true );
@@ -47,7 +37,7 @@
 			}
 
 			if ( response.success ) {
-				successNotice.style.display = 'block';
+				successNotice.style.display = 'inline';
 				errorNotice.style.display   = 'none';
 				setTimeout(
 					function () {
@@ -57,7 +47,7 @@
 				);
 			} else if ( response.message ) {
 				errorNotice.textContent   = response.message;
-				errorNotice.style.display = 'block';
+				errorNotice.style.display = 'inline';
 				successNotice.style.display = 'none';
 			}
 		};
