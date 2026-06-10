@@ -30,9 +30,8 @@
 #main-tabs .main-tabs-item .text {
 	rotate: -90deg;
 	width: 100%;
-	min-width: 85px;
+	min-width: 87px;
 	font-size: 16px;
-	line-height: 1.1;
 }
 
 .au-container {
