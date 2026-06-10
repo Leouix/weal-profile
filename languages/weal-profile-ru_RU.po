@@ -157,19 +157,19 @@ msgstr "Сохранить"
 #: includes/achievements/class-weal-profile-achievements.php:165
 #, php-format
 msgid "Awarded for %d comments left"
-msgstr ""
+msgstr "Награда за %d оставленных комментариев"
 
 #. translators: %d: target comment likes count
 #: includes/achievements/class-weal-profile-achievements.php:170
 #, php-format
 msgid "Awarded for %d comment likes"
-msgstr ""
+msgstr "Награда за %d лайков на комментариях"
 
 #. translators: %d: target comment dislikes count
 #: includes/achievements/class-weal-profile-achievements.php:175
 #, php-format
 msgid "Awarded for %d comment dislikes"
-msgstr ""
+msgstr "Награда за %d дизлайков на комментариях"
 
 #: includes/achievements/class-weal-profile-achievements.php:191
 msgid "Active Commentator"
