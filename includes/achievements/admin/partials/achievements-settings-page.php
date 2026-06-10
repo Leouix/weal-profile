@@ -19,7 +19,7 @@ $achievements_data = Weal_Profile_Achievements::get_admin_achievements_data();
 
 		<?php foreach ( $achievements_data as $achievement_id => $settings ) : ?>
 			<div class="achievement-block">
-				<h3><span class="dashicons <?php echo esc_attr( $settings['icon'] ); ?>"></span> <?php echo esc_html( $settings['label'] ); ?></h3>
+				<h3><?php echo Weal_Profile_Achievements::render_achievement_icon( $settings['icon'], 'admin-achievement-icon' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo esc_html( $settings['label'] ); ?></h3>
 
 				<div class="label-area">
 					<input type="hidden" name="achievements[<?php echo esc_attr( $achievement_id ); ?>][enabled]" value="0">

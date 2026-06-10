@@ -106,6 +106,29 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Get total likes received on a user's approved comments.
+	 *
+	 * @param int $user_id User ID.
+	 * @return int Total likes.
+	 */
+	private function get_user_total_comment_likes( $user_id ) {
+		global $wpdb;
+
+		$total = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				"SELECT COALESCE(SUM(l.meta_value + 0), 0)
+				FROM {$wpdb->comments} c
+				LEFT JOIN {$wpdb->commentmeta} l
+					ON c.comment_ID = l.comment_id AND l.meta_key = '_weal_likes_count'
+				WHERE c.user_id = %d AND c.comment_approved = '1'",
+				$user_id
+			)
+		);
+
+		return (int) $total;
+	}
+
+	/**
 	 * Get achievement definitions with default values.
 	 *
 	 * @return array
@@ -116,6 +139,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'label'  => __( 'Active Commentator', 'weal-profile' ),
 				'target' => 3,
 				'icon'   => 'dashicons-awards',
+			),
+			'cutie'     => array(
+				'label'  => __( 'Cutie', 'weal-profile' ),
+				'target' => 3,
+				'icon'   => '&#x1f970;',
 			),
 		);
 	}
@@ -157,6 +185,23 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Check if user qualifies for cutie badge.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True if user meets the target.
+	 */
+	private function has_badge_cutie( $user_id ) {
+		$achievements = self::get_admin_achievements_data();
+		$settings     = isset( $achievements['cutie'] ) ? $achievements['cutie'] : array();
+
+		if ( empty( $settings['enabled'] ) ) {
+			return false;
+		}
+
+		return $this->get_user_total_comment_likes( $user_id ) >= (int) $settings['target'];
+	}
+
+	/**
 	 * Get hidden achievement IDs for a user.
 	 *
 	 * @param int $user_id User ID.
@@ -183,6 +228,24 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Render an achievement icon — dashicon span or emoji span.
+	 *
+	 * @param string $icon     Icon value (dashicons-* class or emoji).
+	 * @param string $class    Additional classes for the span.
+	 * @param string $title    Title attribute.
+	 * @return string HTML for the icon.
+	 */
+	public static function render_achievement_icon( $icon, $class = '', $title = '' ) {
+		$title_attr = $title ? 'title="' . esc_attr( $title ) . '"' : '';
+
+		if ( str_starts_with( $icon, 'dashicons-' ) ) {
+			return '<span class="dashicons ' . esc_attr( $icon ) . ' ' . esc_attr( $class ) . '" ' . $title_attr . '></span>';
+		}
+
+		return '<span class="' . esc_attr( $class ) . '" ' . $title_attr . '>' . wp_kses_post( $icon ) . '</span>';
+	}
+
+	/**
 	 * Wrap avatar HTML in badge container if user qualifies and hasn't hidden it.
 	 *
 	 * @param string $avatar_html The avatar HTML.
@@ -194,20 +257,42 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			return $avatar_html;
 		}
 
-		$instance = self::instance();
-		if ( $instance->has_badge_commenter( $user_id ) ) {
-			$achievements = self::get_admin_achievements_data();
-			$settings     = isset( $achievements['commenter'] ) ? $achievements['commenter'] : array();
-			$title        = isset( $settings['label'] ) ? $settings['label'] : __( 'Great Commenter', 'weal-profile' );
+		$instance    = self::instance();
+		$achievements = self::get_admin_achievements_data();
+		$badges_html = '';
 
-			if ( self::is_achievement_hidden( $user_id, 'commenter' ) ) {
-				return $avatar_html;
+		foreach ( $achievements as $id => $settings ) {
+			if ( empty( $settings['enabled'] ) ) {
+				continue;
 			}
 
-			$icon = isset( $settings['icon'] ) ? $settings['icon'] : 'dashicons-awards';
-			return '<div class="has-badge">' . $avatar_html . '<span class="has-badge-commenter dashicons ' . esc_attr( $icon ) . '" title="' . esc_attr( $title ) . '"></span></div>';
+			if ( self::is_achievement_hidden( $user_id, $id ) ) {
+				continue;
+			}
+
+			$qualifies = false;
+			if ( 'commenter' === $id ) {
+				$qualifies = $instance->has_badge_commenter( $user_id );
+			} elseif ( 'cutie' === $id ) {
+				$qualifies = $instance->has_badge_cutie( $user_id );
+			}
+
+			if ( ! $qualifies ) {
+				continue;
+			}
+
+			$title = isset( $settings['label'] ) ? $settings['label'] : '';
+			$icon  = isset( $settings['icon'] ) ? $settings['icon'] : '';
+
+			$badge_class = 'has-badge-' . $id;
+			$badges_html .= self::render_achievement_icon( $icon, $badge_class, $title );
 		}
-		return $avatar_html;
+
+		if ( '' === $badges_html ) {
+			return $avatar_html;
+		}
+
+		return '<div class="has-badge">' . $avatar_html . $badges_html . '</div>';
 	}
 
 	/**
@@ -248,7 +333,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			}
 
 			$html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-			$html .= '<span class="achievement-icon dashicons ' . esc_attr( $achievement['icon'] ) . '"></span>';
+			$html .= self::render_achievement_icon( $achievement['icon'], 'achievement-icon' );
 			$html .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
 
 			if ( $show_toggle && $achievement['earned'] ) {
@@ -321,7 +406,12 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$result       = array();
 
 		foreach ( $achievements as $id => $settings ) {
-			$count  = $instance->get_user_comment_count( $user_id );
+			if ( 'cutie' === $id ) {
+				$count = $instance->get_user_total_comment_likes( $user_id );
+			} else {
+				$count = $instance->get_user_comment_count( $user_id );
+			}
+
 			$earned = ! empty( $settings['enabled'] ) && $count >= (int) $settings['target'];
 
 			$result[] = array(
