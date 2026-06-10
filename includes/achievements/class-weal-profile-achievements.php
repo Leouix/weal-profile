@@ -359,7 +359,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			$icon        = isset( $settings['icon'] ) ? $settings['icon'] : '';
+			$icon = isset( $settings['icon'] ) ? $settings['icon'] : '';
 
 			$badge_class  = 'has-badge-' . $id;
 			$badges_html .= self::render_achievement_icon( $icon, $badge_class, $settings['label'] );
