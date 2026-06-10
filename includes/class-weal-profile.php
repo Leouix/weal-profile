@@ -104,8 +104,6 @@ class Weal_Profile {
 		}
 		$this->plugin_name = 'weal-profile';
 
-		$this->load_textdomain();
-
 		$this->load_dependencies();
 
 		$this->settings_manager = new Settings_Manager();
@@ -517,13 +515,6 @@ class Weal_Profile {
 
 			update_option( 'weal_profile_db_version', WEAL_PROFILE_DB_VERSION );
 		}
-	}
-
-	/**
-	 * Load plugin textdomain for translations.
-	 */
-	private function load_textdomain() {
-		load_plugin_textdomain( 'weal-profile', false, dirname( plugin_basename( WEAL_PROFILE_PLUGIN_FILE ) ) . '/languages' );
 	}
 
 	/**
