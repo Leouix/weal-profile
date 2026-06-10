@@ -388,7 +388,6 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				$html   .= '<input type="checkbox" class="achievement-toggle-input" data-achievement-id="' . esc_attr( $achievement['id'] ) . '" ' . $checked . '>';
 				$html   .= '<span class="achievement-slider round"></span>';
 				$html   .= '</label>';
-				$html   .= '<span class="toggle-status-text">' . ( $is_hidden ? esc_html__( 'Hidden', 'weal-profile' ) : esc_html__( 'Shown', 'weal-profile' ) ) . '</span>';
 			} elseif ( $achievement['earned'] ) {
 				$html .= '<span class="achievement-status earned">' . esc_html__( 'Earned', 'weal-profile' ) . '</span>';
 			} else {
