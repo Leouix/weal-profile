@@ -406,13 +406,18 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$result       = array();
 
 		foreach ( $achievements as $id => $settings ) {
+			// Do not render achievements disabled in admin settings.
+			if ( empty( $settings['enabled'] ) ) {
+				continue;
+			}
+
 			if ( 'cutie' === $id ) {
 				$count = $instance->get_user_total_comment_likes( $user_id );
 			} else {
 				$count = $instance->get_user_comment_count( $user_id );
 			}
 
-			$earned = ! empty( $settings['enabled'] ) && $count >= (int) $settings['target'];
+			$earned = $count >= (int) $settings['target'];
 
 			$result[] = array(
 				'id'     => $id,
