@@ -27,11 +27,11 @@ $achievements_data = Weal_Profile_Achievements::get_admin_achievements_data();
 					<label for="achievement-<?php echo esc_attr( $achievement_id ); ?>-enabled">
 						<?php esc_html_e( 'Enable achievement', 'weal-profile' ); ?>
 					</label>
-                    <input type="checkbox"
-                           id="achievement-<?php echo esc_attr( $achievement_id ); ?>-enabled"
-                           name="achievements[<?php echo esc_attr( $achievement_id ); ?>][enabled]"
-                           value="1"
-                             <?php checked( ! empty( $settings['enabled'] ) ); ?>>
+					<input type="checkbox"
+							id="achievement-<?php echo esc_attr( $achievement_id ); ?>-enabled"
+							name="achievements[<?php echo esc_attr( $achievement_id ); ?>][enabled]"
+							value="1"
+							<?php checked( ! empty( $settings['enabled'] ) ); ?>>
 				</div>
 
 				<div class="label-area">

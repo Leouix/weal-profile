@@ -77,25 +77,25 @@ $weal_profile_active_tab     = isset( $_GET['comments_page'] ) ? 'comments' : 'p
 $weal_profile_posts_style    = 'comments' === $weal_profile_active_tab ? 'display:none;' : '';
 $weal_profile_comments_style = 'posts' === $weal_profile_active_tab ? 'display:none;' : '';
 
-	?>
+?>
 		<div class="weal-profile-top-area weal-other-top-area">
 			<div></div>
 		
 			<div class="avatar-area">
-                <div class="weal-profile-achievements-section">
-                    <?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, false ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
-                </div>
+				<div class="weal-profile-achievements-section">
+					<?php echo wp_kses( Weal_Profile_Achievements::render_user_achievements( $weal_profile_user_id, false ), Weal_Profile_Achievements::get_allowed_achievements_html() ); ?>
+				</div>
 
-                <?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
-                <div>
-                    <div class="weal-profile-avatar-wrapper">
-                        <?php echo wp_kses_post( $weal_profile_avatar_html ); ?>
-                    </div>
-                    <?php if ( ! empty( $weal_profile_display_name ) ) : ?>
-                        <div class="weal-profile-display-name"><?php echo esc_html( $weal_profile_display_name ); ?></div>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
+				<?php if ( $weal_profile_is_avatar_field_allowed ) : ?>
+				<div>
+					<div class="weal-profile-avatar-wrapper">
+						<?php echo wp_kses_post( $weal_profile_avatar_html ); ?>
+					</div>
+					<?php if ( ! empty( $weal_profile_display_name ) ) : ?>
+						<div class="weal-profile-display-name"><?php echo esc_html( $weal_profile_display_name ); ?></div>
+					<?php endif; ?>
+				</div>
+				<?php endif; ?>
 
 		</div>
 	</div>

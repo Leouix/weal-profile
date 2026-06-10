@@ -128,7 +128,7 @@
 				if ( 4 === this.readyState && 200 === this.status ) {
 					var json = JSON.parse( this.response );
 					if ( json.success ) {
-						var item    = target.closest( '.weal-profile-achievement-item' );
+						var item     = target.closest( '.weal-profile-achievement-item' );
 						var statusEl = item ? item.querySelector( '.toggle-status-text' ) : null;
 						if ( statusEl ) {
 							statusEl.textContent = hidden ? 'Hidden' : 'Shown';

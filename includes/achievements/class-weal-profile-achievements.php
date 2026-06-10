@@ -276,18 +276,18 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * Render an achievement icon — dashicon span or emoji span.
 	 *
 	 * @param string $icon     Icon value (dashicons-* class or emoji).
-	 * @param string $class    Additional classes for the span.
+	 * @param string $css_class Additional classes for the span.
 	 * @param string $title    Title attribute.
 	 * @return string HTML for the icon.
 	 */
-	public static function render_achievement_icon( $icon, $class = '', $title = '' ) {
+	public static function render_achievement_icon( $icon, $css_class = '', $title = '' ) {
 		$title_attr = $title ? 'title="' . esc_attr( $title ) . '"' : '';
 
 		if ( str_starts_with( $icon, 'dashicons-' ) ) {
-			return '<span class="dashicons ' . esc_attr( $icon ) . ' ' . esc_attr( $class ) . '" ' . $title_attr . '></span>';
+			return '<span class="dashicons ' . esc_attr( $icon ) . ' ' . esc_attr( $css_class ) . '" ' . $title_attr . '></span>';
 		}
 
-		return '<span class="' . esc_attr( $class ) . '" ' . $title_attr . '>' . wp_kses_post( $icon ) . '</span>';
+		return '<span class="' . esc_attr( $css_class ) . '" ' . $title_attr . '>' . wp_kses_post( $icon ) . '</span>';
 	}
 
 	/**
@@ -302,9 +302,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			return $avatar_html;
 		}
 
-		$instance    = self::instance();
+		$instance     = self::instance();
 		$achievements = self::get_admin_achievements_data();
-		$badges_html = '';
+		$badges_html  = '';
 
 		foreach ( $achievements as $id => $settings ) {
 			if ( empty( $settings['enabled'] ) ) {
@@ -331,7 +331,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			$title = isset( $settings['label'] ) ? $settings['label'] : '';
 			$icon  = isset( $settings['icon'] ) ? $settings['icon'] : '';
 
-			$badge_class = 'has-badge-' . $id;
+			$badge_class  = 'has-badge-' . $id;
 			$badges_html .= self::render_achievement_icon( $icon, $badge_class, $title );
 		}
 
@@ -357,7 +357,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			return '';
 		}
 
-		$html  = '<div class="weal-profile-achievements-list">';
+		$html = '<div class="weal-profile-achievements-list">';
 
 		foreach ( $achievements as $achievement ) {
 			$is_hidden = in_array( $achievement['id'], $hidden, true );
@@ -582,7 +582,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'label'   => isset( $submitted['label'] ) ? sanitize_text_field( wp_unslash( $submitted['label'] ) ) : $defaults['label'],
 		);
 
-		$all_settings                 = $this->settings_manager->get_achievements_settings();
+		$all_settings                    = $this->settings_manager->get_achievements_settings();
 		$all_settings[ $achievement_id ] = $sanitized;
 
 		$this->settings_manager->save_achievements_settings( $all_settings );
