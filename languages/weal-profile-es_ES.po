@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Weal Profile 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/weal-profile\n"
-"POT-Creation-Date: 2026-05-28T17:47:15+00:00\n"
+"POT-Creation-Date: 2026-06-11 00:47+0700\n"
 "PO-Revision-Date: 2026-05-28T20:00:00+00:00\n"
 "Last-Translator: leouix <nsht22sola@gmail.com>\n"
 "Language-Team: Spanish\n"
@@ -16,37 +16,8 @@ msgstr ""
 "X-Domain: weal-profile\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. Plugin Name of the plugin
-#: weal-profile.php includes/class-weal-profile.php:202
-#: includes/class-weal-profile.php:203
-msgid "Weal Profile"
-msgstr "Weal Profile"
-
-#. Plugin URI of the plugin
-#: weal-profile.php
-msgid "https://weal.cloud"
-msgstr "https://weal.cloud"
-
-#. Description of the plugin
-#: weal-profile.php
-msgid ""
-"Creates a personal account page where logged-in users can manage their "
-"profile information and review their site activity."
-msgstr ""
-"Crea una página de cuenta personal donde los usuarios registrados pueden "
-"gestionar su perfil y revisar su actividad en el sitio."
-
-#. Author of the plugin
-#: weal-profile.php
-msgid "leouix"
-msgstr "leouix"
-
-#. Author URI of the plugin
-#: weal-profile.php
-msgid "https://github.com/Leouix/"
-msgstr "https://github.com/Leouix/"
-
 #: admin/class-admin-settings.php:105
+#: includes/achievements/class-weal-profile-achievements.php:554
 msgid "Security check failed"
 msgstr "La verificación de seguridad falló"
 
@@ -54,202 +25,98 @@ msgstr "La verificación de seguridad falló"
 msgid "Invalid checkbox data"
 msgstr "Datos de casilla inválidos"
 
-#. translators: %s: The invalid checkbox field name.
-#: admin/class-admin-settings.php:137
+#: admin/class-admin-settings.php:134
+msgid "At least one profile field must be selected."
+msgstr "Debe seleccionarse al menos un campo de perfil."
+
+#: admin/class-admin-settings.php:141
 #, php-format
 msgid "Invalid checkbox field: %s"
 msgstr "Campo de casilla inválido: %s"
 
-#: admin/partials/admin-settings-page.php:26
-msgid "Plugin settings page"
-msgstr "Página de configuración del plugin"
+#: admin/class-admin-settings.php:223
+msgid "Weal Profile Settings"
+msgstr "Ajustes de Weal Profile"
 
-#: admin/partials/admin-settings-page.php:29
+#: admin/class-admin-settings.php:226 includes/class-weal-profile.php:214
+#: includes/class-weal-profile.php:215
+msgid "General"
+msgstr "General"
+
+#: admin/class-admin-settings.php:227 includes/class-weal-profile.php:223
+#: includes/class-weal-profile.php:224
+msgid "Achievements"
+msgstr "Logros"
+
+#: admin/partials/admin-settings-page.php:27
 msgid "URL user page:"
 msgstr "URL de la página de usuario:"
 
-#: admin/partials/admin-settings-page.php:47
+#: admin/partials/admin-settings-page.php:45
 msgid "Which fields should be shown in the user account?"
 msgstr "¿Qué campos se deben mostrar en la cuenta de usuario?"
 
-#: admin/partials/admin-settings-page.php:51
+#: admin/partials/admin-settings-page.php:49
 msgid "avatar"
 msgstr "Avatar"
 
-#: admin/partials/admin-settings-page.php:56
+#: admin/partials/admin-settings-page.php:54
 msgid "display_name"
 msgstr "Nombre para mostrar"
 
-#: admin/partials/admin-settings-page.php:61
+#: admin/partials/admin-settings-page.php:59
 msgid "nickname"
 msgstr "Apodo"
 
-#: admin/partials/admin-settings-page.php:66
+#: admin/partials/admin-settings-page.php:64
 msgid "first_name"
 msgstr "Nombre"
 
-#: admin/partials/admin-settings-page.php:71
+#: admin/partials/admin-settings-page.php:69
 msgid "last_name"
 msgstr "Apellido"
 
-#: admin/partials/admin-settings-page.php:76
+#: admin/partials/admin-settings-page.php:74
 msgid "user_url"
 msgstr "URL del sitio"
 
-#: admin/partials/admin-settings-page.php:81
+#: admin/partials/admin-settings-page.php:79
 msgid "description"
 msgstr "Descripción"
 
-#: admin/partials/admin-settings-page.php:84
+#: admin/partials/admin-settings-page.php:82
 msgid "Comment Likes/Dislikes"
 msgstr "Me gusta/No me gusta en comentarios"
 
-#: admin/partials/admin-settings-page.php:88
+#: admin/partials/admin-settings-page.php:86
 msgid "Enable likes and dislikes on comments"
 msgstr "Activar me gusta y no me gusta en los comentarios"
 
-#: admin/partials/admin-settings-page.php:92
+#: admin/partials/admin-settings-page.php:90
 msgid "Сохранить настройки"
 msgstr "Guardar configuración"
 
-#: admin/partials/admin-settings-page.php:93
+#: admin/partials/admin-settings-page.php:91
+#: includes/achievements/admin/partials/achievements-settings-page.php:60
 msgid "Success!"
 msgstr "¡Éxito!"
-
-#: includes/class-routes.php:52
-msgid "Login required"
-msgstr "Se requiere inicio de sesión"
-
-#: includes/class-routes.php:63 includes/class-routes.php:197
-msgid "Access denied"
-msgstr "Acceso denegado"
-
-#: includes/class-routes.php:203
-msgid "Login User ID is required."
-msgstr "Se requiere ID de usuario."
-
-#: includes/class-routes.php:229 includes/class-routes.php:269
-#: includes/class-routes.php:417 includes/class-routes.php:476
-msgid "User not logged in"
-msgstr "Usuario no conectado"
-
-#: includes/class-routes.php:253
-#: includes/comment-votes/class-likes-vote-service.php:96
-msgid "Invalid nonce"
-msgstr "Nonce inválido"
-
-#: includes/class-routes.php:275
-msgid "Tab Name is required."
-msgstr "Se requiere nombre de pestaña."
-
-#: includes/class-routes.php:293
-msgid "Invalid tab"
-msgstr "Pestaña inválida"
-
-#: includes/class-weal-profile-avatar.php:50
-#: includes/class-weal-profile-avatar.php:223
-msgid "Profile picture"
-msgstr "Foto de perfil"
-
-#: includes/class-weal-profile-avatar.php:65
-msgid "You must be logged in."
-msgstr "Debe iniciar sesión."
-
-#: includes/class-weal-profile-avatar.php:71
-msgid "You do not have permission to upload avatars."
-msgstr "No tiene permiso para subir avatares."
-
-#: includes/class-weal-profile-avatar.php:75
-msgid "No file uploaded."
-msgstr "No se subió ningún archivo."
-
-#: includes/class-weal-profile-avatar.php:82
-msgid "File upload error."
-msgstr "Error al subir el archivo."
-
-#: includes/class-weal-profile-avatar.php:86
-msgid "File size exceeds 2MB limit."
-msgstr "El tamaño del archivo excede el límite de 2MB."
-
-#: includes/class-weal-profile.php:192
-msgid "Settings"
-msgstr "Ajustes"
-
-#: includes/comment-votes/class-comment-votes.php:184
-msgid "Like this comment"
-msgstr "Me gusta este comentario"
-
-#: includes/comment-votes/class-comment-votes.php:189
-msgid "Dislike this comment"
-msgstr "No me gusta este comentario"
-
-#: includes/comment-votes/class-comment-votes.php:195
-msgid "Login to vote"
-msgstr "Inicie sesión para votar"
-
-#: includes/comment-votes/class-likes-vote-service.php:87
-msgid "Comment votes are disabled"
-msgstr "La votación de comentarios está desactivada"
-
-#: includes/comment-votes/class-likes-vote-service.php:108
-msgid "User not found"
-msgstr "Usuario no encontrado"
-
-#: includes/comment-votes/class-likes-vote-service.php:117
-msgid "Comment not found"
-msgstr "Comentario no encontrado"
-
-#: includes/comment-votes/class-profile-votes-page.php:47
-#: public/partials/user-comments-list.php:24
-msgid "Comment Reactions"
-msgstr "Reacciones a comentarios"
-
-#: includes/comment-votes/class-profile-votes-page.php:52
-#: public/partials/user-comments-list.php:29
-msgid "Likes Received"
-msgstr "Me gusta recibidos"
-
-#: includes/comment-votes/class-profile-votes-page.php:57
-#: public/partials/user-comments-list.php:34
-msgid "Dislikes Received"
-msgstr "No me gusta recibidos"
-
-#: includes/comment-votes/class-profile-votes-page.php:64
-#: public/partials/user-comments-list.php:40
-msgid "Top Comments"
-msgstr "Mejores comentarios"
-
-#: includes/manager/class-public-page-manager.php:50
-msgid "Unable to find available slug for public page after 100 attempts"
-msgstr "No se pudo encontrar un slug disponible después de 100 intentos"
-
-#: includes/ratings/class-weal-profile-rating.php:122
-msgid "Rate this article:"
-msgstr "Valora este artículo:"
-
-#: includes/ratings/class-weal-profile-rating.php:143
-msgid "votes"
-msgstr "votos"
-
-#: includes/ratings/class-weal-profile-rating.php:181
-msgid "Invalid data."
-msgstr "Datos inválidos."
-
-#: includes/ratings/class-weal-profile-rating.php:192
-msgid "You have already voted."
-msgstr "Ya has votado."
 
 #: public/class-info-tab-manager.php:59
 msgid "You do not have permission to edit this user."
 msgstr "No tienes permiso para editar este usuario."
 
-#: public/partials/other-user-profile.php:94
-#: public/partials/tab-my-activity.php:17
+#: public/partials/weal-profile-public-display.php:55
+msgid "Are you sure you want to delete the image?"
+msgstr "¿Estás seguro de que quieres eliminar la imagen?"
+
+#: public/partials/tab-my-activity.php:18
+#: public/partials/other-user-profile.php:106
 msgid "Posts"
 msgstr "Entradas"
 
-#: public/partials/other-user-profile.php:97
-#: public/partials/tab-my-activity.php:20
+#: public/partials/tab-my-activity.php:21
+#: public/partials/user-comments-list.php:40
+#: public/partials/other-user-profile.php:109
 msgid "Comments"
 msgstr "Comentarios"
 
@@ -282,33 +149,207 @@ msgid "Description:"
 msgstr "Descripción:"
 
 #: public/partials/tab-info.php:103
+#: includes/achievements/admin/partials/achievements-settings-page.php:59
 msgid "Save"
 msgstr "Guardar"
+
+#: public/partials/user-comments-list.php:21
+msgid "Comment Reactions"
+msgstr "Reacciones a comentarios"
+
+#: public/partials/user-comments-list.php:26
+msgid "Likes Received"
+msgstr "Me gusta recibidos"
+
+#: public/partials/user-comments-list.php:31
+msgid "Dislikes Received"
+msgstr "No me gusta recibidos"
+
+#: public/partials/user-comments-list.php:71
+msgid "No comments"
+msgstr "Sin comentarios"
 
 #: public/partials/tab-my-posts.php:43
 msgid "No posts found."
 msgstr "No se encontraron entradas."
 
-#: public/partials/user-comments-list.php:60
-msgid "No comments"
-msgstr "Sin comentarios"
+#: includes/class-routes.php:52
+msgid "Login required"
+msgstr "Se requiere inicio de sesión"
 
-#: public/partials/weal-profile-public-display.php:17
-msgid "My Account"
-msgstr "Mi cuenta"
+#: includes/class-routes.php:63 includes/class-routes.php:197
+msgid "Access denied"
+msgstr "Acceso denegado"
 
-#: public/partials/weal-profile-public-display.php:24
-msgid "Activity"
-msgstr "Actividad"
+#: includes/class-routes.php:203
+msgid "Login User ID is required."
+msgstr "Se requiere ID de usuario."
 
-#: public/partials/weal-profile-public-display.php:29
-msgid "My Info"
-msgstr "Mi información"
+#: includes/class-routes.php:240 includes/class-routes.php:280
+#: includes/class-routes.php:426 includes/class-routes.php:487
+msgid "User not logged in"
+msgstr "Usuario no conectado"
 
-#: public/partials/weal-profile-public-display.php:50
-msgid "Are you sure you want to delete the image?"
-msgstr "¿Estás seguro de que quieres eliminar la imagen?"
+#: includes/class-routes.php:264
+#: includes/comment-votes/class-likes-vote-service.php:46
+msgid "Invalid nonce"
+msgstr "Nonce inválido"
 
-#: public/partials/weal-profile-public-display.php:53
-msgid "Del"
-msgstr "Eliminar"
+#: includes/class-routes.php:286
+msgid "Tab Name is required."
+msgstr "Se requiere nombre de pestaña."
+
+#: includes/class-routes.php:304
+msgid "Invalid tab"
+msgstr "Pestaña inválida"
+
+#: includes/class-weal-profile.php:193
+msgid "Settings"
+msgstr "Ajustes"
+
+#: includes/class-weal-profile.php:204 includes/class-weal-profile.php:205
+msgid "Weal Profile"
+msgstr "Weal Profile"
+
+#: includes/manager/class-public-page-manager.php:50
+msgid "Unable to find available slug for public page after 100 attempts"
+msgstr "No se pudo encontrar un slug disponible después de 100 intentos"
+
+#: includes/ratings/class-weal-profile-rating.php:122
+msgid "Rate this article:"
+msgstr "Valora este artículo:"
+
+#: includes/ratings/class-weal-profile-rating.php:143
+msgid "votes"
+msgstr "votos"
+
+#: includes/ratings/class-weal-profile-rating.php:181
+msgid "Invalid data."
+msgstr "Datos inválidos."
+
+#: includes/ratings/class-weal-profile-rating.php:192
+msgid "You have already voted."
+msgstr "Ya has votado."
+
+#: includes/class-weal-profile-avatar.php:66
+#: includes/class-weal-profile-avatar.php:245
+msgid "Profile picture"
+msgstr "Foto de perfil"
+
+#: includes/class-weal-profile-avatar.php:81
+msgid "You must be logged in."
+msgstr "Debe iniciar sesión."
+
+#: includes/class-weal-profile-avatar.php:87
+msgid "You do not have permission to upload avatars."
+msgstr "No tiene permiso para subir avatares."
+
+#: includes/class-weal-profile-avatar.php:91
+msgid "No file uploaded."
+msgstr "No se subió ningún archivo."
+
+#: includes/class-weal-profile-avatar.php:98
+msgid "File upload error."
+msgstr "Error al subir el archivo."
+
+#: includes/class-weal-profile-avatar.php:102
+msgid "File size exceeds 2MB limit."
+msgstr "El tamaño del archivo excede el límite de 2MB."
+
+#: includes/comment-votes/class-comment-votes.php:184
+msgid "Like this comment"
+msgstr "Me gusta este comentario"
+
+#: includes/comment-votes/class-comment-votes.php:189
+msgid "Dislike this comment"
+msgstr "No me gusta este comentario"
+
+#: includes/comment-votes/class-comment-votes.php:195
+msgid "Login to vote"
+msgstr "Inicie sesión para votar"
+
+#: includes/comment-votes/class-likes-vote-service.php:37
+msgid "Comment votes are disabled"
+msgstr "La votación de comentarios está desactivada"
+
+#: includes/comment-votes/class-likes-vote-service.php:58
+msgid "User not found"
+msgstr "Usuario no encontrado"
+
+#: includes/comment-votes/class-likes-vote-service.php:67
+msgid "Comment not found"
+msgstr "Comentario no encontrado"
+
+#: includes/achievements/admin/partials/achievements-settings-page.php:28
+msgid "Enable achievement"
+msgstr "Activar logro"
+
+#: includes/achievements/admin/partials/achievements-settings-page.php:39
+msgid "Target comments count:"
+msgstr "Recuento objetivo de comentarios:"
+
+#: includes/achievements/admin/partials/achievements-settings-page.php:50
+msgid "Label:"
+msgstr "Etiqueta:"
+
+#: includes/achievements/class-weal-profile-achievements.php:162
+msgid "Active Commentator"
+msgstr "Comentarista activo"
+
+#: includes/achievements/class-weal-profile-achievements.php:167
+msgid "Cutie"
+msgstr "Lind@"
+
+#: includes/achievements/class-weal-profile-achievements.php:172
+msgid "Angry"
+msgstr "Enojado"
+
+#: includes/achievements/class-weal-profile-achievements.php:392
+msgid "Earned"
+msgstr "Obtenido"
+
+#: includes/achievements/class-weal-profile-achievements.php:394
+msgid "Not earned"
+msgstr "No obtenido"
+
+#: includes/achievements/class-weal-profile-achievements.php:570
+#: includes/achievements/class-weal-profile-achievements.php:632
+msgid "Invalid achievement ID"
+msgstr "ID de logro inválido"
+
+#~ msgid "Activity"
+#~ msgstr "Actividad"
+
+#~ msgid "My Info"
+#~ msgstr "Mi información"
+
+#~ msgid "Delete"
+#~ msgstr "Eliminar"
+
+#~ msgid "Del"
+#~ msgstr "Borrar"
+
+#~ msgid "https://weal.cloud"
+#~ msgstr "https://weal.cloud"
+
+#~ msgid ""
+#~ "Creates a personal account page where logged-in users can manage their "
+#~ "profile information and review their site activity."
+#~ msgstr ""
+#~ "Crea una página de cuenta personal donde los usuarios registrados pueden "
+#~ "gestionar su perfil y revisar su actividad en el sitio."
+
+#~ msgid "leouix"
+#~ msgstr "leouix"
+
+#~ msgid "https://github.com/Leouix/"
+#~ msgstr "https://github.com/Leouix/"
+
+#~ msgid "Plugin settings page"
+#~ msgstr "Página de configuración del plugin"
+
+#~ msgid "Top Comments"
+#~ msgstr "Mejores comentarios"
+
+#~ msgid "My Account"
+#~ msgstr "Mi cuenta"
