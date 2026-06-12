@@ -46,6 +46,7 @@ class Activation_Manager {
 	public function activate() {
 
 		$this->initialize_settings();
+		$this->initialize_achievements_settings();
 		$this->create_comment_votes_table();
 
 		flush_rewrite_rules();
@@ -83,5 +84,31 @@ class Activation_Manager {
 		// 3. Сохраняем настройки в таблицу wp_options
 		$default_fields = $this->settings_manager->get_default_fields();
 		$this->settings_manager->save_settings( $slug, $default_fields );
+	}
+
+	/**
+	 * Initialize achievements settings with all achievements enabled by default.
+	 */
+	private function initialize_achievements_settings() {
+		$existing = $this->settings_manager->get_achievements_settings();
+
+		if ( ! empty( $existing ) ) {
+			return;
+		}
+
+		require_once WEAL_PROFILE_PLUGIN_DIR . 'includes/achievements/class-weal-profile-achievements.php';
+
+		$defs     = \WealProfile\Includes\Achievements\Weal_Profile_Achievements::get_achievement_definitions();
+		$defaults = array();
+
+		foreach ( $defs as $id => $def ) {
+			$defaults[ $id ] = array(
+				'enabled' => true,
+				'target'  => $def['target'],
+				'label'   => $def['label'],
+			);
+		}
+
+		$this->settings_manager->save_achievements_settings( $defaults );
 	}
 }
