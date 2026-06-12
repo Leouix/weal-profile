@@ -74,7 +74,7 @@ class Activation_Manager {
 			return;
 		}
 
-		// 1. Находим свободный slug для страницы (например, 'my-account')
+		// 1. Находим свободный slug для страницы (например, 'my-profile')
 		$slug = $this->page_manager->find_available_slug();
 
 		// 2. Создаем физическую страницу в WordPress

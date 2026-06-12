@@ -144,7 +144,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 
 		register_rest_route(
 			'weal-profile/v1',
-			'/my-account/posts/',
+			'/my-profile/posts/',
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'my_account_posts' ),
@@ -154,7 +154,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 
 		register_rest_route(
 			'weal-profile/v1',
-			'/my-account/comments/',
+			'/my-profile/comments/',
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'my_account_comments' ),

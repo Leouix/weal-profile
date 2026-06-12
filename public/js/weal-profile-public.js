@@ -365,9 +365,9 @@
 	}
 
 	function loadMyAccountSubtab( tab, page ) {
-		var endpoint = 'my-account/comments/';
+		var endpoint = 'my-profile/comments/';
 		if ( 'posts' === tab ) {
-			endpoint = 'my-account/posts/';
+			endpoint = 'my-profile/posts/';
 		}
 
 		var cacheKey = 'sub:' + tab + ':page:' + ( page || 1 );

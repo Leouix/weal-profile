@@ -20,12 +20,11 @@ class Public_Page_Manager {
 
 
 	private const FALLBACK_SLUGS = array(
-		'my-account',
 		'my-profile',
 		'profile-account',
 	);
 	private const MAX_ATTEMPTS   = 100;
-	private const SLUG_PREFIX    = 'my-account--';
+	private const SLUG_PREFIX    = 'my-profile--';
 
 	/**
 	 * Find available slug.
