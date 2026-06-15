@@ -1,6 +1,6 @@
 === Weal Profile ===
 Contributors: leouix, Weal
-Tags: manage-user-page, user-profile, user-account, account-page, achievements, comments-rating
+Tags: manage-user-page, user-profile, user-account, achievements, comments-rating
 Donate link: https://www.donationalerts.com/r/weal_plugin
 Requires at least: 6.2
 Tested up to: 7.0
@@ -9,7 +9,7 @@ Stable tag: 1.4.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A WordPress plugin that creates a personal account page where logged-in users can manage their profile information, track achievements, and review their site activity.
+Creates a personal account page for logged-in users to manage profile information, track achievements, and review site activity.
 
 == Description ==
 
