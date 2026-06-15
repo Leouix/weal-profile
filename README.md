@@ -5,7 +5,7 @@ Donate link: https://www.donationalerts.com/r/weal_plugin
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,6 +117,9 @@ Each vote sets a cookie (`weal_voted_post_{post_id}`) valid for 1 year. Both the
 Yes. Go to **WordPress Admin → Weal Profile** and uncheck "Enable likes and dislikes on comments".
 
 == Changelog ==
+
+= 1.4.2 =
+* Improved user interaction and security.
 
 = 1.4.1 =
 * Added UI and security improvements.
