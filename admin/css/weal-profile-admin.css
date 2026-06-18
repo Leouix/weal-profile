@@ -140,5 +140,23 @@ h1 {
 
 .achievement-container .achievement-form {
 	max-width: 250px;
-	margin-right: 35px;
+}
+
+.achievement-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: end;
+	border-right: 1px solid #ccc;
+	padding: 20px;
+	box-sizing: border-box;
+	height: fit-content;
+}
+
+.achievement-duplicate {
+	background-image: url("../icons/duplicate.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
 }

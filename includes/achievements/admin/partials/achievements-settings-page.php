@@ -15,7 +15,11 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 ?>
 <div class="au-container achievement-container">
 	<?php foreach ( $weal_profile_achievements_data as $weal_profile_achievement_id => $weal_profile_settings ) : ?>
-		<form class="achievement-form">
+
+        <div class="achievement-wrapper">
+            <div class="achievement-duplicate" title="<?php esc_attr_e( 'Duplicate achievement', 'weal-profile' ); ?>"></div>
+
+            <form class="achievement-form">
 			<?php wp_nonce_field( 'weal_profile_achievements_save', 'weal_profile_achievements_nonce' ); ?>
 			<input type="hidden" name="achievement_id" value="<?php echo esc_attr( $weal_profile_achievement_id ); ?>">
 
@@ -65,5 +69,6 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 				</div>
 			</div>
 		</form>
+        </div>
 	<?php endforeach; ?>
 </div>
