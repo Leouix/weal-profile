@@ -780,7 +780,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		$all_settings = $this->settings_manager->get_achievements_settings();
-		$source_data  = $all_settings[ $source_id ] ?? $definitions[ $source_id ];
+		$source_data  = isset( $all_settings[ $source_id ] )
+			? wp_parse_args( $all_settings[ $source_id ], $definitions[ $source_id ] )
+			: $definitions[ $source_id ];
 		$new_id       = 'copy_' . $source_id . '_' . uniqid();
 
 		$new_data = array(
