@@ -86,6 +86,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'rest_api_init', array( $this, 'register_admin_route' ) );
 		add_action( 'rest_api_init', array( $this, 'register_user_toggle_route' ) );
+		add_action( 'rest_api_init', array( $this, 'register_duplicate_route' ) );
+		add_action( 'rest_api_init', array( $this, 'register_delete_route' ) );
 	}
 
 	/**
@@ -156,9 +158,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 *
 	 * @param string $achievement_id Achievement ID (commenter, cutie, angry).
 	 * @param int    $target         Target threshold.
+	 * @param string $source         Optional source type for custom achievements.
 	 * @return string
 	 */
-	public static function get_achievement_description( $achievement_id, $target ) {
+	public static function get_achievement_description( $achievement_id, $target, $source = '' ) {
+		$lookup       = ! empty( $source ) ? $source : $achievement_id;
 		$descriptions = array(
 			'commenter' => sprintf(
 				/* translators: %d: target comment count */
@@ -177,7 +181,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			),
 		);
 
-		return isset( $descriptions[ $achievement_id ] ) ? $descriptions[ $achievement_id ] : '';
+		return isset( $descriptions[ $lookup ] ) ? $descriptions[ $lookup ] : '';
 	}
 
 	/**
@@ -206,6 +210,16 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Check if achievement ID is a system (built-in) achievement.
+	 *
+	 * @param string $achievement_id Achievement ID.
+	 * @return bool
+	 */
+	public static function is_system_achievement( $achievement_id ) {
+		return isset( self::get_achievement_definitions()[ $achievement_id ] );
+	}
+
+	/**
 	 * Get achievements settings merged with definitions.
 	 * Used by admin template and internal logic.
 	 *
@@ -221,6 +235,14 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			$saved_item          = isset( $saved[ $id ] ) ? $saved[ $id ] : array();
 			$achievements[ $id ] = wp_parse_args( $saved_item, $default );
 		}
+
+		foreach ( $saved as $id => $item ) {
+			if ( isset( $achievements[ $id ] ) ) {
+				continue;
+			}
+			$achievements[ $id ] = $item;
+		}
+
 		return $achievements;
 	}
 
@@ -346,12 +368,14 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			$qualifies = false;
-			if ( 'commenter' === $id ) {
+			$qualifies   = false;
+			$source_type = isset( $settings['source'] ) ? $settings['source'] : $id;
+
+			if ( 'commenter' === $source_type ) {
 				$qualifies = $instance->has_badge_commenter( $user_id );
-			} elseif ( 'cutie' === $id ) {
+			} elseif ( 'cutie' === $source_type ) {
 				$qualifies = $instance->has_badge_cutie( $user_id );
-			} elseif ( 'angry' === $id ) {
+			} elseif ( 'angry' === $source_type ) {
 				$qualifies = $instance->has_badge_angry( $user_id );
 			}
 
@@ -409,7 +433,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			}
 
 			$html       .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '">';
-			$description = self::get_achievement_description( $achievement['id'], $achievement['target'] );
+			$description = self::get_achievement_description( $achievement['id'], $achievement['target'], $achievement['source'] );
 			$html       .= self::render_achievement_icon( $achievement['icon'], 'achievement-icon', '', $description );
 			$html       .= '<span class="achievement-label">' . esc_html( $achievement['label'] ) . '</span>';
 
@@ -487,9 +511,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			if ( 'cutie' === $id ) {
+			$source_type = isset( $settings['source'] ) ? $settings['source'] : $id;
+
+			if ( 'cutie' === $source_type ) {
 				$count = $instance->get_user_total_comment_likes( $user_id );
-			} elseif ( 'angry' === $id ) {
+			} elseif ( 'angry' === $source_type ) {
 				$count = $instance->get_user_total_comment_dislikes( $user_id );
 			} else {
 				$count = $instance->get_user_comment_count( $user_id );
@@ -503,6 +529,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'target' => $settings['target'],
 				'earned' => $earned,
 				'icon'   => $settings['icon'],
+				'source' => isset( $settings['source'] ) ? $settings['source'] : $id,
 			);
 		}
 
@@ -596,9 +623,10 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			? sanitize_text_field( wp_unslash( $post_data['achievement_id'] ) )
 			: '';
 
-		$definitions = self::get_achievement_definitions();
+		$definitions  = self::get_achievement_definitions();
+		$all_settings = $this->settings_manager->get_achievements_settings();
 
-		if ( ! isset( $definitions[ $achievement_id ] ) ) {
+		if ( ! isset( $definitions[ $achievement_id ] ) && ! isset( $all_settings[ $achievement_id ] ) ) {
 			return new WP_REST_Response(
 				array(
 					'success' => false,
@@ -608,7 +636,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			);
 		}
 
-		$defaults  = $definitions[ $achievement_id ];
+		$defaults  = isset( $definitions[ $achievement_id ] ) ? $definitions[ $achievement_id ] : $all_settings[ $achievement_id ];
 		$submitted = isset( $post_data['achievements'][ $achievement_id ] ) ? $post_data['achievements'][ $achievement_id ] : array();
 
 		$sanitized = array(
@@ -617,7 +645,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'label'   => isset( $submitted['label'] ) ? sanitize_text_field( wp_unslash( $submitted['label'] ) ) : $defaults['label'],
 		);
 
-		$all_settings                    = $this->settings_manager->get_achievements_settings();
+		if ( isset( $all_settings[ $achievement_id ] ) ) {
+			$sanitized['icon']   = $all_settings[ $achievement_id ]['icon'] ?? '';
+			$sanitized['source'] = $all_settings[ $achievement_id ]['source'] ?? '';
+		}
+
 		$all_settings[ $achievement_id ] = $sanitized;
 
 		$this->settings_manager->save_achievements_settings( $all_settings );
@@ -690,6 +722,244 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
+	 * Register REST route for duplicating an achievement.
+	 *
+	 * @return void
+	 */
+	public function register_duplicate_route() {
+		register_rest_route(
+			'weal-profile/v1',
+			'/duplicate-achievement/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_duplicate_achievement' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * Handle duplicating a system achievement.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function handle_duplicate_achievement( WP_REST_Request $request ) {
+		$post_data = $request->get_params();
+
+		$nonce = isset( $post_data['weal_profile_achievements_nonce'] )
+			? sanitize_text_field( wp_unslash( $post_data['weal_profile_achievements_nonce'] ) )
+			: '';
+
+		if ( ! wp_verify_nonce( $nonce, 'weal_profile_achievements_save' ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Security check failed', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		$source_id = isset( $post_data['achievement_id'] )
+			? sanitize_text_field( wp_unslash( $post_data['achievement_id'] ) )
+			: '';
+
+		$definitions = self::get_achievement_definitions();
+
+		if ( ! isset( $definitions[ $source_id ] ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Only system achievements can be duplicated', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		$all_settings = $this->settings_manager->get_achievements_settings();
+		$source_data  = $all_settings[ $source_id ] ?? $definitions[ $source_id ];
+		$new_id       = 'copy_' . $source_id . '_' . uniqid();
+
+		$new_data = array(
+			'label'   => $source_data['label'] . '-copy',
+			'target'  => (int) $source_data['target'],
+			'icon'    => $source_data['icon'] ?? '',
+			'enabled' => ! empty( $source_data['enabled'] ),
+			'source'  => $source_id,
+		);
+
+		$all_settings[ $new_id ] = $new_data;
+		$this->settings_manager->save_achievements_settings( $all_settings );
+
+		$html = self::render_admin_achievement_item( $new_id, $new_data );
+
+		return new WP_REST_Response(
+			array(
+				'success'        => true,
+				'achievement_id' => $new_id,
+				'html'           => $html,
+			)
+		);
+	}
+
+	/**
+	 * Register REST route for deleting a custom achievement.
+	 *
+	 * @return void
+	 */
+	public function register_delete_route() {
+		register_rest_route(
+			'weal-profile/v1',
+			'/delete-achievement/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_delete_achievement' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
+	}
+
+	/**
+	 * Handle deleting a custom achievement.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response
+	 */
+	public function handle_delete_achievement( WP_REST_Request $request ) {
+		$post_data = $request->get_params();
+
+		$nonce = isset( $post_data['weal_profile_achievements_nonce'] )
+			? sanitize_text_field( wp_unslash( $post_data['weal_profile_achievements_nonce'] ) )
+			: '';
+
+		if ( ! wp_verify_nonce( $nonce, 'weal_profile_achievements_save' ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Security check failed', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		$achievement_id = isset( $post_data['achievement_id'] )
+			? sanitize_text_field( wp_unslash( $post_data['achievement_id'] ) )
+			: '';
+
+		if ( self::is_system_achievement( $achievement_id ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'System achievements cannot be deleted', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		$all_settings = $this->settings_manager->get_achievements_settings();
+
+		if ( ! isset( $all_settings[ $achievement_id ] ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Achievement not found', 'weal-profile' ),
+				),
+				404
+			);
+		}
+
+		unset( $all_settings[ $achievement_id ] );
+		$this->settings_manager->save_achievements_settings( $all_settings );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+			)
+		);
+	}
+
+	/**
+	 * Render a single achievement admin item HTML.
+	 *
+	 * @param string $id       Achievement ID.
+	 * @param array  $settings Achievement settings.
+	 * @return string HTML.
+	 */
+	public static function render_admin_achievement_item( $id, $settings ) {
+		$source      = isset( $settings['source'] ) ? $settings['source'] : $id;
+		$description = self::get_achievement_description( $id, $settings['target'], $source );
+		ob_start();
+		?>
+		<div class="achievement-wrapper">
+			<?php if ( self::is_system_achievement( $id ) ) : ?>
+				<div class="achievement-duplicate" title="<?php esc_attr_e( 'Duplicate achievement', 'weal-profile' ); ?>"></div>
+			<?php else : ?>
+				<div class="achievement-delete" title="<?php esc_attr_e( 'Delete achievement', 'weal-profile' ); ?>">
+					<img src="<?php echo esc_url( WEAL_PROFILE_PLUGIN_URL . 'admin/icons/delete.png' ); ?>" alt="<?php esc_attr_e( 'Delete', 'weal-profile' ); ?>">
+				</div>
+			<?php endif; ?>
+
+			<form class="achievement-form">
+				<?php wp_nonce_field( 'weal_profile_achievements_save', 'weal_profile_achievements_nonce' ); ?>
+				<input type="hidden" name="achievement_id" value="<?php echo esc_attr( $id ); ?>">
+
+				<div class="achievement-block">
+					<h3><?php echo self::render_achievement_icon( $settings['icon'], 'admin-achievement-icon' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo esc_html( $settings['label'] ); ?></h3>
+
+					<div class="label-area">
+						<input type="hidden" name="achievements[<?php echo esc_attr( $id ); ?>][enabled]" value="0">
+						<label for="achievement-<?php echo esc_attr( $id ); ?>-enabled">
+							<?php esc_html_e( 'Enable achievement', 'weal-profile' ); ?>
+						</label>
+						<input type="checkbox"
+								id="achievement-<?php echo esc_attr( $id ); ?>-enabled"
+								name="achievements[<?php echo esc_attr( $id ); ?>][enabled]"
+								value="1"
+								<?php checked( ! empty( $settings['enabled'] ) ); ?>>
+					</div>
+
+					<div class="label-area">
+						<label for="achievement-<?php echo esc_attr( $id ); ?>-target">
+							<?php esc_html_e( 'Target comments count:', 'weal-profile' ); ?>
+						</label>
+						<input type="number"
+							id="achievement-<?php echo esc_attr( $id ); ?>-target"
+							name="achievements[<?php echo esc_attr( $id ); ?>][target]"
+							value="<?php echo esc_attr( $settings['target'] ); ?>"
+							min="1">
+						<p class="description">
+							<?php echo esc_html( $description ); ?>
+						</p>
+					</div>
+
+					<div class="label-area">
+						<label for="achievement-<?php echo esc_attr( $id ); ?>-label">
+							<?php esc_html_e( 'Label:', 'weal-profile' ); ?>
+						</label>
+						<input type="text"
+							id="achievement-<?php echo esc_attr( $id ); ?>-label"
+							name="achievements[<?php echo esc_attr( $id ); ?>][label]"
+							value="<?php echo esc_attr( $settings['label'] ); ?>">
+					</div>
+
+					<div class="button-area">
+						<input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
+						<span class="achievement-success-notice"><?php esc_html_e( 'Success!', 'weal-profile' ); ?></span>
+						<span class="achievement-error-notice"></span>
+					</div>
+				</div>
+			</form>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
 	 * Enqueue admin scripts for the Achievements settings page.
 	 *
 	 * @return void
@@ -714,9 +984,10 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'weal-profile-achievements-admin',
 			'wealProfileAchievementsData',
 			array(
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-				'root'  => esc_url_raw( rest_url() ),
-				'page'  => $page,
+				'nonce'         => wp_create_nonce( 'wp_rest' ),
+				'root'          => esc_url_raw( rest_url() ),
+				'page'          => $page,
+				'confirmDelete' => esc_html__( 'Вы уверены что хотите удалить ачивку?', 'weal-profile' ),
 			)
 		);
 	}

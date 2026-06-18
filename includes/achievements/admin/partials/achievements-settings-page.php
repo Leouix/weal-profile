@@ -15,11 +15,21 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 ?>
 <div class="au-container achievement-container">
 	<?php foreach ( $weal_profile_achievements_data as $weal_profile_achievement_id => $weal_profile_settings ) : ?>
+		<?php
+		$weal_source      = isset( $weal_profile_settings['source'] ) ? $weal_profile_settings['source'] : $weal_profile_achievement_id;
+		$weal_description = Weal_Profile_Achievements::get_achievement_description( $weal_profile_achievement_id, $weal_profile_settings['target'], $weal_source );
+		?>
 
-        <div class="achievement-wrapper">
-            <div class="achievement-duplicate" title="<?php esc_attr_e( 'Duplicate achievement', 'weal-profile' ); ?>"></div>
+	<div class="achievement-wrapper">
+		<?php if ( Weal_Profile_Achievements::is_system_achievement( $weal_profile_achievement_id ) ) : ?>
+			<div class="achievement-duplicate" title="<?php esc_attr_e( 'Duplicate achievement', 'weal-profile' ); ?>"></div>
+		<?php else : ?>
+			<div class="achievement-delete" title="<?php esc_attr_e( 'Delete achievement', 'weal-profile' ); ?>">
+				<img src="<?php echo esc_url( WEAL_PROFILE_PLUGIN_URL . 'admin/icons/delete.png' ); ?>" alt="<?php esc_attr_e( 'Delete', 'weal-profile' ); ?>">
+			</div>
+		<?php endif; ?>
 
-            <form class="achievement-form">
+		<form class="achievement-form">
 			<?php wp_nonce_field( 'weal_profile_achievements_save', 'weal_profile_achievements_nonce' ); ?>
 			<input type="hidden" name="achievement_id" value="<?php echo esc_attr( $weal_profile_achievement_id ); ?>">
 
@@ -48,7 +58,7 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 						value="<?php echo esc_attr( $weal_profile_settings['target'] ); ?>"
 						min="1">
 					<p class="description">
-						<?php echo esc_html( Weal_Profile_Achievements::get_achievement_description( $weal_profile_achievement_id, $weal_profile_settings['target'] ) ); ?>
+						<?php echo esc_html( $weal_description ); ?>
 					</p>
 				</div>
 
@@ -69,6 +79,6 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 				</div>
 			</div>
 		</form>
-        </div>
+	</div>
 	<?php endforeach; ?>
 </div>
