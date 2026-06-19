@@ -886,15 +886,24 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 						</p>
 					</div>
 
-					<div class="label-area">
-						<label for="achievement-<?php echo esc_attr( $id ); ?>-label">
-							<?php esc_html_e( 'Label:', 'weal-profile' ); ?>
-						</label>
-						<input type="text"
-							id="achievement-<?php echo esc_attr( $id ); ?>-label"
-							name="achievements[<?php echo esc_attr( $id ); ?>][label]"
-							value="<?php echo esc_attr( $settings['label'] ); ?>">
-					</div>
+				<div class="label-area">
+					<label for="achievement-<?php echo esc_attr( $id ); ?>-label">
+						<?php esc_html_e( 'Label:', 'weal-profile' ); ?>
+					</label>
+					<input type="text"
+						id="achievement-<?php echo esc_attr( $id ); ?>-label"
+						name="achievements[<?php echo esc_attr( $id ); ?>][label]"
+						value="<?php echo esc_attr( $settings['label'] ); ?>">
+				</div>
+
+				<?php if ( ! self::is_system_achievement( $id ) ) : ?>
+				<div class="label-area">
+					<label for="achievement-<?php echo esc_attr( $id ); ?>-source"><?php esc_html_e( 'Source:', 'weal-profile' ); ?></label>
+					<input
+                            id="achievement-<?php echo esc_attr( $id ); ?>-source"
+                            type="text" disabled="disabled" value="<?php echo esc_attr( $source ); ?>">
+				</div>
+				<?php endif; ?>
 
 					<div class="label-area">
 						<label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>

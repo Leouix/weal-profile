@@ -72,6 +72,15 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 						value="<?php echo esc_attr( $weal_profile_settings['label'] ); ?>">
 				</div>
 
+				<?php if ( ! Weal_Profile_Achievements::is_system_achievement( $weal_profile_achievement_id ) ) : ?>
+				<div class="label-area">
+					<label for="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-source"><?php esc_html_e( 'Source:', 'weal-profile' ); ?></label>
+					<input
+                            id="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-source"
+                            type="text" disabled="disabled" value="<?php echo esc_attr( $weal_source ); ?>">
+				</div>
+				<?php endif; ?>
+
 				<div class="label-area">
 					<label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>
 					<div class="achievement-icon-preview">
