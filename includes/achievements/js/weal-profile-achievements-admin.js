@@ -6,6 +6,7 @@
 
 (function () {
 	var mediaFrame = null;
+	var currentIconWrapper = null;
 
 	function init() {
 		var forms = document.querySelectorAll( '.achievement-form' );
@@ -77,6 +78,8 @@
 	}
 
 	function openMediaLibrary( wrapper ) {
+		currentIconWrapper = wrapper;
+
 		if ( mediaFrame ) {
 			mediaFrame.open();
 			return;
@@ -93,7 +96,7 @@
 
 		mediaFrame.on( 'select', function () {
 			var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
-			setIcon( wrapper, attachment.id, attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url );
+			setIcon( currentIconWrapper, attachment.id, attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url );
 		} );
 
 		mediaFrame.open();
