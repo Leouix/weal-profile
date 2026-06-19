@@ -16,7 +16,7 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 <div class="au-container achievement-container">
 	<?php foreach ( $weal_profile_achievements_data as $weal_profile_achievement_id => $weal_profile_settings ) : ?>
 		<?php
-		$weal_source      = isset( $weal_profile_settings['source'] ) ? $weal_profile_settings['source'] : $weal_profile_achievement_id;
+		$weal_source      = ! empty( $weal_profile_settings['source'] ) ? $weal_profile_settings['source'] : $weal_profile_achievement_id;
 		$weal_description = Weal_Profile_Achievements::get_achievement_description( $weal_profile_achievement_id, $weal_profile_settings['target'], $weal_source );
 		?>
 

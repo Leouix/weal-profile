@@ -384,7 +384,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			}
 
 			$qualifies   = false;
-			$source_type = isset( $settings['source'] ) ? $settings['source'] : $id;
+			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
 
 			if ( 'commenter' === $source_type ) {
 				$qualifies = $instance->has_badge_commenter( $user_id );
@@ -526,7 +526,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			$source_type = isset( $settings['source'] ) ? $settings['source'] : $id;
+			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
 
 			if ( 'cutie' === $source_type ) {
 				$count = $instance->get_user_total_comment_likes( $user_id );
@@ -544,7 +544,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'target' => $settings['target'],
 				'earned' => $earned,
 				'icon'   => $settings['icon'],
-				'source' => isset( $settings['source'] ) ? $settings['source'] : $id,
+				'source' => ! empty( $settings['source'] ) ? $settings['source'] : $id,
 			);
 		}
 
@@ -933,7 +933,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * @return string HTML.
 	 */
 	public static function render_admin_achievement_item( $id, $settings ) {
-		$source      = isset( $settings['source'] ) ? $settings['source'] : $id;
+		$source      = ! empty( $settings['source'] ) ? $settings['source'] : $id;
 		$description = self::get_achievement_description( $id, $settings['target'], $source );
 		ob_start();
 		?>
