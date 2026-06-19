@@ -91,58 +91,29 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
-	 * Get approved comment count for a user.
+	 * Get user metrics (comments, likes, dislikes) with request-level cache.
 	 *
 	 * @param int $user_id User ID.
-	 * @return int Comment count.
+	 * @return array{comments: int, likes: int, dislikes: int}
 	 */
-	private function get_user_comment_count( $user_id ) {
-		$count = get_comments(
-			array(
-				'count'   => true,
-				'user_id' => $user_id,
-				'status'  => 'approve',
-			)
-		);
-		return (int) $count;
-	}
+	private static function get_user_metrics( $user_id ) {
+		static $cache = array();
 
-	/**
-	 * Get total likes received on a user's approved comments.
-	 *
-	 * @param int $user_id User ID.
-	 * @return int Total likes.
-	 */
-	private function get_user_total_comment_likes( $user_id ) {
+		if ( isset( $cache[ $user_id ] ) ) {
+			return $cache[ $user_id ];
+		}
+
 		global $wpdb;
 
-		$total = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$result = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				"SELECT COALESCE(SUM(l.meta_value + 0), 0)
+				"SELECT
+					COUNT(DISTINCT c.comment_ID) AS comments,
+					COALESCE(SUM(l.meta_value + 0), 0) AS likes,
+					COALESCE(SUM(d.meta_value + 0), 0) AS dislikes
 				FROM {$wpdb->comments} c
 				LEFT JOIN {$wpdb->commentmeta} l
 					ON c.comment_ID = l.comment_id AND l.meta_key = '_weal_likes_count'
-				WHERE c.user_id = %d AND c.comment_approved = '1'",
-				$user_id
-			)
-		);
-
-		return (int) $total;
-	}
-
-	/**
-	 * Get total dislikes received on a user's approved comments.
-	 *
-	 * @param int $user_id User ID.
-	 * @return int Total dislikes.
-	 */
-	private function get_user_total_comment_dislikes( $user_id ) {
-		global $wpdb;
-
-		$total = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				"SELECT COALESCE(SUM(d.meta_value + 0), 0)
-				FROM {$wpdb->comments} c
 				LEFT JOIN {$wpdb->commentmeta} d
 					ON c.comment_ID = d.comment_id AND d.meta_key = '_weal_dislikes_count'
 				WHERE c.user_id = %d AND c.comment_approved = '1'",
@@ -150,7 +121,13 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			)
 		);
 
-		return (int) $total;
+		$cache[ $user_id ] = array(
+			'comments' => (int) ( $result->comments ?? 0 ),
+			'likes'    => (int) ( $result->likes ?? 0 ),
+			'dislikes' => (int) ( $result->dislikes ?? 0 ),
+		);
+
+		return $cache[ $user_id ];
 	}
 
 	/**
@@ -249,56 +226,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		return $achievements;
 	}
 
-	/**
-	 * Check if user qualifies for commenter badge.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True if user meets the target.
-	 */
-	private function has_badge_commenter( $user_id ) {
-		$achievements = self::get_admin_achievements_data();
-		$settings     = isset( $achievements['commenter'] ) ? $achievements['commenter'] : array();
 
-		if ( empty( $settings['enabled'] ) ) {
-			return false;
-		}
-
-		return $this->get_user_comment_count( $user_id ) >= (int) $settings['target'];
-	}
-
-	/**
-	 * Check if user qualifies for cutie badge.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True if user meets the target.
-	 */
-	private function has_badge_cutie( $user_id ) {
-		$achievements = self::get_admin_achievements_data();
-		$settings     = isset( $achievements['cutie'] ) ? $achievements['cutie'] : array();
-
-		if ( empty( $settings['enabled'] ) ) {
-			return false;
-		}
-
-		return $this->get_user_total_comment_likes( $user_id ) >= (int) $settings['target'];
-	}
-
-	/**
-	 * Check if user qualifies for angry badge.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True if user meets the target.
-	 */
-	private function has_badge_angry( $user_id ) {
-		$achievements = self::get_admin_achievements_data();
-		$settings     = isset( $achievements['angry'] ) ? $achievements['angry'] : array();
-
-		if ( empty( $settings['enabled'] ) ) {
-			return false;
-		}
-
-		return $this->get_user_total_comment_dislikes( $user_id ) >= (int) $settings['target'];
-	}
 
 	/**
 	 * Get hidden achievement IDs for a user.
@@ -367,9 +295,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			return $avatar_html;
 		}
 
-		$instance     = self::instance();
 		$achievements = self::get_admin_achievements_data();
 		$badges_html  = '';
+		$metrics      = null;
 
 		foreach ( $achievements as $id => $settings ) {
 			if ( empty( $settings['enabled'] ) ) {
@@ -380,20 +308,21 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
-			$count       = 0;
-
-			if ( 'cutie' === $source_type ) {
-				$count = $instance->get_user_total_comment_likes( $user_id );
-			} elseif ( 'angry' === $source_type ) {
-				$count = $instance->get_user_total_comment_dislikes( $user_id );
-			} else {
-				$count = $instance->get_user_comment_count( $user_id );
+			if ( null === $metrics ) {
+				$metrics = self::get_user_metrics( $user_id );
 			}
 
-			$qualifies = $count >= (int) $settings['target'];
+			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
 
-			if ( ! $qualifies ) {
+			if ( 'cutie' === $source_type ) {
+				$count = $metrics['likes'];
+			} elseif ( 'angry' === $source_type ) {
+				$count = $metrics['dislikes'];
+			} else {
+				$count = $metrics['comments'];
+			}
+
+			if ( $count < (int) $settings['target'] ) {
 				continue;
 			}
 
@@ -515,24 +444,27 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * @return array Array of achievement items.
 	 */
 	public static function get_achievements_data( $user_id ) {
-		$instance     = self::instance();
 		$achievements = self::get_admin_achievements_data();
 		$result       = array();
+		$metrics      = null;
 
 		foreach ( $achievements as $id => $settings ) {
-			// Do not render achievements disabled in admin settings.
 			if ( empty( $settings['enabled'] ) ) {
 				continue;
+			}
+
+			if ( null === $metrics ) {
+				$metrics = self::get_user_metrics( $user_id );
 			}
 
 			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
 
 			if ( 'cutie' === $source_type ) {
-				$count = $instance->get_user_total_comment_likes( $user_id );
+				$count = $metrics['likes'];
 			} elseif ( 'angry' === $source_type ) {
-				$count = $instance->get_user_total_comment_dislikes( $user_id );
+				$count = $metrics['dislikes'];
 			} else {
-				$count = $instance->get_user_comment_count( $user_id );
+				$count = $metrics['comments'];
 			}
 
 			$earned = $count >= (int) $settings['target'];
