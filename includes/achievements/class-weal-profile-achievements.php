@@ -223,7 +223,84 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			$achievements[ $id ] = $item;
 		}
 
+		// Ensure replace_previous has a default value.
+		foreach ( $achievements as $id => &$data ) {
+			if ( ! isset( $data['replace_previous'] ) ) {
+				$data['replace_previous'] = ! empty( $data['source'] );
+			}
+		}
+		unset( $data );
+
 		return $achievements;
+	}
+
+	/**
+	 * Get IDs of achievements that should be visible, applying replace_previous logic.
+	 *
+	 * @param array $achievements All achievements data (id => settings).
+	 * @param array $metrics      User metrics (comments, likes, dislikes).
+	 * @return array IDs of achievements to keep visible.
+	 */
+	private static function get_visible_achievement_ids( $achievements, $metrics ) {
+		$groups    = array();
+		$to_remove = array();
+
+		foreach ( $achievements as $id => $settings ) {
+			if ( empty( $settings['enabled'] ) ) {
+				continue;
+			}
+
+			$source      = ! empty( $settings['source'] ) ? $settings['source'] : $id;
+			$source_type = $source;
+
+			if ( 'cutie' === $source_type ) {
+				$count = $metrics['likes'];
+			} elseif ( 'angry' === $source_type ) {
+				$count = $metrics['dislikes'];
+			} else {
+				$count = $metrics['comments'];
+			}
+
+			$earned = $count >= (int) $settings['target'];
+
+			if ( ! $earned ) {
+				continue;
+			}
+
+			$groups[ $source ][] = array(
+				'id'               => $id,
+				'target'           => (int) $settings['target'],
+				'replace_previous' => ! empty( $settings['replace_previous'] ),
+			);
+		}
+
+		foreach ( $groups as $source => $items ) {
+			$has_replace    = false;
+			$highest_target = 0;
+
+			foreach ( $items as $item ) {
+				if ( $item['replace_previous'] ) {
+					$has_replace = true;
+					if ( $item['target'] > $highest_target ) {
+						$highest_target = $item['target'];
+					}
+				}
+			}
+
+			if ( $has_replace ) {
+				foreach ( $items as $item ) {
+					if ( $item['target'] < $highest_target ) {
+						$to_remove[] = $item['id'];
+					}
+				}
+			}
+		}
+
+		if ( empty( $to_remove ) ) {
+			return array_keys( $achievements );
+		}
+
+		return array_values( array_diff( array_keys( $achievements ), $to_remove ) );
 	}
 
 
@@ -296,8 +373,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		$achievements = self::get_admin_achievements_data();
+		$metrics      = self::get_user_metrics( $user_id );
+		$visible_ids  = self::get_visible_achievement_ids( $achievements, $metrics );
 		$badges_html  = '';
-		$metrics      = null;
 
 		foreach ( $achievements as $id => $settings ) {
 			if ( empty( $settings['enabled'] ) ) {
@@ -308,21 +386,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			if ( null === $metrics ) {
-				$metrics = self::get_user_metrics( $user_id );
-			}
-
-			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
-
-			if ( 'cutie' === $source_type ) {
-				$count = $metrics['likes'];
-			} elseif ( 'angry' === $source_type ) {
-				$count = $metrics['dislikes'];
-			} else {
-				$count = $metrics['comments'];
-			}
-
-			if ( $count < (int) $settings['target'] ) {
+			if ( ! in_array( $id, $visible_ids, true ) ) {
 				continue;
 			}
 
@@ -426,16 +490,17 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 */
 	public static function get_achievements_data( $user_id ) {
 		$achievements = self::get_admin_achievements_data();
+		$metrics      = self::get_user_metrics( $user_id );
+		$visible_ids  = self::get_visible_achievement_ids( $achievements, $metrics );
 		$result       = array();
-		$metrics      = null;
 
 		foreach ( $achievements as $id => $settings ) {
 			if ( empty( $settings['enabled'] ) ) {
 				continue;
 			}
 
-			if ( null === $metrics ) {
-				$metrics = self::get_user_metrics( $user_id );
+			if ( ! in_array( $id, $visible_ids, true ) ) {
+				continue;
 			}
 
 			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
@@ -593,6 +658,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			$sanitized['icon'] = isset( $all_settings[ $achievement_id ]['icon'] ) ? $all_settings[ $achievement_id ]['icon'] : ( $defaults['icon'] ?? '' );
 		}
 
+		$sanitized['replace_previous'] = ! empty( $submitted['replace_previous'] );
+
 		if ( isset( $all_settings[ $achievement_id ] ) ) {
 			$sanitized['source'] = $all_settings[ $achievement_id ]['source'] ?? '';
 		}
@@ -733,11 +800,12 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$new_id       = 'copy_' . $source_id . '_' . uniqid();
 
 		$new_data = array(
-			'label'   => $source_data['label'] . '-copy',
-			'target'  => (int) $source_data['target'],
-			'icon'    => $source_data['icon'] ?? '',
-			'enabled' => ! empty( $source_data['enabled'] ),
-			'source'  => $source_id,
+			'label'            => $source_data['label'] . '-copy',
+			'target'           => (int) $source_data['target'],
+			'icon'             => $source_data['icon'] ?? '',
+			'enabled'          => ! empty( $source_data['enabled'] ),
+			'source'           => $source_id,
+			'replace_previous' => true,
 		);
 
 		$all_settings[ $new_id ] = $new_data;
@@ -900,8 +968,23 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				<div class="label-area">
 					<label for="achievement-<?php echo esc_attr( $id ); ?>-source"><?php esc_html_e( 'Source:', 'weal-profile' ); ?></label>
 					<input
-                            id="achievement-<?php echo esc_attr( $id ); ?>-source"
-                            type="text" disabled="disabled" value="<?php echo esc_attr( $source ); ?>">
+							id="achievement-<?php echo esc_attr( $id ); ?>-source"
+							type="text" disabled="disabled" value="<?php echo esc_attr( $source ); ?>">
+				</div>
+
+				<div class="label-area">
+					<input type="hidden" name="achievements[<?php echo esc_attr( $id ); ?>][replace_previous]" value="0">
+					<label for="achievement-<?php echo esc_attr( $id ); ?>-replace-previous">
+						<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
+					</label>
+					<input type="checkbox"
+							id="achievement-<?php echo esc_attr( $id ); ?>-replace-previous"
+							name="achievements[<?php echo esc_attr( $id ); ?>][replace_previous]"
+							value="1"
+							<?php checked( ! empty( $settings['replace_previous'] ) ); ?>>
+					<p class="description">
+						<?php esc_html_e( 'If enabled, higher-tier achievements hide lower-tier ones of the same type. Disable to show all.', 'weal-profile' ); ?>
+					</p>
 				</div>
 				<?php endif; ?>
 
@@ -965,12 +1048,12 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'weal-profile-achievements-admin',
 			'wealProfileAchievementsData',
 			array(
-				'nonce'            => wp_create_nonce( 'wp_rest' ),
-				'root'             => esc_url_raw( rest_url() ),
-				'page'             => $page,
-				'confirmDelete'    => esc_html__( 'Вы уверены что хотите удалить ачивку?', 'weal-profile' ),
-				'chooseIconTitle'  => esc_html__( 'Choose Achievement Icon', 'weal-profile' ),
-				'selectText'       => esc_html__( 'Select', 'weal-profile' ),
+				'nonce'           => wp_create_nonce( 'wp_rest' ),
+				'root'            => esc_url_raw( rest_url() ),
+				'page'            => $page,
+				'confirmDelete'   => esc_html__( 'Вы уверены что хотите удалить ачивку?', 'weal-profile' ),
+				'chooseIconTitle' => esc_html__( 'Choose Achievement Icon', 'weal-profile' ),
+				'selectText'      => esc_html__( 'Select', 'weal-profile' ),
 			)
 		);
 	}

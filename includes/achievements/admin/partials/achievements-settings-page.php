@@ -76,8 +76,23 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 				<div class="label-area">
 					<label for="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-source"><?php esc_html_e( 'Source:', 'weal-profile' ); ?></label>
 					<input
-                            id="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-source"
-                            type="text" disabled="disabled" value="<?php echo esc_attr( $weal_source ); ?>">
+							id="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-source"
+							type="text" disabled="disabled" value="<?php echo esc_attr( $weal_source ); ?>">
+				</div>
+
+				<div class="label-area">
+					<input type="hidden" name="achievements[<?php echo esc_attr( $weal_profile_achievement_id ); ?>][replace_previous]" value="0">
+					<label for="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-replace-previous">
+						<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
+					</label>
+					<input type="checkbox"
+							id="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-replace-previous"
+							name="achievements[<?php echo esc_attr( $weal_profile_achievement_id ); ?>][replace_previous]"
+							value="1"
+							<?php checked( ! empty( $weal_profile_settings['replace_previous'] ) ); ?>>
+					<p class="description">
+						<?php esc_html_e( 'If enabled, higher-tier achievements hide lower-tier ones of the same type. Disable to show all.', 'weal-profile' ); ?>
+					</p>
 				</div>
 				<?php endif; ?>
 
