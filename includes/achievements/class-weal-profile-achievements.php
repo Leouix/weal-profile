@@ -234,6 +234,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		foreach ( $defs as $id => $default ) {
 			$saved_item          = isset( $saved[ $id ] ) ? $saved[ $id ] : array();
 			$achievements[ $id ] = wp_parse_args( $saved_item, $default );
+			if ( empty( $achievements[ $id ]['icon'] ) && isset( $default['icon'] ) ) {
+				$achievements[ $id ]['icon'] = $default['icon'];
+			}
 		}
 
 		foreach ( $saved as $id => $item ) {
@@ -670,7 +673,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$icon_submitted = isset( $submitted['icon'] ) ? sanitize_text_field( wp_unslash( $submitted['icon'] ) ) : '';
 
 		if ( ! empty( $submitted['remove_icon'] ) ) {
-			$sanitized['icon'] = '';
+			$sanitized['icon'] = isset( $defaults['icon'] ) ? $defaults['icon'] : '';
 		} elseif ( '' !== $icon_submitted ) {
 			$sanitized['icon'] = $icon_submitted;
 		} else {
