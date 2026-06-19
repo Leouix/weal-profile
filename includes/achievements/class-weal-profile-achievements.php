@@ -390,6 +390,20 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
+			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
+
+			if ( 'cutie' === $source_type ) {
+				$count = $metrics['likes'];
+			} elseif ( 'angry' === $source_type ) {
+				$count = $metrics['dislikes'];
+			} else {
+				$count = $metrics['comments'];
+			}
+
+			if ( $count < (int) $settings['target'] ) {
+				continue;
+			}
+
 			$icon = isset( $settings['icon'] ) ? $settings['icon'] : '';
 
 			$badge_class  = 'has-badge-' . $id;
