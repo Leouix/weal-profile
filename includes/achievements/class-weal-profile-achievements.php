@@ -822,11 +822,6 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			);
 		}
 
-		$icon = isset( $all_settings[ $achievement_id ]['icon'] ) ? $all_settings[ $achievement_id ]['icon'] : '';
-		if ( is_numeric( $icon ) ) {
-			wp_delete_attachment( (int) $icon, true );
-		}
-
 		unset( $all_settings[ $achievement_id ] );
 		$this->settings_manager->save_achievements_settings( $all_settings );
 
