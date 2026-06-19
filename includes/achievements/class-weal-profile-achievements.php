@@ -577,6 +577,17 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'checked'             => array(),
 				'data-achievement-id' => array(),
 			),
+			'img'   => array(
+				'src'      => array(),
+				'alt'      => array(),
+				'class'    => array(),
+				'width'    => array(),
+				'height'   => array(),
+				'loading'  => array(),
+				'decoding' => array(),
+				'sizes'    => array(),
+				'srcset'   => array(),
+			),
 		);
 	}
 
