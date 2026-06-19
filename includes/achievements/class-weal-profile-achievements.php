@@ -341,17 +341,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		if ( is_numeric( $icon ) ) {
-			$img = wp_get_attachment_image(
-				(int) $icon,
-				'thumbnail',
-				false,
-				array(
-					'class' => esc_attr( $css_class ) . ' achievement-custom-icon',
-					'alt'   => $title ? esc_attr( $title ) : '',
-				)
-			);
-			if ( $img ) {
-				return $img;
+			$image_src = wp_get_attachment_image_src( (int) $icon, array( 30, 30 ) );
+			if ( $image_src ) {
+				$icon_class = esc_attr( $css_class ) . ' achievement-custom-icon';
+				$alt_text   = $title ? esc_attr( $title ) : '';
+				return '<img src="' . esc_url( $image_src[0] ) . '" class="' . $icon_class . '" alt="' . $alt_text . '" ' . $title_attr . '>';
 			}
 		}
 
@@ -383,16 +377,18 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				continue;
 			}
 
-			$qualifies   = false;
 			$source_type = ! empty( $settings['source'] ) ? $settings['source'] : $id;
+			$count       = 0;
 
-			if ( 'commenter' === $source_type ) {
-				$qualifies = $instance->has_badge_commenter( $user_id );
-			} elseif ( 'cutie' === $source_type ) {
-				$qualifies = $instance->has_badge_cutie( $user_id );
+			if ( 'cutie' === $source_type ) {
+				$count = $instance->get_user_total_comment_likes( $user_id );
 			} elseif ( 'angry' === $source_type ) {
-				$qualifies = $instance->has_badge_angry( $user_id );
+				$count = $instance->get_user_total_comment_dislikes( $user_id );
+			} else {
+				$count = $instance->get_user_comment_count( $user_id );
 			}
+
+			$qualifies = $count >= (int) $settings['target'];
 
 			if ( ! $qualifies ) {
 				continue;
