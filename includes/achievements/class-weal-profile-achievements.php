@@ -411,30 +411,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * @return string Filtered avatar HTML.
 	 */
 	public function filter_get_avatar( $avatar, $id_or_email, $size, $default_url, $alt ) {
-		$user_id = false;
-
-		if ( is_numeric( $id_or_email ) ) {
-			$user_id = (int) $id_or_email;
-		} elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-			$user_id = (int) $id_or_email->user_id;
-		} elseif ( $id_or_email instanceof \WP_User ) {
-			$user_id = $id_or_email->ID;
-		} elseif ( is_string( $id_or_email ) && is_email( $id_or_email ) ) {
-			$user = get_user_by( 'email', $id_or_email );
-			if ( $user ) {
-				$user_id = $user->ID;
-			}
-		}
-
-		if ( ! $user_id ) {
+		if ( ! is_object( $id_or_email ) || empty( $id_or_email->user_id ) ) {
 			return $avatar;
 		}
 
-		if ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-			return self::wrap_avatar_with_badge( $avatar, $user_id );
-		}
-
-		return $avatar;
+		return self::wrap_avatar_with_badge( $avatar, (int) $id_or_email->user_id );
 	}
 
 	/**
