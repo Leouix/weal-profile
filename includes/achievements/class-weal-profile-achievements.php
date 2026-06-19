@@ -324,11 +324,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	}
 
 	/**
-	 * Render an achievement icon — dashicon span or emoji span.
+	 * Render an achievement icon.
 	 *
-	 * @param string $icon     Icon value (dashicons-* class or emoji).
-	 * @param string $css_class Additional classes for the span.
-	 * @param string $title    Title attribute.
+	 * @param string $icon       The icon value (dashicon class, emoji HTML, or attachment ID).
+	 * @param string $css_class  Additional classes for the span.
+	 * @param string $title      Title attribute.
 	 * @param string $description Description.
 	 * @return string HTML for the icon.
 	 */
@@ -338,6 +338,21 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 
 		if ( str_starts_with( $icon, 'dashicons-' ) ) {
 			return '<span class="dashicons ' . esc_attr( $icon ) . ' ' . esc_attr( $css_class ) . '" ' . $title_attr . ' ' . $desc_attr . '></span>';
+		}
+
+		if ( is_numeric( $icon ) ) {
+			$img = wp_get_attachment_image(
+				(int) $icon,
+				'thumbnail',
+				false,
+				array(
+					'class' => esc_attr( $css_class ) . ' achievement-custom-icon',
+					'alt'   => $title ? esc_attr( $title ) : '',
+				)
+			);
+			if ( $img ) {
+				return $img;
+			}
 		}
 
 		return '<span class="' . esc_attr( $css_class ) . '" ' . $title_attr . ' ' . $desc_attr . '>' . wp_kses_post( $icon ) . '</span>';
@@ -645,8 +660,17 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'label'   => isset( $submitted['label'] ) ? sanitize_text_field( wp_unslash( $submitted['label'] ) ) : $defaults['label'],
 		);
 
+		$icon_submitted = isset( $submitted['icon'] ) ? sanitize_text_field( wp_unslash( $submitted['icon'] ) ) : '';
+
+		if ( ! empty( $submitted['remove_icon'] ) ) {
+			$sanitized['icon'] = '';
+		} elseif ( '' !== $icon_submitted ) {
+			$sanitized['icon'] = $icon_submitted;
+		} else {
+			$sanitized['icon'] = isset( $all_settings[ $achievement_id ]['icon'] ) ? $all_settings[ $achievement_id ]['icon'] : ( $defaults['icon'] ?? '' );
+		}
+
 		if ( isset( $all_settings[ $achievement_id ] ) ) {
-			$sanitized['icon']   = $all_settings[ $achievement_id ]['icon'] ?? '';
 			$sanitized['source'] = $all_settings[ $achievement_id ]['source'] ?? '';
 		}
 
@@ -875,6 +899,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			);
 		}
 
+		$icon = isset( $all_settings[ $achievement_id ]['icon'] ) ? $all_settings[ $achievement_id ]['icon'] : '';
+		if ( is_numeric( $icon ) ) {
+			wp_delete_attachment( (int) $icon, true );
+		}
+
 		unset( $all_settings[ $achievement_id ] );
 		$this->settings_manager->save_achievements_settings( $all_settings );
 
@@ -949,6 +978,27 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 							value="<?php echo esc_attr( $settings['label'] ); ?>">
 					</div>
 
+					<div class="label-area">
+						<label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>
+						<div class="achievement-icon-preview">
+							<?php echo self::render_achievement_icon( $settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</div>
+						<input type="hidden"
+							name="achievements[<?php echo esc_attr( $id ); ?>][icon]"
+							value="<?php echo esc_attr( $settings['icon'] ?? '' ); ?>"
+							class="achievement-icon-input">
+						<input type="hidden"
+							name="achievements[<?php echo esc_attr( $id ); ?>][remove_icon]"
+							value="0"
+							class="achievement-remove-icon-flag">
+						<button type="button" class="button upload-achievement-icon-button">
+							<?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
+						</button>
+						<button type="button" class="button remove-achievement-icon-button">
+							<?php esc_html_e( 'Remove Icon', 'weal-profile' ); ?>
+						</button>
+					</div>
+
 					<div class="button-area">
 						<input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
 						<span class="achievement-success-notice"><?php esc_html_e( 'Success!', 'weal-profile' ); ?></span>
@@ -972,6 +1022,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			return;
 		}
 
+		wp_enqueue_media();
+
 		wp_enqueue_script(
 			'weal-profile-achievements-admin',
 			WEAL_PROFILE_PLUGIN_URL . 'includes/achievements/js/weal-profile-achievements-admin.js',
@@ -986,10 +1038,12 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 			'weal-profile-achievements-admin',
 			'wealProfileAchievementsData',
 			array(
-				'nonce'         => wp_create_nonce( 'wp_rest' ),
-				'root'          => esc_url_raw( rest_url() ),
-				'page'          => $page,
-				'confirmDelete' => esc_html__( 'Вы уверены что хотите удалить ачивку?', 'weal-profile' ),
+				'nonce'            => wp_create_nonce( 'wp_rest' ),
+				'root'             => esc_url_raw( rest_url() ),
+				'page'             => $page,
+				'confirmDelete'    => esc_html__( 'Вы уверены что хотите удалить ачивку?', 'weal-profile' ),
+				'chooseIconTitle'  => esc_html__( 'Choose Achievement Icon', 'weal-profile' ),
+				'selectText'       => esc_html__( 'Select', 'weal-profile' ),
 			)
 		);
 	}

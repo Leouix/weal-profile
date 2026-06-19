@@ -5,6 +5,8 @@
  */
 
 (function () {
+	var mediaFrame = null;
+
 	function init() {
 		var forms = document.querySelectorAll( '.achievement-form' );
 		if ( ! forms.length ) {
@@ -46,6 +48,87 @@
 				);
 			}
 		);
+
+		initIconPickers();
+	}
+
+	function initIconPickers() {
+		var wrappers = document.querySelectorAll( '.achievement-wrapper' );
+		wrappers.forEach( function ( wrapper ) {
+			bindIconPickerEvents( wrapper );
+		} );
+	}
+
+	function bindIconPickerEvents( wrapper ) {
+		var uploadButton = wrapper.querySelector( '.upload-achievement-icon-button' );
+		var removeButton = wrapper.querySelector( '.remove-achievement-icon-button' );
+
+		if ( uploadButton ) {
+			uploadButton.addEventListener( 'click', function () {
+				openMediaLibrary( wrapper );
+			} );
+		}
+
+		if ( removeButton ) {
+			removeButton.addEventListener( 'click', function () {
+				removeIcon( wrapper );
+			} );
+		}
+	}
+
+	function openMediaLibrary( wrapper ) {
+		if ( mediaFrame ) {
+			mediaFrame.open();
+			return;
+		}
+
+		mediaFrame = wp.media( {
+			title: wealProfileAchievementsData.chooseIconTitle || 'Choose Achievement Icon',
+			library: { type: 'image' },
+			button: {
+				text: wealProfileAchievementsData.selectText || 'Select'
+			},
+			multiple: false
+		} );
+
+		mediaFrame.on( 'select', function () {
+			var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
+			setIcon( wrapper, attachment.id, attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url );
+		} );
+
+		mediaFrame.open();
+	}
+
+	function setIcon( wrapper, attachmentId, imageUrl ) {
+		var iconInput = wrapper.querySelector( '.achievement-icon-input' );
+		var removeFlag = wrapper.querySelector( '.achievement-remove-icon-flag' );
+		var preview = wrapper.querySelector( '.achievement-icon-preview' );
+
+		if ( iconInput ) {
+			iconInput.value = attachmentId;
+		}
+		if ( removeFlag ) {
+			removeFlag.value = '0';
+		}
+		if ( preview ) {
+			preview.innerHTML = '<img src="' + imageUrl + '" alt="" class="achievement-custom-icon" style="max-width:50px;max-height:50px;border-radius:4px;">';
+		}
+	}
+
+	function removeIcon( wrapper ) {
+		var iconInput = wrapper.querySelector( '.achievement-icon-input' );
+		var removeFlag = wrapper.querySelector( '.achievement-remove-icon-flag' );
+		var preview = wrapper.querySelector( '.achievement-icon-preview' );
+
+		if ( iconInput ) {
+			iconInput.value = '';
+		}
+		if ( removeFlag ) {
+			removeFlag.value = '1';
+		}
+		if ( preview ) {
+			preview.innerHTML = '';
+		}
 	}
 
 	function getAchievementId( el ) {
@@ -170,6 +253,8 @@
 				}
 			);
 		}
+
+		bindIconPickerEvents( wrapper );
 	}
 
 	function saveForm( elForm ) {

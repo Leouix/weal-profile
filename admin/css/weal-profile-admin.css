@@ -175,3 +175,32 @@ h1 {
 	height: 20px;
 	display: block;
 }
+
+.achievement-icon-preview {
+	margin-bottom: 8px;
+	min-height: 30px;
+	display: flex;
+	align-items: center;
+}
+
+.achievement-icon-preview .dashicons {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+}
+
+.achievement-icon-preview .achievement-custom-icon {
+	max-width: 50px;
+	max-height: 50px;
+	border-radius: 4px;
+	object-fit: cover;
+}
+
+.upload-achievement-icon-button,
+.remove-achievement-icon-button {
+	margin-top: 4px !important;
+}
+
+.remove-achievement-icon-button {
+	margin-left: 4px !important;
+}

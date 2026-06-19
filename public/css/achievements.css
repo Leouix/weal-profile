@@ -24,6 +24,16 @@
 	padding: 2px;
 }
 
+.has-badge .achievement-custom-icon {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	object-fit: cover;
+	background: #fff;
+	padding: 2px;
+	vertical-align: middle;
+}
+
 .weal-profile-achievement-item .dashicons-awards {
 	color: #ffc107;
 }
@@ -63,6 +73,14 @@
 	line-height: 1;
 	min-width: 30px;
 	text-align: center;
+}
+
+.weal-profile-achievement-item .achievement-custom-icon {
+	width: 30px;
+	height: 30px;
+	border-radius: 4px;
+	object-fit: cover;
+	vertical-align: middle;
 }
 
 .weal-profile-achievement-item .achievement-label {
