@@ -101,6 +101,7 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 						id="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-label"
 						name="achievements[<?php echo esc_attr( $weal_profile_achievement_id ); ?>][label]"
 						value="<?php echo esc_attr( $weal_profile_settings['label'] ); ?>">
+					<span class="label-error-notice" style="display:none;color:#d63638;"></span>
 				</div>
 
 				<?php if ( ! Weal_Profile_Achievements::is_system_achievement( $weal_profile_achievement_id ) ) : ?>

@@ -279,6 +279,19 @@
 		var successNotice = buttonArea.querySelector( '.achievement-success-notice' );
 		var errorNotice   = buttonArea.querySelector( '.achievement-error-notice' );
 
+		var labelInput = elForm.querySelector( 'input[name$="[label]"]' );
+		var labelError = elForm.querySelector( '.label-error-notice' );
+		if ( labelInput && '' === labelInput.value.trim() ) {
+			if ( labelError ) {
+				labelError.textContent = wealProfileAchievementsData.labelRequired || 'Label cannot be empty.';
+				labelError.style.display = 'inline';
+			}
+			return;
+		}
+		if ( labelError ) {
+			labelError.style.display = 'none';
+		}
+
 		var xhr = new XMLHttpRequest();
 		xhr.open( 'POST', wealProfileAchievementsData.root + 'weal-profile/v1/admin-save-achievements-settings/', true );
 		xhr.setRequestHeader( 'X-WP-Nonce', wealProfileAchievementsData.nonce );

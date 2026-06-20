@@ -690,10 +690,21 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$defaults  = isset( $definitions[ $achievement_id ] ) ? $definitions[ $achievement_id ] : $all_settings[ $achievement_id ];
 		$submitted = isset( $post_data['achievements'][ $achievement_id ] ) ? $post_data['achievements'][ $achievement_id ] : array();
 
+		$label_raw = isset( $submitted['label'] ) ? sanitize_text_field( wp_unslash( $submitted['label'] ) ) : '';
+		if ( '' === $label_raw ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => esc_html__( 'Label cannot be empty.', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
 		$sanitized = array(
 			'enabled' => ! empty( $submitted['enabled'] ),
 			'target'  => isset( $submitted['target'] ) ? max( 1, (int) $submitted['target'] ) : $defaults['target'],
-			'label'   => isset( $submitted['label'] ) ? sanitize_text_field( wp_unslash( $submitted['label'] ) ) : $defaults['label'],
+			'label'   => $label_raw,
 		);
 
 		$icon_submitted = isset( $submitted['icon'] ) ? sanitize_text_field( wp_unslash( $submitted['icon'] ) ) : '';
@@ -1051,6 +1062,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 						id="achievement-<?php echo esc_attr( $id ); ?>-label"
 						name="achievements[<?php echo esc_attr( $id ); ?>][label]"
 						value="<?php echo esc_attr( $settings['label'] ); ?>">
+					<span class="label-error-notice" style="display:none;color:#d63638;"></span>
 				</div>
 
 				<?php if ( ! self::is_system_achievement( $id ) ) : ?>
@@ -1176,6 +1188,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				'root'            => esc_url_raw( rest_url() ),
 				'page'            => $page,
 				'confirmDelete'   => esc_html__( 'Вы уверены что хотите удалить ачивку?', 'weal-profile' ),
+				'labelRequired'   => esc_html__( 'Label cannot be empty.', 'weal-profile' ),
 				'chooseIconTitle' => esc_html__( 'Choose Achievement Icon', 'weal-profile' ),
 				'selectText'      => esc_html__( 'Select', 'weal-profile' ),
 			)
