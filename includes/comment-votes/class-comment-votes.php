@@ -106,15 +106,16 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 		$charset_collate = $wpdb->get_charset_collate();
 		$table_name      = $wpdb->prefix . self::TABLE_NAME;
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		$sql = "CREATE TABLE $table_name (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			comment_id BIGINT UNSIGNED NOT NULL,
 			user_id BIGINT UNSIGNED NOT NULL,
 			is_liked TINYINT(1) NOT NULL DEFAULT 1,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (id),
+			PRIMARY KEY  (id),
 			INDEX comment_id_index (comment_id),
 			INDEX user_id_index (user_id),
+			INDEX ix_comment_liked (comment_id, is_liked),
 			UNIQUE KEY uniq_comment_user (comment_id, user_id)
 		) $charset_collate;";
 
@@ -362,21 +363,18 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
-		$likes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		// Single query aggregates both counts.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i WHERE comment_id = %d AND is_liked = 1',
+				'SELECT COALESCE(SUM(is_liked = 1), 0) AS likes, COALESCE(SUM(is_liked = 0), 0) AS dislikes FROM %i WHERE comment_id = %d',
 				$table_name,
 				$comment_id
 			)
 		);
 
-		$dislikes = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i WHERE comment_id = %d AND is_liked = 0',
-				$table_name,
-				$comment_id
-			)
-		);
+		$likes    = (int) $row->likes;
+		$dislikes = (int) $row->dislikes;
 
 		update_comment_meta( $comment_id, '_weal_likes_count', $likes );
 		update_comment_meta( $comment_id, '_weal_dislikes_count', $dislikes );
