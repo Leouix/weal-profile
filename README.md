@@ -56,6 +56,11 @@ A motivational achievements and badges system that rewards users based on their 
 * Badges are dynamically displayed on user avatars in the comments section.
 * Fully configurable targets via the admin panel.
 * REST API endpoints for managing achievement settings.
+* **Custom Icons (v1.4.2+):** Upload custom images as achievement icons via WordPress Media Library.
+* **Duplicate Achievement (v1.4.2+):** Clone system achievements to create custom copies with independent thresholds and labels.
+* **Delete Achievement (v1.4.2+):** Remove duplicated (custom) achievements from the admin panel.
+* **Replace Previous (v1.4.2+):** For copied achievements, enable "Replace previous" to have higher tiers hide lower ones of the same type.
+* **User Visibility Toggle (v1.4.2+):** Users can show or hide earned badges on their profile via a REST API toggle.
 
 == Comment Likes / Dislikes ==
 
@@ -119,6 +124,12 @@ Yes. Go to **WordPress Admin → Weal Profile** and uncheck "Enable likes and di
 == Changelog ==
 
 = 1.4.2 =
+* Added custom icons for achievements via WordPress Media Library.
+* Added duplicate/delete functionality for system achievements.
+* Added "Replace previous" toggle for achievement copies (higher tier hides lower tiers).
+* Added user visibility toggle for earned badges on profile page.
+* Added source tracking for duplicated achievements.
+* Refactored metrics calculation and avatar filter.
 * Improved user interaction and security.
 
 = 1.4.1 =
