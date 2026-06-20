@@ -205,7 +205,7 @@ class Weal_Profile {
 			__( 'Weal Profile', 'weal-profile' ),
 			'manage_options',
 			'weal-profile-admin',
-			array( $admin_settings, 'get_my_account_settings_page' ),
+			array( $admin_settings, 'get_my_profile_settings_page' ),
 			'dashicons-admin-users'
 		);
 
@@ -215,7 +215,7 @@ class Weal_Profile {
 			__( 'General', 'weal-profile' ),
 			'manage_options',
 			'weal-profile-admin',
-			array( $admin_settings, 'get_my_account_settings_page' )
+			array( $admin_settings, 'get_my_profile_settings_page' )
 		);
 
 		add_submenu_page(

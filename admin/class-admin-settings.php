@@ -246,7 +246,7 @@ class Admin_Settings {
 	 *
 	 * @return void
 	 */
-	public function get_my_account_settings_page() {
+	public function get_my_profile_settings_page() {
 		$this->render_admin_page( 'general' );
 	}
 

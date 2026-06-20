@@ -89,7 +89,7 @@
 	);
 
 	function setEmptyButtonTemplate() {
-		const formUserButton = document.getElementById( 'my-account-subtab-content' );
+		const formUserButton = document.getElementById( 'my-profile-subtab-content' );
 		if ( ! formUserButton ) {
 			return;
 		}
@@ -373,7 +373,7 @@
 		var cacheKey = 'sub:' + tab + ':page:' + ( page || 1 );
 		var cached   = cacheGet( cacheKey );
 		if ( cached ) {
-			var container = document.getElementById( 'my-account-subtab-content' );
+			var container = document.getElementById( 'my-profile-subtab-content' );
 			if ( container ) {
 				container.innerHTML = cached;
 			}
@@ -392,7 +392,7 @@
 		xhr.onreadystatechange = function () {
 			if ( 4 === this.readyState && 200 === this.status ) {
 				var json      = JSON.parse( this.response );
-				var container = document.getElementById( 'my-account-subtab-content' );
+				var container = document.getElementById( 'my-profile-subtab-content' );
 				if ( container ) {
 					container.innerHTML = json.html;
 				}
@@ -411,7 +411,7 @@
 	}
 
 	function delButtonSubcontent() {
-		const containerResults = document.getElementById( 'my-account-subtab-content' );
+		const containerResults = document.getElementById( 'my-profile-subtab-content' );
 		if ( ! containerResults ) {
 			return;
 		}
@@ -442,7 +442,7 @@
 	}
 
 	function attachMyAccountPagination( tab ) {
-		var container = document.getElementById( 'my-account-subtab-content' );
+		var container = document.getElementById( 'my-profile-subtab-content' );
 		if ( ! container ) {
 			return;
 		}

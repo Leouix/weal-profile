@@ -154,7 +154,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			'/my-profile/posts/',
 			array(
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'my_account_posts' ),
+				'callback'            => array( $this, 'my_profile_posts' ),
 				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
 			)
 		);
@@ -164,7 +164,7 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 			'/my-profile/comments/',
 			array(
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'my_account_comments' ),
+				'callback'            => array( $this, 'my_profile_comments' ),
 				'permission_callback' => array( __CLASS__, 'check_user_permission' ),
 			)
 		);
@@ -420,13 +420,13 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	}
 
 	/**
-	 * My Account Posts — AJAX endpoint for posts subtab content.
+	 * My Profile Posts — AJAX endpoint for posts subtab content.
 	 *
 	 * @param  WP_REST_Request $request Request.
 	 * @return WP_REST_Response
 	 * @throws Exception On error.
 	 */
-	public function my_account_posts( $request ) {
+	public function my_profile_posts( $request ) {
 		$this->verify_nonce( $request );
 		$this->current_user = get_current_user_id();
 
@@ -481,13 +481,13 @@ class Routes implements Weal_Profile_Module_Singleton_Interface {
 	}
 
 	/**
-	 * My Account Comments — AJAX endpoint for comments subtab content.
+	 * My Profile Comments — AJAX endpoint for comments subtab content.
 	 *
 	 * @param  WP_REST_Request $request Request.
 	 * @return WP_REST_Response
 	 * @throws Exception On error.
 	 */
-	public function my_account_comments( $request ) {
+	public function my_profile_comments( $request ) {
 		$this->verify_nonce( $request );
 		$this->current_user = get_current_user_id();
 

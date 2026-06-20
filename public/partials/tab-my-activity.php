@@ -21,4 +21,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Comments', 'weal-profile' ); ?>
 	</div>
 </div>
-<div id="my-account-subtab-content"></div>
+<div id="my-profile-subtab-content"></div>
