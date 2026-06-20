@@ -983,6 +983,27 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				<div class="achievement-block">
 					<h3><?php echo self::render_achievement_icon( $settings['icon'], 'admin-achievement-icon' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo esc_html( $settings['label'] ); ?></h3>
 
+                    <div class="label-area">
+                        <label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>
+                        <div class="achievement-icon-preview">
+                            <?php echo self::render_achievement_icon( $settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                        </div>
+                        <input type="hidden"
+                               name="achievements[<?php echo esc_attr( $id ); ?>][icon]"
+                               value="<?php echo esc_attr( $settings['icon'] ?? '' ); ?>"
+                               class="achievement-icon-input">
+                        <input type="hidden"
+                               name="achievements[<?php echo esc_attr( $id ); ?>][remove_icon]"
+                               value="0"
+                               class="achievement-remove-icon-flag">
+                        <button type="button" class="button upload-achievement-icon-button">
+                            <?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
+                        </button>
+                        <button type="button" class="button remove-achievement-icon-button">
+                            <?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
+                        </button>
+                    </div>
+
 					<div class="label-area">
 						<input type="hidden" name="achievements[<?php echo esc_attr( $id ); ?>][enabled]" value="0">
 						<label for="achievement-<?php echo esc_attr( $id ); ?>-enabled">
@@ -1048,27 +1069,6 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 					</p>
 				</div>
 				<?php endif; ?>
-
-					<div class="label-area">
-						<label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>
-						<div class="achievement-icon-preview">
-							<?php echo self::render_achievement_icon( $settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						</div>
-						<input type="hidden"
-							name="achievements[<?php echo esc_attr( $id ); ?>][icon]"
-							value="<?php echo esc_attr( $settings['icon'] ?? '' ); ?>"
-							class="achievement-icon-input">
-						<input type="hidden"
-							name="achievements[<?php echo esc_attr( $id ); ?>][remove_icon]"
-							value="0"
-							class="achievement-remove-icon-flag">
-						<button type="button" class="button upload-achievement-icon-button">
-							<?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
-						</button>
-						<button type="button" class="button remove-achievement-icon-button">
-							<?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
-						</button>
-					</div>
 
 					<div class="button-area">
 						<input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
