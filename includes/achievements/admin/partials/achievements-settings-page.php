@@ -60,7 +60,7 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
                            value="0"
                            class="achievement-remove-icon-flag">
                     <button type="button" class="button upload-achievement-icon-button">
-                        <?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
+                        <?php esc_html_e( 'Change Icon', 'weal-profile' ); ?>
                     </button>
                     <button type="button" class="button remove-achievement-icon-button">
                         <?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
@@ -114,9 +114,6 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 				<div class="label-area">
 					<input type="hidden" name="achievements[<?php echo esc_attr( $weal_profile_achievement_id ); ?>][replace_previous]" value="0">
 					<div class="achievement-replace-wrapper">
-						<label for="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-replace-previous">
-							<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
-						</label>
 						<label class="achievement-switch">
 							<input type="checkbox"
 									id="achievement-<?php echo esc_attr( $weal_profile_achievement_id ); ?>-replace-previous"
@@ -126,6 +123,9 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 									<?php checked( ! empty( $weal_profile_settings['replace_previous'] ) ); ?>>
 							<span class="achievement-slider round"></span>
 						</label>
+                        <span>
+							<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
+						</span>
 					</div>
 					<p class="description">
 						<?php esc_html_e( 'If enabled, higher-tier achievements hide lower-tier ones of the same type. Disable to show all.', 'weal-profile' ); ?>

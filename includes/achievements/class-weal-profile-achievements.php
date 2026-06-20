@@ -1010,7 +1010,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
                                value="0"
                                class="achievement-remove-icon-flag">
                         <button type="button" class="button upload-achievement-icon-button">
-                            <?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
+                            <?php esc_html_e( 'Change Icon', 'weal-profile' ); ?>
                         </button>
                         <button type="button" class="button remove-achievement-icon-button">
                             <?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
@@ -1064,9 +1064,6 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				<div class="label-area">
 					<input type="hidden" name="achievements[<?php echo esc_attr( $id ); ?>][replace_previous]" value="0">
 					<div class="achievement-replace-wrapper">
-						<label for="achievement-<?php echo esc_attr( $id ); ?>-replace-previous">
-							<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
-						</label>
 						<label class="achievement-switch">
 							<input type="checkbox"
 									id="achievement-<?php echo esc_attr( $id ); ?>-replace-previous"
@@ -1076,6 +1073,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 									<?php checked( ! empty( $settings['replace_previous'] ) ); ?>>
 							<span class="achievement-slider round"></span>
 						</label>
+                        <span>
+							<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
+						</span>
 					</div>
 					<p class="description">
 						<?php esc_html_e( 'If enabled, higher-tier achievements hide lower-tier ones of the same type. Disable to show all.', 'weal-profile' ); ?>

@@ -51,7 +51,6 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin-left: 10px;
 }
 
 .label-area .description {
@@ -197,13 +196,15 @@ h1 {
 	object-fit: cover;
 }
 
-.upload-achievement-icon-button,
-.remove-achievement-icon-button {
-	margin-top: 4px !important;
+button.button.upload-achievement-icon-button,
+button.button.remove-achievement-icon-button {
+	min-height: 30px;
+	max-height: 30px;
+	line-height: normal;
 }
 
 .remove-achievement-icon-button {
-	margin-left: 4px !important;
+
 }
 
 .admin-achievement-icon.achievement-custom-icon {
