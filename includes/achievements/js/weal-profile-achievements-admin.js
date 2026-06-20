@@ -129,18 +129,21 @@
 		var preview = wrapper.querySelector( '.achievement-icon-preview' );
 		var previewLabel = wrapper.querySelector( '.custom-icon-label' );
 
+		var defaultIcon = preview ? preview.dataset.defaultIcon : '';
+		var isAlreadyDefault = ( iconInput && iconInput.value === defaultIcon ) || ( removeFlag && removeFlag.value === '1' );
+
 		if ( iconInput ) {
 			iconInput.value = '';
 		}
 		if ( removeFlag ) {
 			removeFlag.value = '1';
 		}
-		if ( preview ) {
-			preview.innerHTML = '';
-			preview.style.display = 'none';
+		if ( preview && ! isAlreadyDefault ) {
+			preview.innerHTML = preview.dataset.defaultIconHtml || '';
+			preview.style.display = 'flex';
 		}
-		if ( previewLabel ) {
-			previewLabel.style.display = 'none';
+		if ( previewLabel && ! isAlreadyDefault ) {
+			previewLabel.style.display = 'inline';
 		}
 	}
 

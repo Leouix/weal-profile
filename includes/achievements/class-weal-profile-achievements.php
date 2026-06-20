@@ -967,6 +967,17 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	public static function render_admin_achievement_item( $id, $settings ) {
 		$source      = ! empty( $settings['source'] ) ? $settings['source'] : $id;
 		$description = self::get_achievement_description( $id, $settings['target'], $source );
+
+		// Compute default icon for reset.
+		$defs           = self::get_achievement_definitions();
+		$default_icon    = '';
+		if ( ! empty( $settings['source'] ) && isset( $defs[ $settings['source'] ] ) ) {
+			$default_icon = $defs[ $settings['source'] ]['icon'];
+		} elseif ( isset( $defs[ $id ] ) ) {
+			$default_icon = $defs[ $id ]['icon'];
+		}
+		$default_icon_html = self::render_achievement_icon( $default_icon, 'admin-achievement-icon-preview' );
+
 		ob_start();
 		?>
 		<div class="achievement-wrapper">
@@ -987,7 +998,7 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 
                     <div class="label-area">
                         <span class="custom-icon-label" style="display:none;"><?php esc_html_e( 'New Icon', 'weal-profile' ); ?></span>
-                        <div class="achievement-icon-preview" style="display:none;">
+                        <div class="achievement-icon-preview" style="display:none;" data-default-icon-html="<?php echo esc_attr( $default_icon_html ); ?>" data-default-icon="<?php echo esc_attr( $default_icon ); ?>">
                             <?php echo self::render_achievement_icon( $settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </div>
                         <input type="hidden"

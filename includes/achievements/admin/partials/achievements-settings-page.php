@@ -18,6 +18,16 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 		<?php
 		$weal_source      = ! empty( $weal_profile_settings['source'] ) ? $weal_profile_settings['source'] : $weal_profile_achievement_id;
 		$weal_description = Weal_Profile_Achievements::get_achievement_description( $weal_profile_achievement_id, $weal_profile_settings['target'], $weal_source );
+
+		// Compute default icon for reset.
+		$weal_definitions  = Weal_Profile_Achievements::get_achievement_definitions();
+		$weal_default_icon = '';
+		if ( ! empty( $weal_profile_settings['source'] ) && isset( $weal_definitions[ $weal_profile_settings['source'] ] ) ) {
+			$weal_default_icon = $weal_definitions[ $weal_profile_settings['source'] ]['icon'];
+		} elseif ( isset( $weal_definitions[ $weal_profile_achievement_id ] ) ) {
+			$weal_default_icon = $weal_definitions[ $weal_profile_achievement_id ]['icon'];
+		}
+		$weal_default_icon_html = Weal_Profile_Achievements::render_achievement_icon( $weal_default_icon, 'admin-achievement-icon-preview' );
 		?>
 
 	<div class="achievement-wrapper">
@@ -38,7 +48,7 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 
                 <div class="label-area">
                     <span class="custom-icon-label" style="display:none;"><?php esc_html_e( 'New Icon', 'weal-profile' ); ?></span>
-                    <div class="achievement-icon-preview" style="display:none;">
+                    <div class="achievement-icon-preview" style="display:none;" data-default-icon-html="<?php echo esc_attr( $weal_default_icon_html ); ?>" data-default-icon="<?php echo esc_attr( $weal_default_icon ); ?>">
                         <?php echo Weal_Profile_Achievements::render_achievement_icon( $weal_profile_settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     </div>
                     <input type="hidden"
