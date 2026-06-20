@@ -134,10 +134,10 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 				<?php endif; ?>
 
 				<div class="button-area">
-					<input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
 					<span class="achievement-success-notice"><?php esc_html_e( 'Success!', 'weal-profile' ); ?></span>
-					<span class="achievement-error-notice"></span>
-				</div>
+                    <span class="achievement-error-notice"></span>
+                    <input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
+                </div>
 			</div>
 		</form>
 	</div>

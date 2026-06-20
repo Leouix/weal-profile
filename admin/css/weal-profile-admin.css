@@ -77,6 +77,8 @@ h1 {
 
 .button-area {
 	display: flex;
+	justify-content: flex-end;
+	margin-top: 25px;
 }
 
 .dashicons {

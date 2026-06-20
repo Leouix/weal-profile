@@ -1084,10 +1084,10 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 				<?php endif; ?>
 
 					<div class="button-area">
-						<input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
 						<span class="achievement-success-notice"><?php esc_html_e( 'Success!', 'weal-profile' ); ?></span>
-						<span class="achievement-error-notice"></span>
-					</div>
+                        <span class="achievement-error-notice"></span>
+                        <input type="submit" class="save-achievement-button" value="<?php esc_attr_e( 'Save', 'weal-profile' ); ?>">
+                    </div>
 				</div>
 			</form>
 		</div>
