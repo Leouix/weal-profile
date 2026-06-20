@@ -1065,11 +1065,9 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 						<button type="button" class="button upload-achievement-icon-button">
 							<?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
 						</button>
-						<?php if ( ! self::is_system_achievement( $id ) ) : ?>
 						<button type="button" class="button remove-achievement-icon-button">
 							<?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
 						</button>
-						<?php endif; ?>
 					</div>
 
 					<div class="button-area">

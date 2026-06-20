@@ -118,11 +118,9 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 					<button type="button" class="button upload-achievement-icon-button">
 						<?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
 					</button>
-					<?php if ( ! Weal_Profile_Achievements::is_system_achievement( $weal_profile_achievement_id ) ) : ?>
 					<button type="button" class="button remove-achievement-icon-button">
 						<?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
 					</button>
-					<?php endif; ?>
 				</div>
 
 				<div class="button-area">
