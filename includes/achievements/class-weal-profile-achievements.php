@@ -586,12 +586,46 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 	 * Enqueue badge styles.
 	 */
 	public function enqueue_styles() {
+		if ( ! $this->should_enqueue_styles() ) {
+			return;
+		}
+
 		wp_enqueue_style(
 			'weal-achievements-css',
 			WEAL_PROFILE_PLUGIN_URL . 'public/css/achievements.css',
 			array( 'dashicons' ),
 			WEAL_PROFILE_VERSION
 		);
+	}
+
+	/**
+	 * Check whether achievement styles are needed on the current request.
+	 *
+	 * @return bool
+	 */
+	private function should_enqueue_styles() {
+		if ( $this->is_public_profile_page() ) {
+			return true;
+		}
+
+		return is_singular() && ( comments_open() || get_comments_number() > 0 );
+	}
+
+	/**
+	 * Check whether the current request is the plugin profile page.
+	 *
+	 * @return bool
+	 */
+	private function is_public_profile_page() {
+		$profile_slug = $this->settings_manager->get_user_page_url();
+		if ( empty( $profile_slug ) ) {
+			return false;
+		}
+
+		$current_url = home_url( add_query_arg( null, null ) );
+		$path        = trim( wp_parse_url( $current_url, PHP_URL_PATH ), '/' );
+
+		return trim( $profile_slug, '/' ) === $path;
 	}
 
 	/**

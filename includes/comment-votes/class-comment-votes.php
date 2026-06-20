@@ -118,6 +118,11 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 			return;
 		}
 
+		$settings = ( new Settings_Manager() )->get_settings();
+		if ( empty( $settings['comment_votes_enabled'] ) ) {
+			return;
+		}
+
 		wp_enqueue_style( 'dashicons' );
 		wp_enqueue_style(
 			'weal-comment-votes-css',

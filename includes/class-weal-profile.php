@@ -177,7 +177,7 @@ class Weal_Profile {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'localize_admin_script_data' );
-		$this->loader->add_action( 'admin_enqueue_scripts', Weal_Profile_Achievements::instance(), 'enqueue_admin_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $this, 'enqueue_admin_achievements_scripts' );
 
 		$this->loader->add_action( 'admin_menu', $this, 'add_menu_page_weal_profile' );
 		$this->loader->add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__, 1 ) . '/weal-profile.php' ), $this, 'my_plugin_settings' );
@@ -250,9 +250,12 @@ class Weal_Profile {
 		$routes_class = Routes::instance( $this->admin_settings );
 		$this->loader->add_action( 'rest_api_init', $routes_class, 'route_reg' );
 
-		Comment_Votes::instance();
-		Weal_Profile_Rating::instance();
-		Weal_Profile_Achievements::instance();
+		if ( $this->is_weal_profile_rest_request() ) {
+			Weal_Profile_Rating::instance();
+			Weal_Profile_Achievements::instance();
+		} else {
+			$this->loader->add_action( 'wp', $this, 'initialize_frontend_modules' );
+		}
 
 		$profile_avatar_service = new Weal_Profile_Avatar();
 		$this->loader->add_action( 'template_include', $this, 'show_plugin_content' );
@@ -273,6 +276,46 @@ class Weal_Profile {
 		$page_url    = $this->get_public_page_url();
 
 		return ! empty( $page_url ) && $page_url === $path;
+	}
+
+	/**
+	 * Check whether the current request targets this plugin's REST namespace.
+	 *
+	 * @return bool
+	 */
+	private function is_weal_profile_rest_request() {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		if ( false !== strpos( $request_uri, '/wp-json/weal-profile/v1/' ) ) {
+			return true;
+		}
+
+		$rest_route = isset( $_GET['rest_route'] ) ? sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return 0 === strpos( $rest_route, '/weal-profile/v1/' );
+	}
+
+	/**
+	 * Initialize frontend modules after WordPress query context is available.
+	 */
+	public function initialize_frontend_modules() {
+		if ( is_admin() ) {
+			return;
+		}
+
+		if ( is_singular() || is_home() || is_archive() ) {
+			Comment_Votes::instance();
+			Weal_Profile_Achievements::instance();
+		}
+
+		if ( is_single() ) {
+			Weal_Profile_Rating::instance();
+		}
+	}
+
+	/**
+	 * Enqueue admin scripts for the achievements page.
+	 */
+	public function enqueue_admin_achievements_scripts() {
+		Weal_Profile_Achievements::instance()->enqueue_admin_scripts();
 	}
 
 	/**
