@@ -723,9 +723,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 
 		$this->settings_manager->save_achievements_settings( $all_settings );
 
+		$saved_icon = $sanitized['icon'] ?? '';
 		return new WP_REST_Response(
 			array(
-				'success' => true,
+				'success'   => true,
+				'icon_html' => self::render_achievement_icon( $saved_icon, 'admin-achievement-icon' ),
 			)
 		);
 	}
@@ -984,8 +986,8 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 					<h3><?php echo self::render_achievement_icon( $settings['icon'], 'admin-achievement-icon' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo esc_html( $settings['label'] ); ?></h3>
 
                     <div class="label-area">
-                        <label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>
-                        <div class="achievement-icon-preview">
+                        <span class="custom-icon-label" style="display:none;"><?php esc_html_e( 'New Icon', 'weal-profile' ); ?></span>
+                        <div class="achievement-icon-preview" style="display:none;">
                             <?php echo self::render_achievement_icon( $settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                         </div>
                         <input type="hidden"

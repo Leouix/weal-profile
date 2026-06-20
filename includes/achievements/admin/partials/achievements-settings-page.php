@@ -37,8 +37,8 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 				<h3><?php echo Weal_Profile_Achievements::render_achievement_icon( $weal_profile_settings['icon'], 'admin-achievement-icon' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php echo esc_html( $weal_profile_settings['label'] ); ?></h3>
 
                 <div class="label-area">
-                    <label><?php esc_html_e( 'Custom Icon:', 'weal-profile' ); ?></label>
-                    <div class="achievement-icon-preview">
+                    <span class="custom-icon-label" style="display:none;"><?php esc_html_e( 'New Icon', 'weal-profile' ); ?></span>
+                    <div class="achievement-icon-preview" style="display:none;">
                         <?php echo Weal_Profile_Achievements::render_achievement_icon( $weal_profile_settings['icon'] ?? '', 'admin-achievement-icon-preview' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     </div>
                     <input type="hidden"

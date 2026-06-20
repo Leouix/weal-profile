@@ -106,6 +106,7 @@
 		var iconInput = wrapper.querySelector( '.achievement-icon-input' );
 		var removeFlag = wrapper.querySelector( '.achievement-remove-icon-flag' );
 		var preview = wrapper.querySelector( '.achievement-icon-preview' );
+		var previewLabel = wrapper.querySelector( '.custom-icon-label' );
 
 		if ( iconInput ) {
 			iconInput.value = attachmentId;
@@ -114,7 +115,11 @@
 			removeFlag.value = '0';
 		}
 		if ( preview ) {
-			preview.innerHTML = '<img src="' + imageUrl + '" alt="" class="achievement-custom-icon" style="max-width:50px;max-height:50px;border-radius:4px;">';
+			preview.innerHTML = '<img src="' + imageUrl + '" alt="" class="achievement-custom-icon" style="max-width:20px;max-height:20px;border-radius:50%;">';
+			preview.style.display = 'flex';
+		}
+		if ( previewLabel ) {
+			previewLabel.style.display = 'inline';
 		}
 	}
 
@@ -122,6 +127,7 @@
 		var iconInput = wrapper.querySelector( '.achievement-icon-input' );
 		var removeFlag = wrapper.querySelector( '.achievement-remove-icon-flag' );
 		var preview = wrapper.querySelector( '.achievement-icon-preview' );
+		var previewLabel = wrapper.querySelector( '.custom-icon-label' );
 
 		if ( iconInput ) {
 			iconInput.value = '';
@@ -131,6 +137,10 @@
 		}
 		if ( preview ) {
 			preview.innerHTML = '';
+			preview.style.display = 'none';
+		}
+		if ( previewLabel ) {
+			previewLabel.style.display = 'none';
 		}
 	}
 
@@ -283,6 +293,24 @@
 			if ( response.success ) {
 				successNotice.style.display = 'inline';
 				errorNotice.style.display   = 'none';
+
+				var preview = elForm.querySelector( '.achievement-icon-preview' );
+				var previewLabel = elForm.querySelector( '.custom-icon-label' );
+				if ( preview ) {
+					preview.innerHTML = '';
+					preview.style.display = 'none';
+				}
+				if ( previewLabel ) {
+					previewLabel.style.display = 'none';
+				}
+
+				if ( response.icon_html ) {
+					var iconEl = elForm.querySelector( 'h3 .admin-achievement-icon' );
+					if ( iconEl ) {
+						iconEl.outerHTML = response.icon_html;
+					}
+				}
+
 				setTimeout(
 					function () {
 						successNotice.style.display = 'none';
