@@ -270,12 +270,23 @@ class Weal_Profile {
 	 * Check if current page is public plugin page.
 	 */
 	public function is_public_plugin_page() {
+		// Primary check: page ID (reliable, works with any permalink structure).
+		$page_id = isset( $this->admin_settings['user_page_id'] ) ? (int) $this->admin_settings['user_page_id'] : 0;
+		if ( $page_id > 0 && is_page( $page_id ) ) {
+			return true;
+		}
+
+		// Fallback: URL path matching for backward compatibility.
+		$page_url = $this->get_public_page_url();
+		if ( empty( $page_url ) ) {
+			return false;
+		}
+
 		global $wp;
 		$current_url = home_url( add_query_arg( null, null ) );
 		$path        = trim( wp_parse_url( $current_url, PHP_URL_PATH ), '/' );
-		$page_url    = $this->get_public_page_url();
 
-		return ! empty( $page_url ) && $page_url === $path;
+		return $page_url === $path;
 	}
 
 	/**

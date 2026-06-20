@@ -84,11 +84,13 @@ class Admin_Settings {
 		$votes_enabled = $this->validate_votes_setting( $post_data );
 
 		if ( ! empty( $validated_url ) ) {
-			$this->process_url_change( $validated_url );
+			$page_id = $this->process_url_change( $validated_url );
+		} else {
+			$page_id = $this->current_settings['user_page_id'] ?? 0;
 		}
 
 		$required_url_for_update = $validated_url ?? $this->current_settings['user_page_url'];
-		$this->settings_manager->save_settings( $required_url_for_update, $fields, $votes_enabled );
+		$this->settings_manager->save_settings( $required_url_for_update, $fields, $votes_enabled, $page_id );
 	}
 
 	/**
@@ -171,12 +173,12 @@ class Admin_Settings {
 	 * Process URL change.
 	 *
 	 * @param  string $new_url New URL.
-	 * @return void
+	 * @return int    The new page ID.
 	 * @throws Exception On error.
 	 */
 	private function process_url_change( $new_url ) {
 		$current_url = $this->current_settings['user_page_url'] ?? null;
-		$this->page_manager->update_page_url( $current_url, $new_url );
+		return $this->page_manager->update_page_url( $current_url, $new_url );
 	}
 
 	/**

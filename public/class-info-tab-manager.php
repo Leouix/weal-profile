@@ -140,13 +140,17 @@ class Info_Tab_Manager {
 	 */
 	public function get_user_data() {
 
-		$user_meta   = get_user_meta( $this->logged_user_id );
 		$meta_fields = array(
 			'nickname',
 			'first_name',
 			'last_name',
 			'description',
 		);
+
+		$user_meta = array();
+		foreach ( $meta_fields as $key ) {
+			$user_meta[ $key ] = array( get_user_meta( $this->logged_user_id, $key, true ) );
+		}
 
 		$user_data = get_userdata( $this->logged_user_id );
 

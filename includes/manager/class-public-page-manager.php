@@ -116,6 +116,6 @@ class Public_Page_Manager {
 	 */
 	public function update_page_url( $old_slug, $new_slug ) {
 		$this->delete_page_by_slug( $old_slug );
-		$this->create_page( $new_slug );
+		return $this->create_page( $new_slug );
 	}
 }

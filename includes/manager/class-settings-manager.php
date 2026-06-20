@@ -60,6 +60,7 @@ class Settings_Manager {
 
 		return array(
 			'user_page_url'         => $settings['user_page_url'] ?? null,
+			'user_page_id'          => isset( $settings['user_page_id'] ) ? (int) $settings['user_page_id'] : 0,
 			'fields_allowed'        => $settings['fields_allowed'] ?? $this->default_fields,
 			'comment_votes_enabled' => $settings['comment_votes_enabled'] ?? true,
 		);
@@ -81,12 +82,14 @@ class Settings_Manager {
 	 * @param string $user_page_url        User page URL.
 	 * @param array  $fields_allowed       Allowed fields.
 	 * @param bool   $comment_votes_enabled Enable comment votes.
+	 * @param int    $user_page_id         Page ID of the profile page.
 	 * @return bool
 	 */
-	public function save_settings( string $user_page_url, $fields_allowed, $comment_votes_enabled = true ) {
+	public function save_settings( string $user_page_url, $fields_allowed, $comment_votes_enabled = true, $user_page_id = 0 ) {
 
 		$data = array(
 			'user_page_url'         => sanitize_text_field( $user_page_url ),
+			'user_page_id'          => absint( $user_page_id ),
 			'fields_allowed'        => array_map( 'sanitize_text_field', $fields_allowed ),
 			'comment_votes_enabled' => (bool) $comment_votes_enabled,
 		);

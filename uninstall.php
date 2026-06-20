@@ -38,8 +38,5 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/weal-profile-module-singleton-interface.php';
-
-require_once plugin_dir_path( __FILE__ ) . 'includes/comment-votes/class-comment-votes.php';
-
-\WealProfile\Includes\Comment_Votes\Comment_Votes::drop_table();
+// Plugin data is intentionally preserved on uninstall.
+// Users may reinstall later and expect settings, pages, and votes to remain.

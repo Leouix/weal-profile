@@ -79,11 +79,11 @@ class Activation_Manager {
 		$slug = $this->page_manager->find_available_slug();
 
 		// 2. Создаем физическую страницу в WordPress
-		$this->page_manager->create_page( $slug );
+		$page_id = $this->page_manager->create_page( $slug );
 
 		// 3. Сохраняем настройки в таблицу wp_options
 		$default_fields = $this->settings_manager->get_default_fields();
-		$this->settings_manager->save_settings( $slug, $default_fields );
+		$this->settings_manager->save_settings( $slug, $default_fields, true, $page_id );
 	}
 
 	/**
