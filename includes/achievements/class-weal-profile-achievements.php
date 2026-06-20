@@ -699,7 +699,14 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		$icon_submitted = isset( $submitted['icon'] ) ? sanitize_text_field( wp_unslash( $submitted['icon'] ) ) : '';
 
 		if ( ! empty( $submitted['remove_icon'] ) ) {
-			$sanitized['icon'] = isset( $defaults['icon'] ) ? $defaults['icon'] : '';
+			$source = $all_settings[ $achievement_id ]['source'] ?? '';
+			if ( $source && isset( $definitions[ $source ] ) ) {
+				$sanitized['icon'] = $definitions[ $source ]['icon'];
+			} elseif ( isset( $definitions[ $achievement_id ] ) ) {
+				$sanitized['icon'] = isset( $defaults['icon'] ) ? $defaults['icon'] : '';
+			} else {
+				$sanitized['icon'] = '';
+			}
 		} elseif ( '' !== $icon_submitted ) {
 			$sanitized['icon'] = $icon_submitted;
 		} else {
@@ -1058,9 +1065,11 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 						<button type="button" class="button upload-achievement-icon-button">
 							<?php esc_html_e( 'Choose Icon', 'weal-profile' ); ?>
 						</button>
+						<?php if ( ! self::is_system_achievement( $id ) ) : ?>
 						<button type="button" class="button remove-achievement-icon-button">
-							<?php esc_html_e( 'Remove Icon', 'weal-profile' ); ?>
+							<?php esc_html_e( 'Reset Icon', 'weal-profile' ); ?>
 						</button>
+						<?php endif; ?>
 					</div>
 
 					<div class="button-area">
