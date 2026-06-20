@@ -177,6 +177,18 @@ class Weal_Profile_Rating implements Weal_Profile_Module_Singleton_Interface {
 	 * @return \WP_REST_Response
 	 */
 	public function process_rating_request( $request ) {
+		// Verify REST nonce.
+		$nonce = $request->get_header( 'X-WP-Nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			return new \WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => __( 'Security check failed.', 'weal-profile' ),
+				),
+				403
+			);
+		}
+
 		$post_id = intval( $request->get_param( 'post_id' ) );
 		$rating  = intval( $request->get_param( 'rating' ) );
 
@@ -185,6 +197,18 @@ class Weal_Profile_Rating implements Weal_Profile_Module_Singleton_Interface {
 				array(
 					'success' => false,
 					'message' => __( 'Invalid data.', 'weal-profile' ),
+				),
+				400
+			);
+		}
+
+		// Validate post exists and is published.
+		$post = get_post( $post_id );
+		if ( ! $post || 'publish' !== $post->post_status ) {
+			return new \WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => __( 'Invalid post.', 'weal-profile' ),
 				),
 				400
 			);
