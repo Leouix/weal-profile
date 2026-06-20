@@ -988,14 +988,20 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 
 				<div class="label-area">
 					<input type="hidden" name="achievements[<?php echo esc_attr( $id ); ?>][replace_previous]" value="0">
-					<label for="achievement-<?php echo esc_attr( $id ); ?>-replace-previous">
-						<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
-					</label>
-					<input type="checkbox"
-							id="achievement-<?php echo esc_attr( $id ); ?>-replace-previous"
-							name="achievements[<?php echo esc_attr( $id ); ?>][replace_previous]"
-							value="1"
-							<?php checked( ! empty( $settings['replace_previous'] ) ); ?>>
+					<div class="achievement-replace-wrapper">
+						<label for="achievement-<?php echo esc_attr( $id ); ?>-replace-previous">
+							<?php esc_html_e( 'Replace previous achievement', 'weal-profile' ); ?>
+						</label>
+						<label class="achievement-switch">
+							<input type="checkbox"
+									id="achievement-<?php echo esc_attr( $id ); ?>-replace-previous"
+									class="achievement-toggle-input"
+									name="achievements[<?php echo esc_attr( $id ); ?>][replace_previous]"
+									value="1"
+									<?php checked( ! empty( $settings['replace_previous'] ) ); ?>>
+							<span class="achievement-slider round"></span>
+						</label>
+					</div>
 					<p class="description">
 						<?php esc_html_e( 'If enabled, higher-tier achievements hide lower-tier ones of the same type. Disable to show all.', 'weal-profile' ); ?>
 					</p>
@@ -1047,6 +1053,56 @@ class Weal_Profile_Achievements implements Weal_Profile_Module_Singleton_Interfa
 		}
 
 		wp_enqueue_media();
+
+		$switch_css = '
+			.achievement-replace-wrapper {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				width: 100%;
+			}
+			.achievement-switch {
+				position: relative;
+				display: inline-block;
+				width: 44px;
+				height: 24px;
+				flex-shrink: 0;
+			}
+			.achievement-switch .achievement-toggle-input {
+				opacity: 0;
+				width: 0;
+				height: 0;
+			}
+			.achievement-slider {
+				position: absolute;
+				cursor: pointer;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #ccc;
+				transition: 0.3s;
+				border-radius: 24px;
+			}
+			.achievement-slider:before {
+				position: absolute;
+				content: "";
+				height: 18px;
+				width: 18px;
+				left: 3px;
+				bottom: 3px;
+				background-color: #fff;
+				transition: 0.3s;
+				border-radius: 50%;
+			}
+			.achievement-toggle-input:checked + .achievement-slider {
+				background-color: #4caf50;
+			}
+			.achievement-toggle-input:checked + .achievement-slider:before {
+				transform: translateX(20px);
+			}
+		';
+		wp_add_inline_style( 'weal-profile', $switch_css );
 
 		wp_enqueue_script(
 			'weal-profile-achievements-admin',
