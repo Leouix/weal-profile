@@ -42,6 +42,20 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	private $comment_votes_enabled = null;
 
 	/**
+	 * Batch-loaded user votes cache: "{$user_id}_{$comment_id}" => is_liked|null.
+	 *
+	 * @var array
+	 */
+	private static $user_votes_batch_cache = array();
+
+	/**
+	 * Comment IDs already preloaded via update_meta_cache().
+	 *
+	 * @var int[]
+	 */
+	private static $preloaded_comment_ids = array();
+
+	/**
 	 * Returns the main instance of the class.
 	 *
 	 * @return Comment_Votes
@@ -80,6 +94,7 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	private function init_hooks() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_filter( 'comment_text', array( $this, 'append_vote_buttons' ), 10, 2 );
+		add_filter( 'the_comments', array( $this, 'preload_comment_data' ) );
 	}
 
 	/**
@@ -124,10 +139,90 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	 */
 	private function is_comment_votes_enabled() {
 		if ( null === $this->comment_votes_enabled ) {
-			$settings                     = ( new Settings_Manager() )->get_settings();
+			$settings                    = ( new Settings_Manager() )->get_settings();
 			$this->comment_votes_enabled = ! empty( $settings['comment_votes_enabled'] );
 		}
 		return $this->comment_votes_enabled;
+	}
+
+	/**
+	 * Preload comment meta and batch user votes before the comment loop renders.
+	 *
+	 * Hooked to 'the_comments' to intercept every WP_Comment_Query result
+	 * before individual comment_text filters fire.
+	 *
+	 * @param WP_Comment[] $comments Array of comment objects.
+	 * @return WP_Comment[]
+	 */
+	public function preload_comment_data( $comments ) {
+		if ( empty( $comments ) ) {
+			return $comments;
+		}
+
+		if ( ! $this->is_comment_votes_enabled() ) {
+			return $comments;
+		}
+
+		$comment_ids = wp_list_pluck( $comments, 'comment_ID' );
+		$new_ids     = array_diff( $comment_ids, self::$preloaded_comment_ids );
+
+		if ( ! empty( $new_ids ) ) {
+			// Pre-warm meta cache so get_comment_meta() hits memory, not DB.
+			update_meta_cache( 'comment', $new_ids );
+			self::$preloaded_comment_ids = array_merge( self::$preloaded_comment_ids, $new_ids );
+		}
+
+		if ( is_user_logged_in() ) {
+			self::batch_load_user_votes( get_current_user_id(), $comment_ids );
+		}
+
+		return $comments;
+	}
+
+	/**
+	 * Batch-load user votes for a list of comment IDs in a single query.
+	 *
+	 * @param int   $user_id     User ID.
+	 * @param int[] $comment_ids Comment IDs.
+	 */
+	private static function batch_load_user_votes( $user_id, $comment_ids ) {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . self::TABLE_NAME;
+
+		// Filter out comment IDs already cached for this user.
+		$uncached = array();
+		foreach ( $comment_ids as $cid ) {
+			$key = $user_id . '_' . $cid;
+			if ( ! array_key_exists( $key, self::$user_votes_batch_cache ) ) {
+				$uncached[] = $cid;
+			}
+		}
+
+		if ( empty( $uncached ) ) {
+			return;
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $uncached ), '%d' ) );
+
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber,WordPress.DB.DirectDatabaseQuery
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT comment_id, is_liked FROM %i WHERE user_id = %d AND comment_id IN ($placeholders)",
+				array_merge( array( $table_name, $user_id ), $uncached )
+			)
+		);
+		// phpcs:enable
+
+		// Initialize all as null.
+		foreach ( $uncached as $cid ) {
+			self::$user_votes_batch_cache[ $user_id . '_' . $cid ] = null;
+		}
+
+		// Fill in found votes.
+		foreach ( $results as $row ) {
+			self::$user_votes_batch_cache[ $user_id . '_' . (int) $row->comment_id ] = (int) $row->is_liked;
+		}
 	}
 
 	/**
@@ -229,6 +324,12 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	 * @return int|null Returns 1 for like, 0 for dislike, null for no vote.
 	 */
 	public function get_user_vote( $comment_id, $user_id ) {
+		// Check batch cache first (populated by preload_comment_data).
+		$cache_key = $user_id . '_' . $comment_id;
+		if ( array_key_exists( $cache_key, self::$user_votes_batch_cache ) ) {
+			return self::$user_votes_batch_cache[ $cache_key ];
+		}
+
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
@@ -242,11 +343,12 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 			)
 		);
 
-		if ( null === $result ) {
-			return null;
-		}
+		$vote = ( null === $result ) ? null : (int) $result;
 
-		return (int) $result;
+		// Cache for subsequent calls within the same request.
+		self::$user_votes_batch_cache[ $cache_key ] = $vote;
+
+		return $vote;
 	}
 
 	/**
