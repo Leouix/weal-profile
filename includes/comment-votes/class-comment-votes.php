@@ -35,6 +35,13 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	private static $instance = null;
 
 	/**
+	 * Whether comment votes are enabled (lazily loaded once per request).
+	 *
+	 * @var bool|null
+	 */
+	private $comment_votes_enabled = null;
+
+	/**
 	 * Returns the main instance of the class.
 	 *
 	 * @return Comment_Votes
@@ -111,6 +118,19 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	}
 
 	/**
+	 * Get whether comment votes are enabled, with request-level caching.
+	 *
+	 * @return bool
+	 */
+	private function is_comment_votes_enabled() {
+		if ( null === $this->comment_votes_enabled ) {
+			$settings                     = ( new Settings_Manager() )->get_settings();
+			$this->comment_votes_enabled = ! empty( $settings['comment_votes_enabled'] );
+		}
+		return $this->comment_votes_enabled;
+	}
+
+	/**
 	 * Enqueue frontend assets.
 	 */
 	public function enqueue_assets() {
@@ -118,8 +138,7 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 			return;
 		}
 
-		$settings = ( new Settings_Manager() )->get_settings();
-		if ( empty( $settings['comment_votes_enabled'] ) ) {
+		if ( ! $this->is_comment_votes_enabled() ) {
 			return;
 		}
 
@@ -158,10 +177,7 @@ class Comment_Votes implements Weal_Profile_Module_Singleton_Interface {
 	 * @return string
 	 */
 	public function append_vote_buttons( $comment_text, $comment = null ) {
-		$settings       = ( new Settings_Manager() )->get_settings();
-		$liking_allowed = $settings['comment_votes_enabled'];
-
-		if ( ! $liking_allowed ) {
+		if ( ! $this->is_comment_votes_enabled() ) {
 			return $comment_text;
 		}
 
