@@ -20,6 +20,20 @@ class Settings_Manager {
 	private const ACHIEVEMENTS_OPTION_NAME = 'weal_profile_achievements_settings';
 
 	/**
+	 * Request-level settings cache.
+	 *
+	 * @var array|null
+	 */
+	private static $settings_cache = null;
+
+	/**
+	 * Request-level achievements settings cache.
+	 *
+	 * @var array|null
+	 */
+	private static $achievements_settings_cache = null;
+
+	/**
 	 * Default fields for the profile.
 	 *
 	 * @var array
@@ -38,7 +52,11 @@ class Settings_Manager {
 	 * @return array
 	 */
 	public function get_settings() {
-		$settings = get_option( self::OPTION_NAME, array() );
+		if ( null === self::$settings_cache ) {
+			self::$settings_cache = get_option( self::OPTION_NAME, array() );
+		}
+
+		$settings = self::$settings_cache;
 
 		return array(
 			'user_page_url'         => $settings['user_page_url'] ?? null,
@@ -73,7 +91,10 @@ class Settings_Manager {
 			'comment_votes_enabled' => (bool) $comment_votes_enabled,
 		);
 
-		return update_option( self::OPTION_NAME, $data );
+		$updated              = update_option( self::OPTION_NAME, $data );
+		self::$settings_cache = $data;
+
+		return $updated;
 	}
 
 	/**
@@ -83,7 +104,10 @@ class Settings_Manager {
 	 * @return bool
 	 */
 	public function save_achievements_settings( array $data ) {
-		return update_option( self::ACHIEVEMENTS_OPTION_NAME, $data );
+		$updated                           = update_option( self::ACHIEVEMENTS_OPTION_NAME, $data );
+		self::$achievements_settings_cache = $data;
+
+		return $updated;
 	}
 
 	/**
@@ -92,7 +116,11 @@ class Settings_Manager {
 	 * @return array
 	 */
 	public function get_achievements_settings() {
-		return get_option( self::ACHIEVEMENTS_OPTION_NAME, array() );
+		if ( null === self::$achievements_settings_cache ) {
+			self::$achievements_settings_cache = get_option( self::ACHIEVEMENTS_OPTION_NAME, array() );
+		}
+
+		return self::$achievements_settings_cache;
 	}
 
 	/**

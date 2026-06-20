@@ -21,6 +21,27 @@ use WealProfile\Includes\Manager\Settings_Manager;
 class Weal_Profile_Avatar {
 
 	/**
+	 * Request-level avatar attachment ID cache.
+	 *
+	 * @var array
+	 */
+	private static $avatar_id_cache = array();
+
+	/**
+	 * Request-level profile URL cache.
+	 *
+	 * @var array
+	 */
+	private static $profile_url_cache = array();
+
+	/**
+	 * Request-level profile slug cache.
+	 *
+	 * @var string|null
+	 */
+	private static $profile_slug_cache = null;
+
+	/**
 	 * Check whether current get_avatar call is for a comment context.
 	 *
 	 * @param mixed $id_or_email Value passed to get_avatar().
@@ -43,8 +64,16 @@ class Weal_Profile_Avatar {
 	 * @return int Attachment ID or 0 if not set.
 	 */
 	public static function get_avatar_id( $user_id ) {
-		$avatar_id = get_user_meta( $user_id, 'weal_profile_avatar_id', true );
-		return absint( $avatar_id );
+		$user_id = absint( $user_id );
+		if ( ! $user_id ) {
+			return 0;
+		}
+
+		if ( ! array_key_exists( $user_id, self::$avatar_id_cache ) ) {
+			self::$avatar_id_cache[ $user_id ] = absint( get_user_meta( $user_id, 'weal_profile_avatar_id', true ) );
+		}
+
+		return self::$avatar_id_cache[ $user_id ];
 	}
 
 	/**
@@ -115,6 +144,7 @@ class Weal_Profile_Avatar {
 		$old_avatar_id = self::get_avatar_id( $user_id );
 
 		update_user_meta( $user_id, 'weal_profile_avatar_id', absint( $attachment_id ) );
+		self::$avatar_id_cache[ $user_id ] = absint( $attachment_id );
 
 		if ( $old_avatar_id > 0 ) {
 			wp_delete_attachment( $old_avatar_id, true );
@@ -141,6 +171,7 @@ class Weal_Profile_Avatar {
 		}
 
 		delete_user_meta( $user_id, 'weal_profile_avatar_id' );
+		self::$avatar_id_cache[ $user_id ] = 0;
 
 		return true;
 	}
@@ -182,19 +213,9 @@ class Weal_Profile_Avatar {
 
 		$user_id = (int) $comment->user_id;
 
-		$settings     = new Settings_Manager();
-		$profile_slug = $settings->get_user_page_url();
-
-		if ( empty( $profile_slug ) ) {
+		$profile_url = self::get_profile_url_for_user( $user_id );
+		if ( empty( $profile_url ) ) {
 			return $url;
-		}
-
-		$base_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
-
-		if ( is_user_logged_in() && get_current_user_id() === $user_id ) {
-			$profile_url = $base_url;
-		} else {
-			$profile_url = add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), $base_url );
 		}
 
 		return esc_url( $profile_url );
@@ -261,17 +282,57 @@ class Weal_Profile_Avatar {
 			return $avatar_image;
 		}
 
-		$settings     = new Settings_Manager();
-		$profile_slug = $settings->get_user_page_url();
-
-		if ( empty( $profile_slug ) ) {
+		$profile_url = self::get_profile_url_for_user( (int) $user_id );
+		if ( empty( $profile_url ) ) {
 			return $avatar_image;
 		}
 
-		$profile_url = is_user_logged_in() && get_current_user_id() === (int) $user_id
-			? home_url( '/' . ltrim( $profile_slug, '/' ) )
-			: add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), home_url( '/' . ltrim( $profile_slug, '/' ) ) );
-
 		return '<a href="' . esc_url( $profile_url ) . '" target="_blank" rel="noopener">' . $avatar_image . '</a>';
+	}
+
+	/**
+	 * Get cached public profile slug.
+	 *
+	 * @return string|null
+	 */
+	private static function get_profile_slug() {
+		if ( null === self::$profile_slug_cache ) {
+			$settings                 = new Settings_Manager();
+			self::$profile_slug_cache = $settings->get_user_page_url();
+		}
+
+		return self::$profile_slug_cache;
+	}
+
+	/**
+	 * Get cached profile URL for a user.
+	 *
+	 * @param int $user_id User ID.
+	 * @return string
+	 */
+	private static function get_profile_url_for_user( $user_id ) {
+		$user_id = absint( $user_id );
+		if ( ! $user_id ) {
+			return '';
+		}
+
+		$cache_key = $user_id . ':' . get_current_user_id();
+		if ( isset( self::$profile_url_cache[ $cache_key ] ) ) {
+			return self::$profile_url_cache[ $cache_key ];
+		}
+
+		$profile_slug = self::get_profile_slug();
+		if ( empty( $profile_slug ) ) {
+			self::$profile_url_cache[ $cache_key ] = '';
+			return '';
+		}
+
+		$base_url = home_url( '/' . ltrim( $profile_slug, '/' ) );
+
+		self::$profile_url_cache[ $cache_key ] = is_user_logged_in() && get_current_user_id() === $user_id
+			? $base_url
+			: add_query_arg( 'u', Weal_Profile::encode_user_token( $user_id ), $base_url );
+
+		return self::$profile_url_cache[ $cache_key ];
 	}
 }
