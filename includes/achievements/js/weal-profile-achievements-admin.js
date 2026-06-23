@@ -9,72 +9,38 @@
 	var currentIconWrapper = null;
 
 	function init() {
-		var forms = document.querySelectorAll( '.achievement-form' );
-		if ( ! forms.length ) {
+		var container = document.querySelector( '.achievement-container' );
+		if ( ! container ) {
 			return;
 		}
 
-		forms.forEach(
-			function ( form ) {
-				form.addEventListener(
-					'submit',
-					function ( event ) {
-						event.preventDefault();
-						saveForm( event.target );
-					}
-				);
+		// Event delegation for form submits (covers dynamically added forms).
+		container.addEventListener(
+			'submit',
+			function ( event ) {
+				var form = event.target.closest( '.achievement-form' );
+				if ( form ) {
+					event.preventDefault();
+					saveForm( form );
+				}
 			}
 		);
 
-		var duplicateButtons = document.querySelectorAll( '.achievement-duplicate' );
-		duplicateButtons.forEach(
-			function ( button ) {
-				button.addEventListener(
-					'click',
-					function () {
-						duplicateAchievement( button );
-					}
-				);
+		// Event delegation for icon picker buttons (covers dynamically added items).
+		container.addEventListener(
+			'click',
+			function ( event ) {
+				var uploadBtn = event.target.closest( '.upload-achievement-icon-button' );
+				if ( uploadBtn ) {
+					openMediaLibrary( uploadBtn.closest( '.achievement-wrapper' ) );
+					return;
+				}
+				var removeBtn = event.target.closest( '.remove-achievement-icon-button' );
+				if ( removeBtn ) {
+					removeIcon( removeBtn.closest( '.achievement-wrapper' ) );
+				}
 			}
 		);
-
-		var deleteButtons = document.querySelectorAll( '.achievement-delete' );
-		deleteButtons.forEach(
-			function ( button ) {
-				button.addEventListener(
-					'click',
-					function () {
-						deleteAchievement( button );
-					}
-				);
-			}
-		);
-
-		initIconPickers();
-	}
-
-	function initIconPickers() {
-		var wrappers = document.querySelectorAll( '.achievement-wrapper' );
-		wrappers.forEach( function ( wrapper ) {
-			bindIconPickerEvents( wrapper );
-		} );
-	}
-
-	function bindIconPickerEvents( wrapper ) {
-		var uploadButton = wrapper.querySelector( '.upload-achievement-icon-button' );
-		var removeButton = wrapper.querySelector( '.remove-achievement-icon-button' );
-
-		if ( uploadButton ) {
-			uploadButton.addEventListener( 'click', function () {
-				openMediaLibrary( wrapper );
-			} );
-		}
-
-		if ( removeButton ) {
-			removeButton.addEventListener( 'click', function () {
-				removeIcon( wrapper );
-			} );
-		}
 	}
 
 	function openMediaLibrary( wrapper ) {
@@ -145,132 +111,6 @@
 		if ( previewLabel && ! isAlreadyDefault ) {
 			previewLabel.style.display = 'inline';
 		}
-	}
-
-	function getAchievementId( el ) {
-		var wrapper = el.closest( '.achievement-wrapper' );
-		if ( ! wrapper ) {
-			return '';
-		}
-		var input = wrapper.querySelector( 'input[name="achievement_id"]' );
-		return input ? input.value : '';
-	}
-
-	function getNonce( el ) {
-		var wrapper = el.closest( '.achievement-wrapper' );
-		if ( ! wrapper ) {
-			return '';
-		}
-		var input = wrapper.querySelector( 'input[name="weal_profile_achievements_nonce"]' );
-		return input ? input.value : '';
-	}
-
-	function duplicateAchievement( button ) {
-		var achievementId = getAchievementId( button );
-		if ( ! achievementId ) {
-			return;
-		}
-
-		var formData = new FormData();
-		formData.append( 'achievement_id', achievementId );
-		formData.append( 'weal_profile_achievements_nonce', getNonce( button ) );
-
-		var xhr = new XMLHttpRequest();
-		xhr.open( 'POST', wealProfileAchievementsData.root + 'weal-profile/v1/duplicate-achievement/', true );
-		xhr.setRequestHeader( 'X-WP-Nonce', wealProfileAchievementsData.nonce );
-		xhr.onreadystatechange = function () {
-			if ( 4 !== this.readyState ) {
-				return;
-			}
-
-			try {
-				var response = JSON.parse( this.responseText );
-			} catch ( e ) {
-				return;
-			}
-
-			if ( response.success && response.html ) {
-				var container = document.querySelector( '.achievement-container' );
-				if ( container ) {
-					container.insertAdjacentHTML( 'beforeend', response.html );
-					bindFormEvents( container.lastElementChild );
-				}
-			}
-		};
-		xhr.send( formData );
-	}
-
-	function deleteAchievement( button ) {
-		if ( ! confirm( wealProfileAchievementsData.confirmDelete ) ) {
-			return;
-		}
-
-		var achievementId = getAchievementId( button );
-		if ( ! achievementId ) {
-			return;
-		}
-
-		var formData = new FormData();
-		formData.append( 'achievement_id', achievementId );
-		formData.append( 'weal_profile_achievements_nonce', getNonce( button ) );
-
-		var xhr = new XMLHttpRequest();
-		xhr.open( 'POST', wealProfileAchievementsData.root + 'weal-profile/v1/delete-achievement/', true );
-		xhr.setRequestHeader( 'X-WP-Nonce', wealProfileAchievementsData.nonce );
-		xhr.onreadystatechange = function () {
-			if ( 4 !== this.readyState ) {
-				return;
-			}
-
-			try {
-				var response = JSON.parse( this.responseText );
-			} catch ( e ) {
-				return;
-			}
-
-			if ( response.success ) {
-				var wrapper = button.closest( '.achievement-wrapper' );
-				if ( wrapper ) {
-					wrapper.remove();
-				}
-			}
-		};
-		xhr.send( formData );
-	}
-
-	function bindFormEvents( wrapper ) {
-		var form = wrapper.querySelector( '.achievement-form' );
-		if ( form ) {
-			form.addEventListener(
-				'submit',
-				function ( event ) {
-					event.preventDefault();
-					saveForm( event.target );
-				}
-			);
-		}
-
-		var duplicateButton = wrapper.querySelector( '.achievement-duplicate' );
-		if ( duplicateButton ) {
-			duplicateButton.addEventListener(
-				'click',
-				function () {
-					duplicateAchievement( duplicateButton );
-				}
-			);
-		}
-
-		var deleteButton = wrapper.querySelector( '.achievement-delete' );
-		if ( deleteButton ) {
-			deleteButton.addEventListener(
-				'click',
-				function () {
-					deleteAchievement( deleteButton );
-				}
-			);
-		}
-
-		bindIconPickerEvents( wrapper );
 	}
 
 	function saveForm( elForm ) {

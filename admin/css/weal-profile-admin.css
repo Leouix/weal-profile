@@ -163,21 +163,6 @@ h1 {
 	cursor: pointer;
 }
 
-.achievement-delete {
-	cursor: pointer;
-	width: 20px;
-	height: 20px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.achievement-delete img {
-	width: 20px;
-	height: 20px;
-	display: block;
-}
-
 .achievement-icon-preview {
 	margin-bottom: 8px;
 	min-height: 30px;

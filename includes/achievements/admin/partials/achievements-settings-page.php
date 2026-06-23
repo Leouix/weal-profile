@@ -31,13 +31,7 @@ $weal_profile_achievements_data = Weal_Profile_Achievements::get_admin_achieveme
 		?>
 
 	<div class="achievement-wrapper">
-		<?php if ( Weal_Profile_Achievements::is_system_achievement( $weal_profile_achievement_id ) ) : ?>
-			<div class="achievement-duplicate" title="<?php esc_attr_e( 'Duplicate achievement', 'weal-profile' ); ?>"></div>
-		<?php else : ?>
-			<div class="achievement-delete" title="<?php esc_attr_e( 'Delete achievement', 'weal-profile' ); ?>">
-				<img src="<?php echo esc_url( WEAL_PROFILE_PLUGIN_URL . 'admin/icons/delete.png' ); ?>" alt="<?php esc_attr_e( 'Delete', 'weal-profile' ); ?>">
-			</div>
-		<?php endif; ?>
+		<?php do_action( 'weal_profile_achievement_admin_actions', $weal_profile_achievement_id, $weal_profile_settings ); ?>
 
 		<form class="achievement-form">
 			<?php wp_nonce_field( 'weal_profile_achievements_save', 'weal_profile_achievements_nonce' ); ?>
