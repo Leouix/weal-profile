@@ -227,6 +227,7 @@ class Admin_Settings {
 			<nav class="nav-tab-wrapper">
 				<a href="?page=weal-profile-admin" class="nav-tab <?php echo 'general' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'General', 'weal-profile' ); ?></a>
 				<a href="?page=weal-profile-achievements" class="nav-tab <?php echo 'achievements' === $active_tab ? 'nav-tab-active' : ''; ?>"><?php esc_html_e( 'Achievements', 'weal-profile' ); ?></a>
+				<?php do_action( 'weal_profile_admin_tabs', $active_tab ); ?>
 			</nav>
 
 			<?php
